@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>Login - LeGrow</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#91d27a',
+                        'primary-dark': '#7db967',
+                        'primary-ink': '#35542b',
+                        cream: '#fbf5ea',
+                        card: '#fffdf9',
+                        line: '#e7decd',
+                        ink: '#4c4237',
+                        mute: '#7f7366',
+                        sand: '#f6efe2'
+                    },
+                    boxShadow: {
+                        soft: '0 18px 40px -28px rgba(100, 77, 46, 0.22)'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Lexend', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        ::selection {
+            background: rgba(145, 210, 122, 0.28);
+            color: #3d342a;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.24s ease-out forwards;
+        }
+
+        .animate-spin {
+            animation: spin 0.9s linear infinite;
+        }
+
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+        }
+
+        .field-shell:focus-within {
+            border-color: rgba(145, 210, 122, 0.92);
+            box-shadow: 0 0 0 4px rgba(145, 210, 122, 0.16);
+            background: #fffdf9;
+        }
+
+        .role-pill::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            width: calc(50% - 5px);
+            border-radius: 9999px;
+            background: #fffdf9;
+            box-shadow: 0 6px 18px -16px rgba(0, 0, 0, 0.3);
+            transform: translateX(var(--role-shift, 0%));
+            transition: transform 180ms ease;
+        }
+
+        .role-pill[data-role='teacher']::before {
+            --role-shift: 100%;
+        }
+
+        .login-hero-art {
+            background-image:
+                linear-gradient(90deg, rgba(251, 245, 234, 0.95) 0%, rgba(251, 245, 234, 0.84) 34%, rgba(251, 245, 234, 0.42) 58%, rgba(251, 245, 234, 0.12) 100%),
+                var(--login-hero-image, none);
+            background-size: cover;
+            background-position: center left;
+        }
+    </style>
+    <script src="shared/api.js"></script>
+    <script src="shared/images.js"></script>
+    <link rel="stylesheet" href="shared/page-loading.css" />
+</head>
+<body class="min-h-screen bg-cream text-ink">
+    <div id="toast-container" class="fixed inset-x-0 top-4 z-[9999] flex justify-center px-4 pointer-events-none"></div>
+
+    <main class="min-h-screen lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(430px,520px)]">
+        <section class="login-hero-art relative hidden min-h-screen overflow-hidden border-r border-line/70 lg:flex">
+            <div class="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/85 bg-white/72 text-primary-ink shadow-soft">
+                        <span class="material-icons-round text-[22px]">auto_stories</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-mute">LeGrow</p>
+                        <h1 id="brand-name" class="mt-1 text-xl font-semibold text-ink">LeGrow</h1>
+                    </div>
+                </div>
+
+                <div class="max-w-[29rem] rounded-[2rem] border border-white/70 bg-white/46 p-8 backdrop-blur-[6px]">
+                    <h2 id="hero-title" class="mt-4 text-4xl font-semibold leading-[1.18] text-ink">
+                        A focused space for student growth.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex min-h-screen items-center justify-center px-5 py-8 sm:px-8 lg:px-10">
+            <div class="w-full max-w-[31rem]">
+                <div class="rounded-[1.6rem] border border-line/80 bg-card/95 p-6 shadow-soft sm:p-8">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/20 bg-primary/14 text-primary-ink">
+                            <span class="material-icons-round text-[20px]">school</span>
+                        </div>
+                        <h2 id="panel-title" class="text-[1.55rem] font-semibold text-ink">Sign in</h2>
+                    </div>
+
+                    <div class="mt-6 rounded-[1.2rem] border border-line/80 bg-sand/80 p-1.5">
+                        <div id="role-switcher" class="role-pill relative grid grid-cols-2" data-role="student">
+                            <button
+                                id="btn-student"
+                                type="button"
+                                aria-pressed="true"
+                                onclick="selectRole('student')"
+                                class="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-primary-ink transition-colors"
+                            >
+                                <span class="material-icons-round text-[18px]">face</span>
+                                <span id="student-role-label">Student</span>
+                            </button>
+                            <button
+                                id="btn-teacher"
+                                type="button"
+                                aria-pressed="false"
+                                onclick="selectRole('teacher')"
+                                class="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-mute transition-colors"
+                            >
+                                <span class="material-icons-round text-[18px]">co_present</span>
+                                <span id="teacher-role-label">Teacher</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form class="mt-6 space-y-4" id="login-form" onsubmit="handleLogin(event)" novalidate>
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="username" id="username-label">Account</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">person</span>
+                                <input
+                                    id="username"
+                                    type="text"
+                                    autocomplete="username"
+                                    placeholder="Enter account"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="username-error"
+                                />
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="username-error">Please enter account</p>
+                        </div>
+
+                        <div>
+                            <div class="mb-2 flex items-center justify-between gap-3">
+                                <label class="block text-sm font-semibold text-ink" for="password" id="password-label">Password</label>
+                                <a id="forgot-password-copy" class="text-xs font-medium text-mute transition hover:text-ink" href="register.html">Forgot password</a>
+                            </div>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">lock</span>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    placeholder="Enter password"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="password-error"
+                                />
+                                <button
+                                    type="button"
+                                    onclick="togglePassword()"
+                                    class="ml-3 inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-mute transition hover:bg-white hover:text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <span class="material-icons-round text-[20px]" id="password-toggle-icon">visibility_off</span>
+                                </button>
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="password-error">Please enter password</p>
+                        </div>
+
+                        <button
+                            id="login-btn"
+                            type="submit"
+                            class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-base font-semibold text-primary-ink transition hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
+                            <span id="login-btn-text">Sign in</span>
+                            <span class="material-icons-round text-[20px]" id="login-btn-icon">arrow_forward</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 border-t border-line/80 pt-4 text-sm text-mute">
+                        <p><span id="footer-prefix">No account yet?</span> <a id="register-link-bottom" class="font-semibold text-primary-ink underline-offset-4 transition hover:underline" href="register.html">Create one</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentRole = 'student';
+        const LOGIN_HERO_IMAGE_PATH = 'https://your-project.supabase.co/storage/v1/object/public/images/student/img/login/login_bk.png';
+
+        function applyLoginHeroBackground() {
+            const hero = document.querySelector('.login-hero-art');
+            if (!hero || typeof buildMediaUrl !== 'function') return;
+            const heroUrl = buildMediaUrl(LOGIN_HERO_IMAGE_PATH);
+            if (!heroUrl) return;
+            hero.style.setProperty('--login-hero-image', `url("${heroUrl}")`);
+        }
+
+        const TEXT = {
+            title: '\u7528\u6237\u767b\u5f55 - \u4e50\u5b66\u6210\u957f\u5e73\u53f0',
+            brand: '\u4e50\u5b66\u6210\u957f\u5e73\u53f0',
+            panelTitle: '\u767b\u5f55',
+            studentRole: '\u5b66\u751f\u767b\u5f55',
+            teacherRole: '\u6559\u5e08\u767b\u5f55',
+            register: '\u6ce8\u518c',
+            password: '\u5bc6\u7801',
+            forgotPassword: '\u5fd8\u8bb0\u5bc6\u7801\u8bf7\u8054\u7cfb\u7ba1\u7406\u5458',
+            login: '\u7acb\u5373\u767b\u5f55',
+            footerPrefix: '\u8fd8\u6ca1\u6709\u8d26\u53f7\uff1f',
+            usernameError: '\u8bf7\u8f93\u5165\u8d26\u53f7',
+            teacherAccountError: '\u8bf7\u8f93\u5165\u6559\u5e08\u8d26\u53f7',
+            passwordError: '\u8bf7\u8f93\u5165\u5bc6\u7801',
+            loginLoading: '\u767b\u5f55\u4e2d...',
+            loginSuccess: '\u767b\u5f55\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c...',
+            loginFailed: '\u767b\u5f55\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u8d26\u53f7\u548c\u5bc6\u7801',
+            responseError: '\u670d\u52a1\u8fd4\u56de\u683c\u5f0f\u5f02\u5e38\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5',
+            networkError: '\u7f51\u7edc\u8fde\u63a5\u5931\u8d25\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5',
+            usernameLabelStudent: '\u8d26\u53f7 / \u624b\u673a\u53f7',
+            usernameLabelTeacher: '\u6559\u5e08\u8d26\u53f7',
+            usernamePlaceholderStudent: '\u8bf7\u8f93\u5165\u5b66\u53f7\u3001\u624b\u673a\u53f7\u6216\u90ae\u7bb1',
+            usernamePlaceholderTeacher: '\u8bf7\u8f93\u5165\u6559\u5e08\u8d26\u53f7\u3001\u624b\u673a\u53f7\u6216\u90ae\u7bb1',
+            passwordPlaceholder: '\u8bf7\u8f93\u5165\u5bc6\u7801',
+            mobileCopyStudent: '',
+            mobileCopyTeacher: ''
+        };
+
+        const ROLE_COPY = {
+            student: {
+                hint: '\u5b66\u751f\u53ef\u4ee5\u4f7f\u7528\u5b66\u53f7\u3001\u624b\u673a\u53f7\u6216\u90ae\u7bb1\u767b\u5f55\uff0c\u7ee7\u7eed\u67e5\u770b\u4eca\u65e5\u8ba1\u5212\u4e0e\u6210\u957f\u8bb0\u5f55\u3002',
+                usernameLabel: TEXT.usernameLabelStudent,
+                usernamePlaceholder: TEXT.usernamePlaceholderStudent,
+                heroTitle: '\u8bb0\u5f55\u6210\u957f\u8fc7\u7a0b\uff0c\u6c89\u6dc0\u6bcf\u5929\u7684\u79ef\u6781\u53d8\u5316\u3002'
+            },
+            teacher: {
+                hint: '\u6559\u5e08\u767b\u5f55\u540e\u53ef\u76f4\u63a5\u8fdb\u5165\u5de5\u4f5c\u53f0\uff0c\u67e5\u770b\u4f5c\u4e1a\u5ba1\u6838\u3001\u73ed\u7ea7\u52a8\u6001\u548c\u91cd\u70b9\u5b66\u751f\u63d0\u9192\u3002',
+                usernameLabel: TEXT.usernameLabelTeacher,
+                usernamePlaceholder: TEXT.usernamePlaceholderTeacher,
+                heroTitle: '\u96c6\u4e2d\u67e5\u770b\u73ed\u7ea7\u8fdb\u5c55\u4e0e\u9700\u8981\u5173\u6ce8\u7684\u5b66\u751f\u3002'
+            }
+        };
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function applyStaticCopy() {
+            document.title = TEXT.title;
+            setText('brand-name', TEXT.brand);
+            setText('panel-title', TEXT.panelTitle);
+            setText('student-role-label', TEXT.studentRole);
+            setText('teacher-role-label', TEXT.teacherRole);
+            setText('password-label', TEXT.password);
+            setText('forgot-password-copy', TEXT.forgotPassword);
+            setText('login-btn-text', TEXT.login);
+            setText('footer-prefix', TEXT.footerPrefix);
+            setText('register-link-bottom', TEXT.register);
+
+            const passwordInput = document.getElementById('password');
+            const togglePasswordButton = document.querySelector('button[aria-label]');
+            if (passwordInput) passwordInput.placeholder = TEXT.passwordPlaceholder;
+            if (togglePasswordButton) togglePasswordButton.setAttribute('aria-label', '\u663e\u793a\u6216\u9690\u85cf\u5bc6\u7801');
+        }
+
+        function createToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            toast.className = [
+                'pointer-events-auto flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium shadow-soft animate-fade-in-up',
+                type === 'success'
+                    ? 'border-green-200 bg-green-50 text-green-700'
+                    : 'border-red-200 bg-red-50 text-red-600'
+            ].join(' ');
+
+            const icon = document.createElement('span');
+            icon.className = 'material-icons-round text-[18px]';
+            icon.textContent = type === 'success' ? 'check_circle' : 'error';
+
+            const text = document.createElement('span');
+            text.textContent = String(message || '');
+
+            toast.append(icon, text);
+            return toast;
+        }
+
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = createToast(message, type);
+            container.appendChild(toast);
+
+            window.setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                toast.style.transition = 'opacity 180ms ease, transform 180ms ease';
+                window.setTimeout(() => toast.remove(), 180);
+            }, 2600);
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('password-toggle-icon');
+            const isHidden = passwordInput.type === 'password';
+
+            passwordInput.type = isHidden ? 'text' : 'password';
+            icon.textContent = isHidden ? 'visibility' : 'visibility_off';
+        }
+
+        function clearFieldError(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            input?.classList.remove('input-error');
+            error?.classList.add('hidden');
+        }
+
+        function setFieldError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            input?.classList.add('input-error');
+            if (error) {
+                error.textContent = message;
+                error.classList.remove('hidden');
+            }
+        }
+
+        function validateForm() {
+            const username = document.getElementById('username');
+            const password = document.getElementById('password');
+            let isValid = true;
+
+            clearFieldError('username', 'username-error');
+            clearFieldError('password', 'password-error');
+
+            if (!username.value.trim()) {
+                setFieldError('username', 'username-error', currentRole === 'teacher' ? TEXT.teacherAccountError : TEXT.usernameError);
+                username.focus();
+                isValid = false;
+            }
+
+            if (!password.value.trim()) {
+                setFieldError('password', 'password-error', TEXT.passwordError);
+                if (isValid) password.focus();
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function setLoginLoading(isLoading) {
+            const btn = document.getElementById('login-btn');
+            const btnText = document.getElementById('login-btn-text');
+            const btnIcon = document.getElementById('login-btn-icon');
+
+            btn.disabled = isLoading;
+
+            if (isLoading) {
+                btnText.textContent = TEXT.loginLoading;
+                btnIcon.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4zm2 5.29A7.96 7.96 0 014 12H0c0 3.04 1.14 5.82 3 7.94l3-2.65z"></path></svg>';
+            } else {
+                btnText.textContent = TEXT.login;
+                btnIcon.textContent = 'arrow_forward';
+            }
+        }
+
+        function applyRoleCopy(role) {
+            const copy = ROLE_COPY[role] || ROLE_COPY.student;
+            const switcher = document.getElementById('role-switcher');
+            const btnStudent = document.getElementById('btn-student');
+            const btnTeacher = document.getElementById('btn-teacher');
+            const usernameLabel = document.getElementById('username-label');
+            const usernameInput = document.getElementById('username');
+            const heroTitle = document.getElementById('hero-title');
+
+            switcher.dataset.role = role;
+            btnStudent.setAttribute('aria-pressed', String(role === 'student'));
+            btnTeacher.setAttribute('aria-pressed', String(role === 'teacher'));
+            btnStudent.classList.toggle('text-primary-ink', role === 'student');
+            btnStudent.classList.toggle('text-mute', role !== 'student');
+            btnTeacher.classList.toggle('text-primary-ink', role === 'teacher');
+            btnTeacher.classList.toggle('text-mute', role !== 'teacher');
+
+            usernameLabel.textContent = copy.usernameLabel;
+            usernameInput.placeholder = copy.usernamePlaceholder;
+            heroTitle.textContent = copy.heroTitle;
+        }
+
+        function selectRole(role) {
+            currentRole = role === 'teacher' ? 'teacher' : 'student';
+            applyRoleCopy(currentRole);
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const email = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            setLoginLoading(true);
+
+            try {
+                const response = await fetch(buildApiUrl('/api/login'), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const contentType = response.headers.get('content-type') || '';
+                const data = contentType.includes('application/json')
+                    ? await response.json()
+                    : { error: TEXT.responseError };
+
+                if (!response.ok) {
+                    showToast(data.error || TEXT.loginFailed, 'error');
+                    return;
+                }
+
+                showToast(TEXT.loginSuccess, 'success');
+                localStorage.setItem('sb-access-token', data.session.access_token);
+                localStorage.setItem('sb-refresh-token', data.session.refresh_token);
+                localStorage.setItem('user-role', data.role || currentRole);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                window.setTimeout(async () => {
+                    if ((data.role || currentRole) === 'student') {
+                        try {
+                            const onboardingResponse = await fetch(buildApiUrl(`/api/student/${data.user.id}/onboarding/status`), {
+                                headers: {
+                                    Authorization: `Bearer ${data.session.access_token}`
+                                }
+                            });
+                            const onboardingData = await onboardingResponse.json();
+
+                            window.location.href = onboardingData.completed ? 'student/dashboard.html' : 'onboarding.html';
+                        } catch (error) {
+                            window.location.href = 'student/dashboard.html';
+                        }
+                    } else {
+                        window.location.href = 'teacher/dashboard.html';
+                    }
+                }, 700);
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast(TEXT.networkError, 'error');
+            } finally {
+                setLoginLoading(false);
+            }
+        }
+
+        document.getElementById('username').addEventListener('input', () => {
+            clearFieldError('username', 'username-error');
+        });
+
+        document.getElementById('password').addEventListener('input', () => {
+            clearFieldError('password', 'password-error');
+        });
+
+        applyLoginHeroBackground();
+        applyStaticCopy();
+        applyRoleCopy(currentRole);
+    </script>
+    <script src="shared/page-loading.js"></script>
+</body>
+</html>

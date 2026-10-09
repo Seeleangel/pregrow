@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>个人信息 - 乐学成长平台</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" /><link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee9d2b",
+                        "primary-dark": "#d98b1f",
+                        "primary-light": "#fef3e2",
+                        "beige-bg": "#fcf9f4",
+                        "beige-card": "#ffffff",
+                        "warm-border": "#f0e6d0",
+                        "text-main": "#4a4036",
+                        "text-sub": "#9ca3af",
+                        "background-dark": "#292520",
+                        "surface-dark": "#36322b"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2.5rem",
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(238, 157, 43, 0.15)',
+                        'card': '0 4px 6px -1px rgba(92, 84, 70, 0.05), 0 10px 15px -3px rgba(92, 84, 70, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="../shared/api.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar for dream textarea */
+        textarea::-webkit-scrollbar {
+            width: 6px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #e6dac6;
+            border-radius: 3px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #d4c5ad;
+        }
+
+        /* Dream tag animation */
+        .dream-tag-enter {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* MVP Focus states for accessibility */
+        .focus-ring:focus,
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        .focus-ring:focus-visible {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        /* Disabled state */
+        .disabled,
+        button:disabled,
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0e6d0;
+            border-top-color: #ee9d2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state styling */
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button, a, input, select, textarea {
+            transition: all 0.2s ease;
+        }
+
+    </style>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+</head>
+
+<body class="bg-beige-bg dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen font-body">
+    <main class="max-w-4xl mx-auto p-6 md:p-8">
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+                <a href="dashboard.html" class="w-11 h-11 rounded-lg bg-white dark:bg-surface-dark border-2 border-warm-border dark:border-gray-700 flex items-center justify-center text-text-sub hover:text-primary transition-colors">
+                    <span class="material-icons-round">arrow_back</span>
+                </a>
+                <div>
+                    <h1 class="text-3xl font-display text-text-main dark:text-white">个人信息</h1>
+                    <p class="text-sm text-text-sub dark:text-gray-400">完善你的资料，让成长建议更准确</p>
+                </div>
+            </div>
+            <a href="portfolio.html" class="text-sm px-4 py-2 rounded-full bg-white dark:bg-surface-dark border border-warm-border dark:border-gray-700 text-text-sub hover:text-primary">去梦想档案</a>
+        </header>
+
+        <section class="bg-beige-card dark:bg-surface-dark rounded-lg border-2 border-white/60 dark:border-gray-800 shadow p-6 md:p-8">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/3 flex flex-col items-center">
+                    <div class="relative group/avatar cursor-pointer w-32 h-32 rounded-full border-4 border-white shadow bg-gray-200 dark:bg-white/10 animate-pulse" onclick="document.getElementById('profile-avatar-upload').click()">
+                        <img id="profile-avatar-preview" class="w-full h-full rounded-full object-cover opacity-0 transition-opacity duration-300"
+                            onload="if(this.src && this.src !== window.location.href && !this.src.startsWith('data:image/gif')) { this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse'); }"
+                            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="头像预览" />
+                        <div class="absolute inset-0 rounded-full bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300 z-10 border-4 border-transparent">
+                            <span class="material-icons-round text-white text-3xl mb-1">photo_camera</span>
+                            <span class="text-white text-xs font-bold shadow-sm">点击上传</span>
+                        </div>
+                        <div id="profile-avatar-loading" class="hidden absolute inset-0 rounded-full bg-black/50 flex items-center justify-center z-20">
+                            <div class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        </div>
+                    </div>
+                    <input type="file" id="profile-avatar-upload" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden" onchange="handleProfileAvatarUpload(event)" />
+                    <p class="text-xs text-text-sub dark:text-gray-400 mt-3">点击头像上传本地图片</p>
+                </div>
+
+                <form id="profile-form" class="flex-1 space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-1">姓名</label>
+                        <input id="profile-full-name" type="text" class="w-full rounded-md border border-warm-border dark:border-gray-700 bg-white dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="请输入姓名" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold mb-1">所属班级</label>
+                        <div class="w-full rounded-md border border-warm-border dark:border-gray-700 bg-gray-50 dark:bg-black/20 px-4 py-3 text-text-sub dark:text-gray-400 flex items-center justify-between">
+                            <span id="profile-class-info">加载中...</span>
+                            <span class="material-icons-round text-sm text-gray-400">verified</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">班级信息由邀请码绑定，如需修改请联系老师</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-sm font-bold">我的梦想</label>
+                            <span id="dream-counter" class="text-xs text-text-sub bg-white dark:bg-surface-dark px-2 py-0.5 rounded-full border border-warm-border/50">0/8</span>
+                        </div>
+
+                        <!-- Dream Tags Preview -->
+                        <div id="dream-tags-preview" class="flex flex-wrap gap-2 mb-2 min-h-[1.5rem]">
+                            <!-- Dream tags will be injected here -->
+                        </div>
+
+                        <textarea id="profile-dream" rows="3"
+                            class="w-full rounded-md border border-warm-border dark:border-gray-700 bg-white dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
+                            placeholder="每行输入一个梦想，最多8个&#10;例如：&#10;成为航天工程师&#10;学会弹吉他"></textarea>
+
+                        <div class="flex items-center gap-1 mt-1.5 text-xs text-text-sub">
+                            <span class="material-icons-round text-sm">info</span>
+                            <span>按回车换行添加多个梦想，系统将为你创建多梦想管理</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold mb-1">个人简介</label>
+                        <textarea id="profile-bio" rows="4" class="w-full rounded-md border border-warm-border dark:border-gray-700 bg-white dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="说说你的兴趣和优点"></textarea>
+                    </div>
+
+                    <div class="hidden">
+                        <label class="block text-sm font-bold mb-1">头像链接</label>
+                        <input id="profile-avatar-url" type="url" class="w-full rounded-md border border-warm-border dark:border-gray-700 bg-white dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="https://..." readonly />
+                    </div>
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <button id="profile-save-btn" type="submit" class="px-6 py-3 rounded-full bg-primary text-white font-bold hover:bg-primary-dark transition-colors">保存信息</button>
+                        <span id="profile-feedback" class="text-sm text-text-sub dark:text-gray-400"></span>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentUserId = null;
+
+        function fallbackAvatar(userId) {
+            const seed = (userId || 'student').slice(0, 6);
+            return `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=e6dac6`;
+        }
+
+        function updateAvatarPreview() {
+            const avatarInput = document.getElementById('profile-avatar-url');
+            const avatarEl = document.getElementById('profile-avatar-preview');
+            if (!avatarInput || !avatarEl) return;
+            const value = avatarInput.value.trim();
+            avatarEl.src = value || fallbackAvatar(currentUserId);
+        }
+
+        async function handleProfileAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                alert('仅支持 JPG/PNG/WEBP 格式的图片');
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert('图片大小不能超过 10MB');
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('profile-avatar-loading');
+            if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+
+            try {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    const base64Data = reader.result;
+
+                    try {
+                        const res = await apiFetch(API_BASE_URL + `/api/student/${currentUserId}/avatar/upload`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                fileName: file.name,
+                                mimeType: file.type,
+                                dataBase64: base64Data
+                            })
+                        });
+
+                        const result = await res.json();
+
+                        if (!res.ok) {
+                            throw new Error(result.error || '上传失败');
+                        }
+
+                        if (result.avatar_url) {
+                            document.getElementById('profile-avatar-url').value = result.avatar_url;
+                            updateAvatarPreview();
+                            // Update header avatar too if it exists on profile page (though profile page might not have header avatar)
+                            const headerAvatar = document.getElementById('user-avatar-header');
+                            if (headerAvatar) headerAvatar.src = result.avatar_url;
+
+                            // Optional: update localStorage if user info is cached
+                            const userStr = localStorage.getItem('user');
+                            if (userStr) {
+                                const userObj = JSON.parse(userStr);
+                                userObj.avatar_url = result.avatar_url;
+                                localStorage.setItem('user', JSON.stringify(userObj));
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Upload error:', err);
+                        alert(`上传头像失败: ${err.message}`);
+                    } finally {
+                        if (loadingOverlay) loadingOverlay.classList.add('hidden');
+                        event.target.value = ''; // Reset input
+                    }
+                };
+            } catch (err) {
+                console.error('File reading error:', err);
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        async function loadProfile() {
+            if (!currentUserId) return;
+
+            const feedbackEl = document.getElementById('profile-feedback');
+            try {
+                const res = await apiFetch(API_BASE_URL + `/api/student/${currentUserId}/summary`);
+                if (!res.ok) throw new Error('load failed');
+                const data = await res.json();
+                const dreams = Array.isArray(data.dreams) && data.dreams.length > 0
+                    ? data.dreams
+                    : (data.dream ? String(data.dream).split(/\r?\n|[；;、,，]/).map(item => item.trim()).filter(Boolean) : []);
+
+                document.getElementById('profile-full-name').value = data.full_name || '';
+                document.getElementById('profile-full-name').placeholder = '请输入姓名';
+
+                document.getElementById('profile-dream').value = dreams.join('\n');
+                document.getElementById('profile-dream').placeholder = '每行输入一个梦想，最多8个\n例如：\n成为航天工程师\n学会弹吉他';
+
+                // Update dream preview
+                updateDreamPreview();
+
+                document.getElementById('profile-bio').value = data.bio || '';
+                document.getElementById('profile-bio').placeholder = '说说你的兴趣和优点';
+
+                document.getElementById('profile-avatar-url').value = data.avatar_url || '';
+
+                const classInfoEl = document.getElementById('profile-class-info');
+                if (classInfoEl) {
+                    if (data.class_id && data.school_name && data.class_name) {
+                        classInfoEl.textContent = `${data.school_name} ${data.class_name}`;
+                        classInfoEl.classList.add('text-text-main', 'dark:text-white', 'font-medium');
+                    } else {
+                        classInfoEl.textContent = '未加入班级';
+                        classInfoEl.classList.add('text-red-500');
+                    }
+                }
+
+                updateAvatarPreview();
+
+                // Cache the profile data in localStorage for faster subsequent loads
+                localStorage.setItem(`profile_cache_${currentUserId}`, JSON.stringify(data));
+            } catch (error) {
+                if (feedbackEl) feedbackEl.textContent = '加载失败，请稍后重试';
+                document.getElementById('profile-avatar-preview').src = fallbackAvatar(currentUserId);
+            }
+        }
+
+        async function initProfile() {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            const user = JSON.parse(userStr);
+            currentUserId = user.id;
+
+            // 1. Optimistic load from cache
+            const cachedData = localStorage.getItem(`profile_cache_${currentUserId}`);
+            if (cachedData) {
+                try {
+                    const data = JSON.parse(cachedData);
+                    const dreams = Array.isArray(data.dreams) && data.dreams.length > 0
+                        ? data.dreams
+                        : (data.dream ? String(data.dream).split(/\r?\n|[；;、,，]/).map(item => item.trim()).filter(Boolean) : []);
+                    document.getElementById('profile-full-name').value = data.full_name || '';
+                    document.getElementById('profile-dream').value = dreams.join('\n');
+                    updateDreamPreview();
+                    document.getElementById('profile-bio').value = data.bio || '';
+                    document.getElementById('profile-avatar-url').value = data.avatar_url || '';
+
+                    const classInfoEl = document.getElementById('profile-class-info');
+                    if (classInfoEl) {
+                        if (data.class_id && data.school_name && data.class_name) {
+                            classInfoEl.textContent = `${data.school_name} ${data.class_name}`;
+                            classInfoEl.classList.add('text-text-main', 'dark:text-white', 'font-medium');
+                        } else {
+                            classInfoEl.textContent = '未加入班级';
+                        }
+                    }
+
+                    updateAvatarPreview();
+                } catch(e) { console.warn('Cache read error', e); }
+            } else {
+                // Show loading states if no cache
+                document.getElementById('profile-full-name').placeholder = '加载中...';
+                document.getElementById('profile-dream').placeholder = '加载中...';
+                document.getElementById('profile-bio').placeholder = '加载中...';
+            }
+
+            // 2. Fetch fresh data in background
+            await loadProfile();
+        }
+
+        function parseDreams(text) {
+            return text
+                .split(/\r?\n/)
+                .map(item => item.trim())
+                .filter(Boolean)
+                .slice(0, 8);
+        }
+
+        function updateDreamPreview() {
+            const textarea = document.getElementById('profile-dream');
+            const previewEl = document.getElementById('dream-tags-preview');
+            const counterEl = document.getElementById('dream-counter');
+
+            if (!textarea || !previewEl || !counterEl) return;
+
+            const dreams = parseDreams(textarea.value);
+
+            // Update counter
+            counterEl.textContent = `${dreams.length}/8`;
+            counterEl.className = `text-xs px-2 py-0.5 rounded-full border transition-colors ${
+                dreams.length >= 8
+                    ? 'bg-red-100 text-red-600 border-red-200'
+                    : dreams.length >= 3
+                        ? 'bg-green-100 text-green-600 border-green-200'
+                        : 'bg-white dark:bg-surface-dark text-text-sub border-warm-border/50'
+            }`;
+
+            // Update preview tags
+            if (dreams.length === 0) {
+                previewEl.innerHTML = `<span class="text-xs text-gray-400 italic">还没有添加梦想...</span>`;
+            } else {
+                const colors = [
+                    'bg-blue-100 text-blue-700 border-blue-200',
+                    'bg-green-100 text-green-700 border-green-200',
+                    'bg-purple-100 text-purple-700 border-purple-200',
+                    'bg-orange-100 text-orange-700 border-orange-200',
+                    'bg-pink-100 text-pink-700 border-pink-200',
+                    'bg-cyan-100 text-cyan-700 border-cyan-200',
+                    'bg-yellow-100 text-yellow-700 border-yellow-200',
+                    'bg-indigo-100 text-indigo-700 border-indigo-200'
+                ];
+                previewEl.innerHTML = dreams.map((dream, index) => `
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${colors[index % colors.length]} animate-[fadeIn_0.2s_ease-out]"
+                          style="animation-delay: ${index * 0.05}s">
+                        <span class="material-icons-round text-[10px]">auto_awesome</span>
+                        ${escapeHtml(dream.length > 15 ? dream.slice(0, 15) + '...' : dream)}
+                    </span>
+                `).join('');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function bindForm() {
+            const formEl = document.getElementById('profile-form');
+            const feedbackEl = document.getElementById('profile-feedback');
+            const saveBtn = document.getElementById('profile-save-btn');
+            const avatarInput = document.getElementById('profile-avatar-url');
+            const dreamTextarea = document.getElementById('profile-dream');
+
+            if (avatarInput) {
+                avatarInput.addEventListener('input', updateAvatarPreview);
+            }
+
+            if (dreamTextarea) {
+                dreamTextarea.addEventListener('input', updateDreamPreview);
+                // Initial preview
+                updateDreamPreview();
+            }
+
+            if (!formEl) return;
+            formEl.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                if (!currentUserId) return;
+
+                const dreamList = document.getElementById('profile-dream').value
+                    .split(/\r?\n/)
+                    .map(item => item.trim())
+                    .filter(Boolean);
+
+                const payload = {
+                    full_name: document.getElementById('profile-full-name').value,
+                    dream: dreamList.join('\n'),
+                    dreams: dreamList,
+                    bio: document.getElementById('profile-bio').value,
+                    avatar_url: document.getElementById('profile-avatar-url').value
+                };
+
+                saveBtn.disabled = true;
+                if (feedbackEl) feedbackEl.textContent = '保存中...';
+
+                try {
+                    const res = await apiFetch(API_BASE_URL + `/api/student/${currentUserId}/profile`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!res.ok) {
+                        let message = '保存失败';
+                        try {
+                            const data = await res.json();
+                            message = data?.error || message;
+                        } catch (_) { }
+                        throw new Error(message);
+                    }
+
+                    const result = await res.json();
+                    if (feedbackEl) feedbackEl.textContent = '保存成功';
+
+                    localStorage.setItem(`profile_cache_${currentUserId}`, JSON.stringify(result.data || payload));
+                    const userStr = localStorage.getItem('user');
+                    if (userStr) {
+                        const user = JSON.parse(userStr);
+                        user.user_metadata = {
+                            ...(user.user_metadata || {}),
+                            full_name: result.data?.full_name || payload.full_name
+                        };
+                        localStorage.setItem('user', JSON.stringify(user));
+                    }
+                } catch (error) {
+                    if (feedbackEl) feedbackEl.textContent = error.message || '保存失败';
+                } finally {
+                    saveBtn.disabled = false;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            bindForm();
+            await initProfile();
+
+            const params = new URLSearchParams(window.location.search);
+            const focus = params.get('focus');
+            if (focus === 'dream') {
+                const dreamInput = document.getElementById('profile-dream');
+                if (dreamInput) {
+                    dreamInput.focus();
+                    dreamInput.select();
+                }
+            }
+        });
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

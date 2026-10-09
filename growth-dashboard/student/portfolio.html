@@ -1,0 +1,2385 @@
+﻿<!-- AI Student Dream Portfolio -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>AI 梦想档案</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee9d2b",
+                        "primary-dark": "#d98b1f",
+                        "primary-light": "#fef3e2",
+                        "beige-bg": "#fcf9f4",
+                        "beige-card": "#ffffff",
+                        "warm-border": "#f0e6d0",
+                        "accent-yellow": "#f4d03f",
+                        "text-main": "#4a4036",
+                        "text-sub": "#9ca3af",
+                        "background-dark": "#292520"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2.5rem",
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+            .dream-range::-webkit-slider-thumb {
+            appearance: none;
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 9999px;
+            background: #ee9d2b;
+            border: 3px solid #fef3e2;
+            box-shadow: 0 6px 18px rgba(230, 162, 60, 0.35);
+            cursor: pointer;
+        }
+
+        .dream-range::-moz-range-thumb {
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 9999px;
+            background: #ee9d2b;
+            border: 3px solid #fef3e2;
+            box-shadow: 0 6px 18px rgba(230, 162, 60, 0.35);
+            cursor: pointer;
+        }
+
+        .soft-grid {
+            background-image:
+                linear-gradient(rgba(230, 162, 60, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(230, 162, 60, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* MVP Focus states for accessibility */
+        .focus-ring:focus,
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        .focus-ring:focus-visible {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        /* Disabled state */
+        .disabled,
+        button:disabled,
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0e6d0;
+            border-top-color: #ee9d2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state styling */
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button, a, input, select, textarea {
+            transition: all 0.2s ease;
+        }
+
+    </style>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+</head>
+
+<body
+    class="bg-beige-bg dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen relative overflow-x-hidden">
+
+
+
+        <nav class="relative z-10 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <a href="dashboard.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/30">
+                    <span class="material-icons-round">rocket_launch</span>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-text-main dark:text-gray-100">梦想档案</span>
+            </a>
+        </div>
+        <div class="hidden md:flex items-center bg-white/80 dark:bg-white/5 backdrop-blur-sm px-2 py-2 rounded-full shadow-sm border border-primary/20">
+            <a class="px-6 py-2 bg-primary text-white font-semibold rounded-full shadow-md" href="#">我的梦想</a>
+            <a class="px-6 py-2 text-gray-600 dark:text-gray-300 hover:bg-beige-bg dark:hover:bg-white/10 rounded-full transition-colors" href="#">课堂表现</a>
+            <a class="px-6 py-2 text-gray-600 dark:text-gray-300 hover:bg-beige-bg dark:hover:bg-white/10 rounded-full transition-colors" href="#">成长记录</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="relative p-2 bg-white/80 dark:bg-white/5 rounded-full hover:bg-beige-bg dark:hover:bg-white/10 transition border border-primary/20 text-gray-700 dark:text-gray-100">
+                <span class="material-icons-round">notifications</span>
+                <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></span>
+            </button>
+            <a href="dashboard.html">
+                <span class="material-icons-round text-gray-600 hover:text-primary text-3xl transition-colors">home</span>
+            </a>
+            <a href="profile.html">
+                <img id="user-avatar-nav" alt="学生头像"
+                    class="w-12 h-12 rounded-full border-2 border-primary object-cover shadow-md"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsGkI2c26lOmZnXvaxtoiiLmisODi2HIBlUGsfZ_c2DOI-HiICqyb_hj_abmQHI6nzWU0ehEpAyTkyB-aZa4z2XWogN1O3Bl0gi66x9OfsX0ikzmED6aIJNcEUeFXQelmyx9WzVzK8BW1EayG-6ozRzXX95IqB2TW1koY7UbUU5ssXrP7ogCFzeCLy-mT963qUCtVBB5RcRQ1SITtiQdrOuQpiiPwf3HlnhTImE8ntoqOsEVj-Lh7SjFkedJQq7_0TzvekYKzQwfQ" />
+            </a>
+        </div>
+    </nav>
+        <main class="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pb-12 pt-4 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <section class="lg:col-span-12">
+            <div class="relative overflow-hidden rounded-[1.5rem] border border-primary/20 bg-white/85 dark:bg-white/5 backdrop-blur-md shadow-xl">
+                <div class="absolute inset-0 soft-grid opacity-40 pointer-events-none"></div>
+                <div class="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/15 blur-3xl"></div>
+                <div class="absolute -left-10 bottom-0 h-40 w-40 rounded-full bg-[#ffdca8]/60 blur-3xl"></div>
+                <div class="relative grid gap-4 p-4 md:p-5 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                    <div class="grid gap-3 xl:grid-cols-[156px_minmax(0,1fr)]">
+                        <div class="relative overflow-hidden rounded-[1.45rem] border border-primary/15 bg-gradient-to-br from-[#fff8ef] via-white to-[#fff3de] p-3.5 shadow-lg shadow-primary/10">
+                            <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/15 blur-2xl"></div>
+                            <div class="absolute -left-6 bottom-0 h-20 w-20 rounded-full bg-[#ffd88a]/30 blur-2xl"></div>
+                            <div class="absolute left-3 top-3 rotate-[-8deg] rounded-full bg-[#8ddf74] px-2 py-1 text-[10px] font-black tracking-[0.18em] text-white shadow-sm">GO</div>
+                            <div class="relative flex h-full flex-col items-center justify-center gap-2 text-center">
+                                <div class="relative shrink-0">
+                                    <div class="absolute inset-0 rounded-full bg-primary/25 blur-xl"></div>
+                                    <img id="user-avatar-main" alt="学生梦想头像"
+                                        class="relative z-10 h-22 w-22 rounded-full border-4 border-white object-cover shadow-xl md:h-24 md:w-24"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6yjHXzrJZy8aP6qCTdVhBsG8YX-RDhfob7J2DIF_y7aoY_MGr6pP8v6AoxKoMoht0zaA17x7nLkB-NwxaYwFqK6r345cbi-9JEPH_iGpD79wahnkGrKKZGIL8vZXzMnNj1qUWCCdFNI_py-FwJ1r37cfCbrTUbadwxrSM6jLPA4S-fDd2Fr7bXA6K1p_s7yAuzSijKca-H4uyD6F3KbpxWXX7P3f5z58MFQj7nTH7JSdqXF2sUliIuJtJ31C6gGFu-j-LZ2Uv-Mk" />
+                                </div>
+                                <p class="inline-flex items-center gap-2 rounded-full bg-white/85 px-2.5 py-1 text-[11px] font-bold text-primary-dark shadow-sm">
+                                    <span class="material-icons-round text-sm">auto_awesome</span>
+                                    梦想主角
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="rounded-[1.45rem] border border-primary/15 bg-white/88 p-4 shadow-lg shadow-primary/5 backdrop-blur-sm">
+                            <div class="flex flex-col gap-3">
+                                <div>
+                                    <p class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary-dark">
+                                        <span class="material-icons-round text-sm">stars</span>
+                                        一步一步实现梦想
+                                    </p>
+                                    <h1 class="mt-2.5 min-h-[2.5rem] text-3xl font-bold tracking-tight text-text-main dark:text-gray-100 md:text-[2.35rem]"
+                                        id="user-name">
+                                        <span class="inline-block h-9 w-36 animate-pulse rounded-xl bg-gray-200 dark:bg-white/10"></span>
+                                    </h1>
+                                    <p id="user-bio"
+                                        class="mt-1.5 flex min-h-[1.75rem] items-center gap-2 text-[15px] font-semibold text-primary-dark dark:text-primary">
+                                        <span class="inline-block h-6 w-44 animate-pulse rounded-lg bg-gray-200 dark:bg-white/10"></span>
+                                    </p>
+                                </div>
+
+                                <div class="rounded-[1rem] border border-primary/10 bg-[#fff8ef] px-3.5 py-2.5">
+                                    <div class="flex items-start gap-3">
+                                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
+                                            <span class="material-icons-round text-base">smart_toy</span>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="text-xs font-bold uppercase tracking-[0.25em] text-primary/80">AI 小鼓励</p>
+                                            <p class="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-200" id="ai-comment">
+                                                <span class="block space-y-2">
+                                                    <span class="block h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-white/10"></span>
+                                                    <span class="block h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-white/10"></span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-3">
+                        <div class="group relative overflow-hidden rounded-[1rem] border border-primary/15 bg-gradient-to-br from-[#fff9f0] to-[#fff2dd] p-3.5 shadow-sm transition-transform duration-200 hover:-translate-y-1">
+                            <div class="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-primary/10 blur-2xl"></div>
+                            <div class="absolute left-3 top-3 rotate-[-7deg] rounded-full bg-white/85 px-2 py-1 text-[10px] font-black text-primary shadow-sm">NEW</div>
+                            <div class="relative">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-gray-500">勋章收集</p>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 shadow-sm">
+                                        <span class="material-icons-round text-[1.7rem] text-primary">emoji_events</span>
+                                    </div>
+                                </div>
+                                <h4 class="mt-3 text-3xl font-bold text-text-main dark:text-gray-100" id="badge-count">
+                                    <div class="mt-1 h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-white/10"></div>
+                                </h4>
+                                <p class="mt-1.5 text-[11px] font-semibold text-primary-dark/80">像贴纸一样慢慢收集</p>
+                            </div>
+                        </div>
+                        <div class="group relative overflow-hidden rounded-[1rem] border border-[#b9c8ff]/40 bg-gradient-to-br from-white to-[#eef2ff] p-3.5 shadow-sm transition-transform duration-200 hover:-translate-y-1">
+                            <div class="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-[#7c8cff]/15 blur-2xl"></div>
+                            <div class="absolute left-3 top-3 rotate-[6deg] rounded-full bg-[#dfe6ff] px-2 py-1 text-[10px] font-black text-[#5e72d7] shadow-sm">XP</div>
+                            <div class="relative">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-gray-500">成长能量</p>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/85 shadow-sm">
+                                        <span class="material-icons-round text-[1.7rem] text-[#7c8cff]">bolt</span>
+                                    </div>
+                                </div>
+                                <h4 class="mt-3 text-3xl font-bold text-text-main dark:text-gray-100" id="task-count">
+                                    <div class="mt-1 h-8 w-16 animate-pulse rounded bg-gray-200 dark:bg-white/10"></div>
+                                </h4>
+                                <p class="mt-1.5 text-[11px] font-semibold text-[#5e72d7]">每完成一步就会亮一点</p>
+                            </div>
+                        </div>
+                        <div class="group relative overflow-hidden rounded-[1rem] border border-[#ffc79c]/50 bg-gradient-to-br from-white to-[#fff1e6] p-3.5 shadow-sm transition-transform duration-200 hover:-translate-y-1">
+                            <div class="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-[#ff8a3d]/15 blur-2xl"></div>
+                            <div class="absolute left-3 top-3 rotate-[-5deg] rounded-full bg-[#ffe5d3] px-2 py-1 text-[10px] font-black text-[#d86a20] shadow-sm">HOT</div>
+                            <div class="relative">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-gray-500">连续打卡</p>
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/85 shadow-sm">
+                                        <span class="material-icons-round text-[1.7rem] text-[#ff8a3d]">local_fire_department</span>
+                                    </div>
+                                </div>
+                                <h4 class="mt-3 text-3xl font-bold text-text-main dark:text-gray-100" id="streak-count">
+                                    <div class="mt-1 h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-white/10"></div>
+                                </h4>
+                                <p class="mt-1.5 text-[11px] font-semibold text-[#d86a20]">坚持越久，火苗越亮</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="lg:col-span-8 flex flex-col gap-6">
+            <section class="rounded-[1.5rem] border border-primary/20 bg-white/85 p-5 shadow-lg backdrop-blur-md md:p-7">
+                <div>
+                    <p class="text-sm font-semibold text-primary-dark">当前梦想</p>
+                    <h2 class="mt-2 text-2xl font-bold text-text-main dark:text-gray-100">先盯住一个梦想，页面就会更清楚</h2>
+                    <p class="mt-2 text-sm leading-7 text-gray-500 dark:text-gray-400">把主要注意力放在一个目标上，其他梦想先轻轻放在旁边。</p>
+                </div>
+
+                <div class="mt-5 rounded-[1.5rem] border border-primary/15 bg-[#fffaf4] p-4 md:p-5">
+                    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-[0.2em] text-primary/80">梦想卡片</p>
+                            <p class="mt-2 text-lg font-bold text-text-main dark:text-gray-100">
+                                现在主线是 <span id="growth-dream" class="text-primary-dark">小学生</span>
+                            </p>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">点一下就切换，不会跳出页面。</p>
+                    </div>
+                    <div id="dream-tags-list" class="mt-4 grid gap-3 sm:grid-cols-2">
+                        <span class="rounded-2xl border border-dashed border-primary/20 bg-white/70 px-4 py-5 text-sm text-gray-500">正在加载梦想...</span>
+                    </div>
+                </div>
+                <div id="time-budget-section" class="mt-5 hidden rounded-[1.5rem] border border-primary/15 bg-[#fff8ef] p-4 md:p-5">
+                    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-icons-round text-primary">schedule</span>
+                                <h3 class="text-lg font-bold text-text-main dark:text-gray-100">这周时间怎么分</h3>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">先决定总时间，再给每个梦想一点点。</p>
+                        </div>
+                        <button id="toggle-time-budget-btn"
+                            class="inline-flex items-center gap-2 self-start rounded-full border border-primary/15 bg-white px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-primary/10"
+                            title="收起时间安排">
+                            <span class="material-icons-round text-sm">visibility_off</span>
+                            收起安排
+                        </button>
+                    </div>
+
+                    <div id="time-budget-body" class="mt-4 space-y-4">
+                        <div class="flex flex-col gap-4 rounded-[0.95rem] bg-white/80 p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary/70">本周可用时间</p>
+                                <div class="mt-3 inline-flex items-center gap-3 rounded-full bg-[#fff6e8] px-3 py-2">
+                                    <button id="decrease-total-hours" class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-lg font-bold text-text-main transition hover:bg-primary/10">-</button>
+                                    <span id="total-weekly-hours" class="min-w-[2rem] text-center text-2xl font-bold text-primary-dark">10</span>
+                                    <button id="increase-total-hours" class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-lg font-bold text-text-main transition hover:bg-primary/10">+</button>
+                                    <span class="text-sm font-semibold text-gray-500">小时</span>
+                                </div>
+                            </div>
+                            <button id="save-allocation-btn"
+                                class="rounded-full bg-primary px-5 py-3 text-sm font-bold text-white transition-colors opacity-50 cursor-not-allowed hover:bg-primary-dark"
+                                disabled>
+                                保存分配
+                            </button>
+                        </div>
+
+                        <div id="dream-allocation-list" class="space-y-3"></div>
+
+                        <div class="rounded-[0.95rem] border border-primary/10 bg-white/80 p-4">
+                            <div class="mb-2 flex items-center justify-between text-sm">
+                                <span class="font-semibold text-gray-500">分配预览</span>
+                                <span id="allocation-remaining" class="font-medium text-green-600">剩余 10 小时</span>
+                            </div>
+                            <div id="allocation-bars-preview" class="mt-3">
+                                <div class="h-3 bg-white dark:bg-white/10 rounded-full overflow-hidden flex"></div>
+                            </div>
+                            <div id="allocation-legend" class="mt-3 flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <div id="time-reminders-container" class="hidden"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-[1.5rem] border border-primary/20 bg-white/85 p-5 shadow-lg backdrop-blur-md md:p-7">
+                <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-primary-dark">本周小地图</p>
+                        <h2 class="mt-2 text-2xl font-bold text-text-main dark:text-gray-100">把梦想拆成看得见的小步子</h2>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">这里只显示当前梦想相关的小目标，内容会更少、更容易看。</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="dreams-analytics.html"
+                            class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2.5 text-sm font-bold text-blue-600 transition hover:bg-blue-50">
+                            <span class="material-icons-round text-base">analytics</span>
+                            看看分析
+                        </a>
+                        <button id="add-goal-button"
+                            class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm shadow-primary/20 transition hover:bg-primary-dark active:scale-95">
+                            <span class="material-icons-round text-base">add</span>
+                            添加一个小目标
+                        </button>
+                    </div>
+                </div>
+                <div id="ai-goal-recommend-list" class="mt-5 hidden space-y-2">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">系统已自动给出一条建议目标。</p>
+                </div>
+                <div class="mt-5 relative space-y-6 pl-12" id="milestones-list">
+                    <div class="absolute left-6 top-3 bottom-3 w-0.5 rounded-full bg-gradient-to-b from-primary/60 via-primary/30 to-transparent"></div>
+                    <div class="relative flex items-start gap-6 animate-pulse">
+                        <div class="absolute -left-9 rounded-full border border-gray-200 bg-white p-1 z-10">
+                            <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                        </div>
+                        <div class="h-20 w-full rounded-2xl bg-gray-100"></div>
+                    </div>
+                    <div class="relative mt-4 flex items-start gap-6 animate-pulse">
+                        <div class="absolute -left-9 rounded-full border border-gray-200 bg-white p-1 z-10">
+                            <div class="h-6 w-6 rounded-full bg-gray-200"></div>
+                        </div>
+                        <div class="h-20 w-full rounded-2xl bg-gray-100"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rounded-[1.5rem] border border-primary/20 bg-white/85 p-5 shadow-lg backdrop-blur-md md:p-7">
+                <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-primary-dark">卡住了怎么办</p>
+                        <h2 class="mt-2 text-2xl font-bold text-text-main dark:text-gray-100">先说出阻碍，再想今天能做什么</h2>
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">不用一次写很多，先写一句最真实的卡点就够了。</p>
+                    </div>
+                    <span id="obstacle-dream-badge" class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary-dark">当前梦想：未选择</span>
+                </div>
+
+                <form id="obstacle-form" class="mt-5 space-y-4">
+                    <div class="grid gap-4 md:grid-cols-[1fr_0.9fr]">
+                        <div class="rounded-[0.95rem] border border-primary/10 bg-[#fff9f1] p-4">
+                            <label for="obstacle-content" class="text-sm font-semibold text-text-main dark:text-gray-100">我现在卡在哪里？</label>
+                            <input id="obstacle-content" type="text" maxlength="200" placeholder="例如：我不知道今天该先做哪一步"
+                                class="mt-3 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/20" />
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div class="rounded-[0.95rem] border border-primary/10 bg-white p-4">
+                                <label for="obstacle-type" class="text-sm font-semibold text-text-main dark:text-gray-100">这更像哪种困难？</label>
+                                <select id="obstacle-type"
+                                    class="mt-3 w-full rounded-2xl border border-primary/20 bg-[#fffaf4] px-4 py-3 text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                    <option value="time">时间</option>
+                                    <option value="capability">能力</option>
+                                    <option value="resource">资源</option>
+                                    <option value="emotion">情绪</option>
+                                    <option value="social">人际</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="rounded-[0.95rem] border border-primary/10 bg-white p-4">
+                                <label for="obstacle-severity" class="text-sm font-semibold text-text-main dark:text-gray-100">这个困难有多大？</label>
+                                <div class="mt-3 flex items-center gap-3">
+                                    <input id="obstacle-severity" type="range" min="1" max="5" value="3" class="dream-range w-full accent-primary" />
+                                    <span id="obstacle-severity-value" class="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary-dark">3</span>
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500">1 比较轻松，5 比较难。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <p id="obstacle-feedback" class="min-h-[1rem] text-sm text-gray-500 dark:text-gray-400"></p>
+                        <button id="obstacle-submit" type="submit"
+                            class="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-dark">
+                            记录这个困难
+                        </button>
+                    </div>
+                </form>
+
+                <div id="obstacle-ai-tip" class="mt-5 rounded-[1.5rem] border border-primary/15 bg-[#fff7eb] p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary-dark">
+                            <span class="material-icons-round">tips_and_updates</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-primary-dark">AI 小建议</p>
+                            <p id="obstacle-ai-tip-text" class="mt-2 text-sm leading-7 text-gray-700 dark:text-gray-300 transition-opacity duration-200">先记录一条阻碍，AI 会给你一个更轻松的开始办法。</p>
+                            <p id="obstacle-ai-tip-desc" class="mt-2 text-xs text-gray-500 dark:text-gray-400 transition-opacity duration-200">还没有选中的阻碍</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="obstacle-list" class="mt-5 divide-y divide-primary/10 rounded-[0.95rem] border border-primary/10 bg-white/70 px-4">
+                    <p class="py-4 text-sm text-gray-500 dark:text-gray-400">正在加载阻碍记录...</p>
+                </div>
+            </section>
+        </div>
+
+        <aside class="lg:col-span-4 flex flex-col gap-6">
+            <section class="rounded-[1.5rem] border border-primary/20 bg-white/85 p-5 shadow-lg backdrop-blur-md md:p-6">
+                <div>
+                    <p class="text-sm font-semibold text-primary-dark">能力星图</p>
+                    <h3 class="mt-2 text-xl font-bold text-text-main dark:text-gray-100">看看你最近在哪些地方变强了</h3>
+                </div>
+                <div class="relative mx-auto mt-5 flex aspect-square w-full max-w-[320px] items-center justify-center rounded-[1.5rem] bg-[#f8f3ea] p-4">
+                    <svg class="h-full w-full overflow-visible drop-shadow-xl" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="radar-gradient" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#ee9d2b" stop-opacity="0.9" />
+                                <stop offset="100%" stop-color="#ee9d2b" stop-opacity="0.2" />
+                            </linearGradient>
+                            <filter id="radar-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <g class="stroke-gray-200 dark:stroke-white/10" stroke-width="0.5" stroke-dasharray="1 1" fill="none">
+                            <polygon points="50,10 88,38 73,85 27,85 12,38" />
+                            <polygon points="50,20 78,41 67,76 33,76 22,41" />
+                            <polygon points="50,30 69,44 61,68 39,68 31,44" />
+                            <polygon points="50,40 59,47 56,59 44,59 41,47" />
+                        </g>
+                        <g class="stroke-gray-200 dark:stroke-white/10" stroke-width="0.5" stroke-dasharray="1 1">
+                            <line x1="50" y1="50" x2="50" y2="10" />
+                            <line x1="50" y1="50" x2="88" y2="38" />
+                            <line x1="50" y1="50" x2="73" y2="85" />
+                            <line x1="50" y1="50" x2="27" y2="85" />
+                            <line x1="50" y1="50" x2="12" y2="38" />
+                        </g>
+                        <polygon id="radar-polygon" fill="url(#radar-gradient)" stroke="#ee9d2b" stroke-width="2" stroke-linejoin="round" filter="url(#radar-glow)" class="transition-all duration-1000 ease-out"></polygon>
+                        <g id="radar-dots" class="transition-all duration-1000 ease-out">
+                            <circle r="3" fill="#ffffff" stroke="#ee9d2b" stroke-width="1.5"></circle>
+                            <circle r="3" fill="#ffffff" stroke="#ee9d2b" stroke-width="1.5"></circle>
+                            <circle r="3" fill="#ffffff" stroke="#ee9d2b" stroke-width="1.5"></circle>
+                            <circle r="3" fill="#ffffff" stroke="#ee9d2b" stroke-width="1.5"></circle>
+                            <circle r="3" fill="#ffffff" stroke="#ee9d2b" stroke-width="1.5"></circle>
+                        </g>
+                        <g class="pointer-events-none select-none fill-gray-600 text-[5px] font-bold dark:fill-gray-300" style="text-shadow: 0 1px 2px rgba(255,255,255,0.8);">
+                            <text text-anchor="middle" x="50" y="6" class="fill-primary-dark dark:fill-primary">乐观</text>
+                            <text text-anchor="start" x="90" y="38">坚持</text>
+                            <text text-anchor="middle" x="73" y="92">成就</text>
+                            <text text-anchor="middle" x="27" y="92">社交</text>
+                            <text text-anchor="end" x="10" y="38">创造</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="mt-4 flex justify-center">
+                    <div class="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
+                        <div class="h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></div>
+                        <span class="text-sm font-bold text-primary-dark">综合评级：S</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 gap-4" id="recommended-tasks-list">
+                <div class="h-40 animate-pulse rounded-[1rem] border border-primary/20 bg-primary/10 p-6"></div>
+                <div class="h-40 animate-pulse rounded-[1rem] border border-gray-200 bg-white/80 p-6"></div>
+            </div>
+        </aside>
+    </main>
+        <div id="goal-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" data-close="goal-modal"></div>
+        <div class="relative w-full max-w-md mx-4 rounded-[1rem] border border-primary/20 bg-white/95 p-6 shadow-2xl dark:bg-background-dark">
+            <div class="mb-4 flex items-center justify-between">
+                <h3 id="goal-modal-title" class="text-lg font-bold text-text-main dark:text-gray-100">添加目标</h3>
+                <button id="close-goal-modal" class="flex h-9 w-9 items-center justify-center rounded-full bg-beige-bg text-text-main transition hover:bg-primary/10 dark:bg-white/10 dark:text-gray-100">
+                    <span class="material-icons-round text-base">close</span>
+                </button>
+            </div>
+            <form id="goal-form" class="space-y-4">
+                <div>
+                    <label class="text-sm font-semibold text-text-main dark:text-gray-100" for="goal-title">目标名称</label>
+                    <input id="goal-title" name="title" type="text" required class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" placeholder="例如：这周完成一幅作品" />
+                </div>
+                <div>
+                    <label class="text-sm font-semibold text-text-main dark:text-gray-100" for="goal-desc">目标说明</label>
+                    <textarea id="goal-desc" name="description" rows="3" class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" placeholder="写下这一步为什么重要，或者你准备怎么做。"></textarea>
+                </div>
+                <div>
+                    <label class="text-sm font-semibold text-text-main dark:text-gray-100" for="goal-date">希望完成的日期</label>
+                    <input id="goal-date" name="target_date" type="date" class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" />
+                </div>
+                <p id="goal-form-error" class="hidden text-sm text-red-500"></p>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button id="cancel-goal" type="button" class="rounded-full border border-primary/30 px-4 py-2 text-primary-dark transition hover:bg-primary/10 dark:text-primary">取消</button>
+                    <button id="goal-submit" type="submit" class="rounded-full bg-primary px-5 py-2 text-white font-semibold transition hover:bg-primary-dark">保存目标</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="goal-submit-modal" class="fixed inset-0 z-[60] hidden items-center justify-center">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" data-close="goal-submit-modal"></div>
+        <div class="relative w-full max-w-md mx-4 rounded-[1rem] border border-primary/20 bg-white/95 p-6 shadow-2xl dark:bg-background-dark">
+            <div class="mb-4 flex items-center justify-between">
+                <div>
+                    <h3 id="goal-submit-title" class="text-lg font-bold text-text-main dark:text-gray-100">提交完成材料</h3>
+                    <p id="goal-submit-subtitle" class="mt-1 text-xs text-gray-500 dark:text-gray-400">给老师看看你是怎么完成这个小目标的吧。</p>
+                </div>
+                <button id="close-goal-submit-modal" class="flex h-9 w-9 items-center justify-center rounded-full bg-beige-bg text-text-main transition hover:bg-primary/10 dark:bg-white/10 dark:text-gray-100">
+                    <span class="material-icons-round text-base">close</span>
+                </button>
+            </div>
+            <form id="goal-submit-form" class="space-y-4">
+                <div>
+                    <label class="text-sm font-semibold text-text-main dark:text-gray-100" for="goal-submit-file">上传照片（可选）</label>
+                    <input id="goal-submit-file" type="file" accept="image/*" class="mt-2 block w-full text-sm text-text-main file:mr-3 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-dark hover:file:bg-primary/20" />
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">支持 jpg、png、webp，单张不超过 8MB。</p>
+                </div>
+                <div id="goal-submit-preview-wrap" class="hidden rounded-2xl border border-primary/15 bg-primary/5 p-3 dark:bg-white/5">
+                    <img id="goal-submit-preview" src="" alt="目标完成预览" class="h-40 w-full rounded-xl object-cover" />
+                </div>
+                <div>
+                    <label class="text-sm font-semibold text-text-main dark:text-gray-100" for="goal-submit-note">一句说明（可选）</label>
+                    <textarea id="goal-submit-note" rows="3" maxlength="300" class="mt-2 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" placeholder="例如：我已经把这一步做完了，还拍了照片给老师看。"></textarea>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">照片和说明至少提交一项。</p>
+                </div>
+                <p id="goal-submit-error" class="hidden text-sm text-red-500"></p>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" id="cancel-goal-submit" class="rounded-full border border-primary/30 px-4 py-2 text-primary-dark transition hover:bg-primary/10 dark:text-primary">取消</button>
+                    <button type="submit" id="goal-submit-confirm" class="rounded-full bg-primary px-5 py-2 font-semibold text-white transition hover:bg-primary-dark">提交给老师</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+        <!-- Time Log Modal -->
+    <div id="time-log-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" data-close="time-log-modal"></div>
+        <div class="relative w-full max-w-sm mx-4 rounded-[1rem] bg-white p-6 shadow-2xl dark:bg-[#2d2a25]">
+            <div class="mb-4 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-text-main dark:text-gray-100">记录投入时间</h3>
+                <button id="close-time-log-modal" class="text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-300">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <div id="time-log-goal-info" class="mb-4 rounded-2xl bg-primary/5 p-3 dark:bg-white/5">
+                <p class="text-sm text-gray-600 dark:text-gray-300" id="time-log-goal-title"></p>
+            </div>
+            <form id="time-log-form" class="space-y-4">
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-text-main dark:text-gray-100">投入时长（分钟）</label>
+                    <div class="flex items-center gap-3">
+                        <button type="button" class="time-preset-btn rounded-full border border-primary/30 px-3 py-1.5 text-xs text-primary transition hover:bg-primary/10" data-minutes="15">15 分钟</button>
+                        <button type="button" class="time-preset-btn rounded-full border border-primary/30 px-3 py-1.5 text-xs text-primary transition hover:bg-primary/10" data-minutes="30">30 分钟</button>
+                        <button type="button" class="time-preset-btn rounded-full border border-primary/30 px-3 py-1.5 text-xs text-primary transition hover:bg-primary/10" data-minutes="60">1 小时</button>
+                    </div>
+                    <input type="number" id="time-log-minutes" min="1" max="480" required class="mt-3 w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" placeholder="输入分钟数，例如 30" />
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-text-main dark:text-gray-100">记录日期</label>
+                    <input type="date" id="time-log-date" required class="w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" />
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-text-main dark:text-gray-100">备注（可选）</label>
+                    <input type="text" id="time-log-note" class="w-full rounded-2xl border border-primary/20 bg-white px-4 py-3 text-sm text-text-main focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 dark:bg-white/5 dark:text-gray-100" placeholder="今天做了什么？" />
+                </div>
+                <p id="time-log-error" class="hidden text-sm text-red-500"></p>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" id="cancel-time-log" class="rounded-full border border-primary/30 px-4 py-2 text-primary-dark transition hover:bg-primary/10 dark:text-primary">取消</button>
+                    <button type="submit" class="rounded-full bg-primary px-5 py-2 font-semibold text-white transition hover:bg-primary-dark">记录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentUserId = 'mock-student-id';
+        let editingGoalId = null;
+        let goalCache = new Map();
+        let aiGoalRecommendations = [];
+        let allDreams = [];
+        let selectedDream = '';
+        let obstacleRows = [];
+        const EVIDENCE_MAX_SIZE_BYTES = 8 * 1024 * 1024;
+
+        const escapeHtml = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
+        function readFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('读取图片失败，请重新选择。'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getApiErrorMessage(responseData, fallback = '提交失败，请稍后再试。') {
+            if (responseData && typeof responseData.error === 'string' && responseData.error.trim()) {
+                return responseData.error.trim();
+            }
+            return fallback;
+        }
+
+        function getStudentAuthHeaders() {
+            const token = localStorage.getItem('sb-access-token');
+            return token
+                ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+                : { 'Content-Type': 'application/json' };
+        }
+
+        function getDreamsFromData(data) {
+            if (Array.isArray(data?.dreams) && data.dreams.length > 0) {
+                return data.dreams.filter(Boolean);
+            }
+            if (data?.dream) {
+                return String(data.dream)
+                    .split(/\r?\n|[，。、；;]+/)
+                    .map(item => item.trim())
+                    .filter(Boolean);
+            }
+            return [];
+        }
+
+                function renderDreamTags() {
+            const dreamTagsList = document.getElementById('dream-tags-list');
+            if (!dreamTagsList) return;
+            if (!allDreams.length) {
+                dreamTagsList.innerHTML = '<span class="rounded-2xl border border-dashed border-primary/20 bg-white/70 px-4 py-5 text-sm text-gray-500 dark:text-gray-400">还没有填写梦想，先去个人信息页添加吧。</span>';
+                return;
+            }
+
+            dreamTagsList.innerHTML = allDreams.map((dream, index) => {
+                const active = dream === selectedDream;
+                return `
+                    <button data-action="select-dream" data-dream="${escapeHtml(dream)}"
+                        class="group rounded-[0.95rem] border p-4 text-left transition-all duration-200 ${active
+                        ? 'border-primary bg-primary/10 shadow-sm shadow-primary/10 ring-2 ring-primary/20'
+                        : 'border-primary/15 bg-white/85 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-[#fff7eb]'}">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.18em] ${active ? 'text-primary-dark' : 'text-gray-400'}">
+                                    ${active ? '正在专注' : `梦想 ${index + 1}`}
+                                </p>
+                                <p class="mt-2 text-base font-bold text-text-main dark:text-gray-100">${escapeHtml(dream)}</p>
+                            </div>
+                            <span class="material-icons-round text-lg ${active ? 'text-primary' : 'text-gray-300 group-hover:text-primary/70'}">
+                                ${active ? 'stars' : 'radio_button_unchecked'}
+                            </span>
+                        </div>
+                        <p class="mt-3 text-sm leading-6 ${active ? 'text-primary-dark/90' : 'text-gray-500 dark:text-gray-400'}">
+                            ${active ? '当前页面会围绕这个梦想显示目标、时间和建议。' : '点一下，把它切换成现在最想做的主线。'}
+                        </p>
+                    </button>
+                `;
+            }).join('');
+        }
+
+                function obstacleTypeLabel(type) {
+            const map = {
+                time: '时间',
+                capability: '能力',
+                resource: '资源',
+                emotion: '情绪',
+                social: '人际',
+                other: '其他'
+            };
+            return map[type] || '其他';
+        }
+
+        function obstacleStatusLabel(status) {
+            const map = {
+                todo: '未开始',
+                in_progress: '进行中',
+                resolved: '已解决'
+            };
+            return map[status] || '未开始';
+        }
+
+        function obstacleStatusClass(status) {
+            const map = {
+                todo: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-300',
+                in_progress: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300',
+                resolved: 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300'
+            };
+            return map[status] || map.todo;
+        }
+
+        function obstacleCardAccent(status) {
+            const map = {
+                todo: 'border-l-yellow-300',
+                in_progress: 'border-l-blue-300',
+                resolved: 'border-l-green-300'
+            };
+            return map[status] || map.todo;
+        }
+
+        function getObstacleTaskButtonMeta(row) {
+            const linked = Boolean(row?.linked_task_id);
+            const status = row?.status || 'todo';
+
+            if (status === 'resolved') {
+                return {
+                    label: '已解决',
+                    disabled: true,
+                    className: 'text-xs font-semibold px-3 py-1.5 rounded-full border border-green-200 text-green-600 bg-green-50 cursor-not-allowed'
+                };
+            }
+
+            if (linked) {
+                return {
+                    label: '已转成今日计划',
+                    disabled: true,
+                    className: 'text-xs font-semibold px-3 py-1.5 rounded-full border border-blue-200 text-blue-600 bg-blue-50 cursor-not-allowed'
+                };
+            }
+
+            return {
+                label: '转为今日计划',
+                disabled: false,
+                className: 'text-xs font-semibold px-3 py-1.5 rounded-full bg-primary text-white hover:bg-primary-dark transition'
+            };
+        }
+
+        // ============================================
+        // Time Budget Planner (Multi-Dream Resource Allocation)
+        // ============================================
+
+        let timeBudgetData = {
+            totalHours: 10,
+            dreams: []
+        };
+        let allocationChanged = false;
+
+                async function loadTimeBudget(studentId) {
+            try {
+                const [overviewRes, comparisonRes] = await Promise.all([
+                    fetch(`http://localhost:3003/api/student/${studentId}/dreams/overview`),
+                    fetch(`http://localhost:3003/api/student/${studentId}/time-comparison`)
+                ]);
+
+                if (!overviewRes.ok) throw new Error('Failed to load dreams');
+
+                const data = await overviewRes.json();
+                const overviewDreams = (data.dreams || []).filter(d => d.status === 'active');
+                const activeDreams = allDreams.length > 0
+                    ? allDreams.map((title, index) => {
+                        const matched = overviewDreams.find((dream) => (dream.tag || dream.title) === title);
+                        return matched || {
+                            id: `profile-dream-${index}`,
+                            tag: title,
+                            title,
+                            weekly_hours: 0,
+                            status: 'active'
+                        };
+                    })
+                    : overviewDreams;
+
+                const section = document.getElementById('time-budget-section');
+                const body = document.getElementById('time-budget-body');
+                const toggleBtn = document.getElementById('toggle-time-budget-btn');
+
+                if (activeDreams.length === 0) {
+                    section?.classList.add('hidden');
+                    return;
+                }
+
+                section?.classList.remove('hidden');
+
+                const isCollapsed = localStorage.getItem('hideTimeBudget') === 'true';
+                body?.classList.toggle('hidden', isCollapsed);
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = isCollapsed
+                        ? '<span class="material-icons-round text-sm">visibility</span> 展开安排'
+                        : '<span class="material-icons-round text-sm">visibility_off</span> 收起安排';
+                    toggleBtn.title = isCollapsed ? '展开时间安排' : '收起时间安排';
+                }
+
+                let actualHoursMap = {};
+                let reminders = [];
+                if (comparisonRes.ok) {
+                    const comparisonData = await comparisonRes.json();
+                    actualHoursMap = Object.fromEntries(
+                        (comparisonData.dreams || []).map(d => [d.dream_id, d.actual_hours])
+                    );
+                    reminders = comparisonData.reminders || [];
+                }
+
+                timeBudgetData.totalHours = data.resource_allocation?.total_weekly_hours || 10;
+                timeBudgetData.dreams = activeDreams.map(d => ({
+                    id: d.id,
+                    tag: d.tag,
+                    hours: d.weekly_hours || 0,
+                    color: getDreamColor(d.id)
+                }));
+                timeBudgetData.actualHours = actualHoursMap;
+
+                renderTimeBudget();
+                renderTimeReminders(reminders);
+            } catch (err) {
+                console.error('Time budget load error:', err);
+            }
+        }
+
+        // Render smart reminders for time tracking
+                function renderTimeReminders(reminders) {
+            const container = document.getElementById('time-reminders-container');
+            if (!container) return;
+
+            if (!reminders || reminders.length === 0) {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+                return;
+            }
+
+            const typeIcons = {
+                warning: '⚠️',
+                info: '💡',
+                success: '✅'
+            };
+
+            const typeClasses = {
+                warning: 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20',
+                info: 'border-blue-200 bg-blue-50 dark:bg-blue-900/20',
+                success: 'border-green-200 bg-green-50 dark:bg-green-900/20'
+            };
+
+            container.innerHTML = `
+                <div class="space-y-2 rounded-[0.95rem] border border-primary/10 bg-white/80 p-4">
+                    <p class="text-sm font-bold text-text-main dark:text-gray-100">本周时间提醒</p>
+                    ${reminders.map(r => `
+                        <div class="flex items-start gap-3 rounded-2xl border p-3 ${typeClasses[r.type] || typeClasses.info}">
+                            <span class="text-base">${typeIcons[r.type] || '💡'}</span>
+                            <p class="text-sm leading-6 text-gray-600 dark:text-gray-300">${r.message}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            container.classList.remove('hidden');
+        }
+
+        function getDreamColor(id) {
+            const colors = ['bg-green-400', 'bg-blue-400', 'bg-purple-400', 'bg-orange-400', 'bg-pink-400', 'bg-cyan-400'];
+            let hash = 0;
+            for (let i = 0; i < id.length; i++) {
+                hash = id.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+                function renderTimeBudget() {
+            const totalHoursEl = document.getElementById('total-weekly-hours');
+            const listEl = document.getElementById('dream-allocation-list');
+            const remainingEl = document.getElementById('allocation-remaining');
+            const saveBtn = document.getElementById('save-allocation-btn');
+
+            if (totalHoursEl) totalHoursEl.textContent = timeBudgetData.totalHours;
+
+            const allocated = timeBudgetData.dreams.reduce((sum, d) => sum + d.hours, 0);
+            const remaining = timeBudgetData.totalHours - allocated;
+
+            if (remainingEl) {
+                remainingEl.textContent = remaining >= 0 ? `剩余 ${remaining} 小时` : `超出 ${Math.abs(remaining)} 小时`;
+                remainingEl.className = remaining >= 0 ? 'font-medium text-green-600' : 'font-medium text-red-500';
+            }
+
+            if (saveBtn) {
+                saveBtn.disabled = !allocationChanged || remaining < 0;
+                saveBtn.classList.toggle('opacity-50', !allocationChanged || remaining < 0);
+                saveBtn.classList.toggle('cursor-not-allowed', !allocationChanged || remaining < 0);
+            }
+
+            const actualHoursMap = timeBudgetData.actualHours || {};
+
+            if (listEl) {
+                listEl.innerHTML = timeBudgetData.dreams.map((dream, index) => {
+                    const actualHours = actualHoursMap[dream.id] || 0;
+                    const progress = dream.hours > 0 ? Math.min(100, Math.round((actualHours / dream.hours) * 100)) : 0;
+                    const progressColor = progress >= 100 ? 'bg-green-500' : (progress >= 50 ? 'bg-yellow-500' : 'bg-primary');
+                    const remainingHours = Math.max(0, dream.hours - actualHours);
+
+                    return `
+                        <div class="rounded-[0.95rem] border border-primary/10 bg-white/85 p-4 shadow-sm">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                <div>
+                                    <p class="text-base font-bold text-text-main dark:text-gray-100">${dream.tag}</p>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">给这个梦想安排一点固定时间，更容易坚持。</p>
+                                </div>
+                                <div class="inline-flex items-center gap-2 self-start rounded-full bg-[#fff6e8] px-2 py-2">
+                                    <button class="allocation-decrease flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-bold text-text-main transition hover:bg-primary/10" data-index="${index}">-</button>
+                                    <span class="w-10 text-center text-lg font-bold text-primary-dark">${dream.hours}</span>
+                                    <button class="allocation-increase flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-bold text-text-main transition hover:bg-primary/10" data-index="${index}">+</button>
+                                    <span class="text-sm font-semibold text-gray-500">h</span>
+                                </div>
+                            </div>
+                            <input type="range" min="0" max="${timeBudgetData.totalHours}" value="${dream.hours}"
+                                class="dream-range allocation-slider mt-4 h-2 w-full cursor-pointer appearance-none rounded-lg bg-[#f2e7d6] accent-primary"
+                                data-index="${index}">
+                            <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                                <span class="rounded-full bg-primary/10 px-2.5 py-1 font-semibold text-primary-dark">目标 ${dream.hours} 小时</span>
+                                <span class="rounded-full bg-[#eef6ff] px-2.5 py-1 font-semibold text-[#4a78cc]">已投入 ${actualHours.toFixed(1)} 小时</span>
+                                <span class="rounded-full ${progress >= 100 ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'} px-2.5 py-1 font-semibold">${progress >= 100 ? '已达成' : `还差 ${remainingHours.toFixed(1)} 小时`}</span>
+                            </div>
+                            <div class="mt-3 h-2 rounded-full bg-[#f2e7d6] overflow-hidden">
+                                <div class="${progressColor} h-full transition-all duration-300" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                listEl.querySelectorAll('.allocation-slider').forEach(slider => {
+                    slider.addEventListener('input', (e) => {
+                        const index = parseInt(e.target.dataset.index, 10);
+                        timeBudgetData.dreams[index].hours = parseInt(e.target.value, 10);
+                        allocationChanged = true;
+                        renderTimeBudget();
+                    });
+                });
+
+                listEl.querySelectorAll('.allocation-increase').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const index = parseInt(btn.dataset.index, 10);
+                        if (timeBudgetData.dreams[index].hours < timeBudgetData.totalHours) {
+                            timeBudgetData.dreams[index].hours++;
+                            allocationChanged = true;
+                            renderTimeBudget();
+                        }
+                    });
+                });
+
+                listEl.querySelectorAll('.allocation-decrease').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const index = parseInt(btn.dataset.index, 10);
+                        if (timeBudgetData.dreams[index].hours > 0) {
+                            timeBudgetData.dreams[index].hours--;
+                            allocationChanged = true;
+                            renderTimeBudget();
+                        }
+                    });
+                });
+            }
+
+            renderAllocationBar();
+        }
+
+                function renderAllocationBar() {
+            const legendEl = document.getElementById('allocation-legend');
+            const allocated = timeBudgetData.dreams.reduce((sum, d) => sum + d.hours, 0);
+            const unallocated = Math.max(0, timeBudgetData.totalHours - allocated);
+
+            const container = document.querySelector('#allocation-bars-preview .h-3');
+            if (container) {
+                container.innerHTML = timeBudgetData.dreams
+                    .filter(d => d.hours > 0)
+                    .map(d => {
+                        const percent = timeBudgetData.totalHours > 0 ? (d.hours / timeBudgetData.totalHours) * 100 : 0;
+                        return `<div class="${d.color} h-full transition-all duration-300" style="width: ${percent}%" title="${d.tag}: ${d.hours}h"></div>`;
+                    }).join('') +
+                    (unallocated > 0 ? `<div class="bg-gray-200 dark:bg-gray-700 h-full transition-all duration-300" style="width: ${(unallocated / timeBudgetData.totalHours) * 100}%"></div>` : '');
+            }
+
+            if (legendEl) {
+                legendEl.innerHTML = timeBudgetData.dreams
+                    .filter(d => d.hours > 0)
+                    .map(d => `
+                        <div class="flex items-center gap-2 rounded-full bg-[#fff7eb] px-3 py-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full ${d.color}"></div>
+                            <span class="text-xs text-gray-600">${d.tag} ${d.hours}h</span>
+                        </div>
+                    `).join('') +
+                    (unallocated > 0 ? `
+                        <div class="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+                            <span class="text-xs text-gray-600">未分配 ${unallocated}h</span>
+                        </div>
+                    ` : '');
+            }
+        }
+
+                async function saveTimeAllocation(studentId) {
+            try {
+                const saveBtn = document.getElementById('save-allocation-btn');
+                if (saveBtn) {
+                    saveBtn.textContent = '保存中...';
+                    saveBtn.disabled = true;
+                }
+
+                for (const dream of timeBudgetData.dreams) {
+                    await fetch(`http://localhost:3003/api/student/${studentId}/dreams/${dream.id}/allocation`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ weekly_hours: dream.hours })
+                    });
+                }
+
+                allocationChanged = false;
+                if (saveBtn) {
+                    saveBtn.textContent = '已保存';
+                    setTimeout(() => saveBtn.textContent = '保存分配', 2000);
+                }
+
+                window.showPageToast?.('时间分配已保存', 'success');
+            } catch (err) {
+                console.error('Save allocation error:', err);
+                window.showPageToast?.('保存失败，请重试', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Load User Info & Summary
+            const userStr = localStorage.getItem('user');
+            let userId = 'mock-student-id';
+
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                userId = user.id; // Use real ID
+            } else {
+                console.warn('User not found in localStorage. Redirecting to login.');
+                // Optional: window.location.href = '../index.html';
+                // For now, let's just alert ensuring they know why data is empty
+                alert('未检测到登录信息，数据将显示为默认值。请重新登录。');
+            }
+
+            currentUserId = userId;
+
+            await loadStudentSummary(userId);
+
+            // 2. Load Stats
+            await loadStats(userId);
+
+            // 3. Load Milestones
+            await loadMilestones(userId);
+
+            // 4. Load AI Suggestions
+            await loadAiSuggestions(userId);
+
+            const addGoalButton = document.getElementById('add-goal-button');
+            const goalModal = document.getElementById('goal-modal');
+            const goalForm = document.getElementById('goal-form');
+            const goalFormError = document.getElementById('goal-form-error');
+            const closeGoalModalButton = document.getElementById('close-goal-modal');
+            const cancelGoalButton = document.getElementById('cancel-goal');
+            const modalBackdrop = document.querySelector('[data-close="goal-modal"]');
+            const goalModalTitle = document.getElementById('goal-modal-title');
+            const goalSubmitButton = document.getElementById('goal-submit');
+            const milestonesList = document.getElementById('milestones-list');
+            const aiGoalRecommendList = document.getElementById('ai-goal-recommend-list');
+            const dreamTagsList = document.getElementById('dream-tags-list');
+            const goalSubmitModal = document.getElementById('goal-submit-modal');
+            const goalSubmitForm = document.getElementById('goal-submit-form');
+            const goalSubmitCloseButton = document.getElementById('close-goal-submit-modal');
+            const goalSubmitCancelButton = document.getElementById('cancel-goal-submit');
+            const goalSubmitBackdrop = document.querySelector('[data-close="goal-submit-modal"]');
+            const goalSubmitTitle = document.getElementById('goal-submit-title');
+            const goalSubmitSubtitle = document.getElementById('goal-submit-subtitle');
+            const goalSubmitFile = document.getElementById('goal-submit-file');
+            const goalSubmitNote = document.getElementById('goal-submit-note');
+            const goalSubmitPreviewWrap = document.getElementById('goal-submit-preview-wrap');
+            const goalSubmitPreview = document.getElementById('goal-submit-preview');
+            const goalSubmitError = document.getElementById('goal-submit-error');
+            const goalSubmitConfirmButton = document.getElementById('goal-submit-confirm');
+            const obstacleForm = document.getElementById('obstacle-form');
+            const obstacleTypeEl = document.getElementById('obstacle-type');
+            const obstacleSeverityEl = document.getElementById('obstacle-severity');
+            const obstacleSeverityValueEl = document.getElementById('obstacle-severity-value');
+            const obstacleContentEl = document.getElementById('obstacle-content');
+            const obstacleSubmitEl = document.getElementById('obstacle-submit');
+            const obstacleFeedbackEl = document.getElementById('obstacle-feedback');
+            const obstacleListEl = document.getElementById('obstacle-list');
+            const obstacleAiTipEl = document.getElementById('obstacle-ai-tip');
+            const obstacleDreamBadgeEl = document.getElementById('obstacle-dream-badge');
+            let goalSubmissionResolver = null;
+
+                        const setSelectedDream = async (dream) => {
+                selectedDream = dream || '';
+                const dreamEl = document.getElementById('growth-dream');
+                if (dreamEl) {
+                    dreamEl.textContent = selectedDream || allDreams[0] || '小学生';
+                }
+                if (obstacleDreamBadgeEl) {
+                    obstacleDreamBadgeEl.textContent = `当前梦想：${selectedDream || allDreams[0] || '未选择'}`;
+                }
+
+                renderDreamTags();
+                await loadMilestones(currentUserId);
+                await loadAiSuggestions(currentUserId);
+                await loadAiGoalRecommendations();
+                await loadObstacles(currentUserId);
+                await loadObstacleSuggestion(currentUserId);
+            };
+
+            if (dreamTagsList) {
+                dreamTagsList.addEventListener('click', async (event) => {
+                    const target = event.target.closest('button[data-action="select-dream"]');
+                    if (!target) return;
+                    const dream = target.getAttribute('data-dream') || '';
+                    if (!dream || dream === selectedDream) return;
+                    await setSelectedDream(dream);
+                });
+            }
+
+            if (obstacleSeverityEl && obstacleSeverityValueEl) {
+                obstacleSeverityEl.addEventListener('input', () => {
+                    obstacleSeverityValueEl.textContent = obstacleSeverityEl.value;
+                });
+            }
+
+                        if (obstacleForm) {
+                obstacleForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    if (!currentUserId) return;
+
+                    const content = obstacleContentEl ? obstacleContentEl.value.trim() : '';
+                    const obstacleType = obstacleTypeEl ? obstacleTypeEl.value : 'other';
+                    const severity = obstacleSeverityEl ? Number(obstacleSeverityEl.value) : 3;
+
+                    if (!selectedDream) {
+                        if (obstacleFeedbackEl) {
+                            obstacleFeedbackEl.textContent = '请先选择一个梦想';
+                            obstacleFeedbackEl.className = 'text-sm text-red-500 min-h-[1rem]';
+                        }
+                        return;
+                    }
+
+                    if (!content) {
+                        if (obstacleFeedbackEl) {
+                            obstacleFeedbackEl.textContent = '先写一句你现在遇到的困难';
+                            obstacleFeedbackEl.className = 'text-sm text-red-500 min-h-[1rem]';
+                        }
+                        return;
+                    }
+
+                    if (obstacleSubmitEl) {
+                        obstacleSubmitEl.disabled = true;
+                        obstacleSubmitEl.textContent = '记录中...';
+                    }
+                    if (obstacleFeedbackEl) {
+                        obstacleFeedbackEl.textContent = '正在保存阻碍...';
+                        obstacleFeedbackEl.className = 'text-sm text-gray-500 min-h-[1rem]';
+                    }
+
+                    try {
+                        const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/obstacles`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                dream_tag: selectedDream,
+                                obstacle_type: obstacleType,
+                                content,
+                                severity
+                            })
+                        });
+
+                        const responseData = await res.json().catch(() => ({}));
+                        if (!res.ok) throw new Error(responseData.error || '保存失败');
+
+                        if (obstacleContentEl) obstacleContentEl.value = '';
+                        if (obstacleSeverityEl) obstacleSeverityEl.value = '3';
+                        if (obstacleSeverityValueEl) obstacleSeverityValueEl.textContent = '3';
+
+                        if (obstacleFeedbackEl) {
+                            obstacleFeedbackEl.textContent = '已经记下这个困难了，我们继续往前走。';
+                            obstacleFeedbackEl.className = 'text-sm text-green-600 min-h-[1rem]';
+                        }
+
+                        await loadObstacles(currentUserId);
+                        await loadObstacleSuggestion(currentUserId);
+                    } catch (error) {
+                        if (obstacleFeedbackEl) {
+                            obstacleFeedbackEl.textContent = error.message || '添加失败，请稍后再试';
+                            obstacleFeedbackEl.className = 'text-sm text-red-500 min-h-[1rem]';
+                        }
+                    } finally {
+                        if (obstacleSubmitEl) {
+                            obstacleSubmitEl.disabled = false;
+                            obstacleSubmitEl.textContent = '记录这个困难';
+                        }
+                    }
+                });
+            }
+
+            if (obstacleListEl) {
+                obstacleListEl.addEventListener('change', async (event) => {
+                    const target = event.target;
+                    if (!(target instanceof HTMLSelectElement)) return;
+                    if (target.getAttribute('data-action') !== 'change-obstacle-status') return;
+
+                    const obstacleId = target.getAttribute('data-obstacle-id');
+                    const nextStatus = target.value;
+                    if (!obstacleId || !nextStatus || !currentUserId) return;
+
+                    const previousStatus = target.getAttribute('data-current-status') || '';
+                    const statusWrap = target.closest('[data-status-wrap]');
+                    const loadingEl = statusWrap ? statusWrap.querySelector('[data-status-loading]') : null;
+                    const statusLineEl = statusWrap && statusWrap.hasAttribute('data-status-line')
+                        ? statusWrap
+                        : (statusWrap ? statusWrap.querySelector('[data-status-line]') : null);
+                    const statusDotEl = statusWrap ? statusWrap.querySelector('[data-status-dot]') : null;
+                    const rowContainerEl = statusWrap ? statusWrap.closest('[data-obstacle-row]') : null;
+                    const taskButtonEl = rowContainerEl ? rowContainerEl.querySelector('[data-task-button="1"]') : null;
+                    const startedAt = Date.now();
+
+                    const applyStatusUi = (status) => {
+                        if (statusLineEl) {
+                            statusLineEl.classList.remove('border-l-yellow-300', 'border-l-blue-300', 'border-l-green-300');
+                            statusLineEl.classList.add(obstacleCardAccent(status));
+                        }
+
+                        if (statusDotEl) {
+                            statusDotEl.classList.remove('bg-yellow-500', 'bg-blue-500', 'bg-green-500');
+                            const dotClass = status === 'todo' ? 'bg-yellow-500' : status === 'in_progress' ? 'bg-blue-500' : 'bg-green-500';
+                            statusDotEl.classList.add(dotClass);
+                        }
+                    };
+
+                    target.disabled = true;
+                    target.classList.add('opacity-70', 'cursor-wait');
+                    if (loadingEl) loadingEl.classList.remove('hidden');
+
+                    try {
+                        const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/obstacles/${obstacleId}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: nextStatus })
+                        });
+                        if (!res.ok) throw new Error('目标保存失败');
+
+                        target.setAttribute('data-current-status', nextStatus);
+                        applyStatusUi(nextStatus);
+
+                        const rowIndex = obstacleRows.findIndex((row) => row.id === obstacleId);
+                        if (rowIndex >= 0) {
+                            obstacleRows[rowIndex] = {
+                                ...obstacleRows[rowIndex],
+                                status: nextStatus
+                            };
+
+                            if (taskButtonEl) {
+                                const taskButtonMeta = getObstacleTaskButtonMeta(obstacleRows[rowIndex]);
+                                taskButtonEl.textContent = taskButtonMeta.label;
+                                taskButtonEl.disabled = taskButtonMeta.disabled;
+                                taskButtonEl.className = taskButtonMeta.className;
+                            }
+                        }
+
+                        const elapsed = Date.now() - startedAt;
+                        if (elapsed < 280) {
+                            await new Promise((resolve) => setTimeout(resolve, 280 - elapsed));
+                        }
+
+                        await loadObstacleSuggestion(currentUserId);
+                    } catch (error) {
+                        console.error('Update obstacle status error:', error);
+                        if (previousStatus) {
+                            target.value = previousStatus;
+                            applyStatusUi(previousStatus);
+                        }
+                    } finally {
+                        target.disabled = false;
+                        target.classList.remove('opacity-70', 'cursor-wait');
+                        if (loadingEl) loadingEl.classList.add('hidden');
+                    }
+                });
+
+                obstacleListEl.addEventListener('click', async (event) => {
+                    const target = event.target.closest('button[data-action]');
+                    if (!target) return;
+
+                    const action = target.getAttribute('data-action');
+                    const obstacleId = target.getAttribute('data-obstacle-id');
+                    if (!action || !obstacleId || !currentUserId) return;
+
+                    if (action === 'delete-obstacle') {
+                        const confirmed = window.confirm('确定删除这条阻碍记录吗？');
+                        if (!confirmed) return;
+
+                        try {
+                            const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/obstacles/${obstacleId}`, {
+                                method: 'DELETE'
+                            });
+                            if (!res.ok) throw new Error('删除失败');
+                            await loadObstacles(currentUserId);
+                            await loadObstacleSuggestion(currentUserId);
+                        } catch (error) {
+                            console.error('Delete obstacle error:', error);
+                        }
+                    }
+
+                    if (action === 'obstacle-create-task') {
+                        const row = obstacleRows.find((item) => item.id === obstacleId);
+                        if (!row || row.status === 'resolved' || row.linked_task_id) {
+                            return;
+                        }
+
+                        target.disabled = true;
+                        target.textContent = '创建中...';
+                        try {
+                            const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/obstacles/${obstacleId}/create-task`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    title: row ? `突破阻碍：${String(row.content || '').slice(0, 12)}` : undefined,
+                                    description: row ? `围绕“${row.dream_tag || selectedDream || '当前梦想'}”解决阻碍：${row.content}` : undefined
+                                })
+                            });
+                            if (!res.ok) throw new Error('创建失败');
+
+                            const responseData = await res.json().catch(() => ({}));
+                            const updatedObstacle = responseData?.obstacle;
+
+                            if (updatedObstacle) {
+                                const rowIndex = obstacleRows.findIndex((item) => item.id === obstacleId);
+                                if (rowIndex >= 0) {
+                                    obstacleRows[rowIndex] = {
+                                        ...obstacleRows[rowIndex],
+                                        status: updatedObstacle.status || obstacleRows[rowIndex].status,
+                                        linked_task_id: updatedObstacle.linked_task_id || obstacleRows[rowIndex].linked_task_id
+                                    };
+                                    const taskButtonMeta = getObstacleTaskButtonMeta(obstacleRows[rowIndex]);
+                                    target.textContent = taskButtonMeta.label;
+                                    target.disabled = taskButtonMeta.disabled;
+                                    target.className = taskButtonMeta.className;
+                                }
+                            } else {
+                                target.textContent = '已转成今日计划';
+                                target.disabled = true;
+                                target.className = 'text-xs font-semibold px-3 py-1.5 rounded-full border border-blue-200 text-blue-600 bg-blue-50 cursor-not-allowed';
+                            }
+
+                            await loadObstacles(currentUserId);
+                            await loadObstacleSuggestion(currentUserId);
+                        } catch (error) {
+                            console.error('Create task from obstacle error:', error);
+                            target.disabled = false;
+                            target.textContent = '重试';
+                        }
+                    }
+                });
+            }
+
+            const openGoalModal = () => {
+                if (!goalModal) return;
+                goalModal.classList.remove('hidden');
+                goalModal.classList.add('flex');
+                document.body.classList.add('overflow-hidden');
+            };
+
+                        const closeGoalModal = () => {
+                if (!goalModal) return;
+                goalModal.classList.add('hidden');
+                goalModal.classList.remove('flex');
+                document.body.classList.remove('overflow-hidden');
+                editingGoalId = null;
+                if (goalModalTitle) goalModalTitle.textContent = '添加目标';
+                if (goalSubmitButton) goalSubmitButton.textContent = '保存目标';
+                if (goalFormError) {
+                    goalFormError.textContent = '';
+                    goalFormError.classList.add('hidden');
+                }
+            };
+
+            const resetGoalSubmitModal = () => {
+                goalSubmitForm?.reset();
+                goalSubmitError?.classList.add('hidden');
+                if (goalSubmitError) goalSubmitError.textContent = '';
+                if (goalSubmitConfirmButton) {
+                    goalSubmitConfirmButton.disabled = false;
+                    goalSubmitConfirmButton.textContent = '提交给老师';
+                }
+                goalSubmitPreviewWrap?.classList.add('hidden');
+                goalSubmitPreview?.removeAttribute('src');
+            };
+
+            const closeGoalSubmitModal = (result = null) => {
+                goalSubmitModal?.classList.add('hidden');
+                goalSubmitModal?.classList.remove('flex');
+                document.body.classList.remove('overflow-hidden');
+                const resolver = goalSubmissionResolver;
+                goalSubmissionResolver = null;
+                resetGoalSubmitModal();
+                if (typeof resolver === 'function') resolver(result);
+            };
+
+            const openGoalSubmitModal = (goal) => {
+                if (!goalSubmitModal || !goalSubmitForm || !goalSubmitFile || !goalSubmitNote || !goalSubmitConfirmButton) {
+                    return Promise.resolve(null);
+                }
+
+                resetGoalSubmitModal();
+                if (goalSubmitTitle) goalSubmitTitle.textContent = '提交完成材料';
+                if (goalSubmitSubtitle) {
+                    goalSubmitSubtitle.textContent = `完成“${goal?.title || '这个目标'}”后，把照片或说明交给老师。`;
+                }
+                goalSubmitModal.classList.remove('hidden');
+                goalSubmitModal.classList.add('flex');
+                document.body.classList.add('overflow-hidden');
+                setTimeout(() => goalSubmitNote.focus(), 0);
+                return new Promise((resolve) => {
+                    goalSubmissionResolver = resolve;
+                });
+            };
+
+                        const openEditModal = (goal) => {
+                if (!goalForm) return;
+                editingGoalId = goal.id;
+                if (goalModalTitle) goalModalTitle.textContent = '编辑目标';
+                if (goalSubmitButton) goalSubmitButton.textContent = '保存修改';
+                const titleInput = document.getElementById('goal-title');
+                const descInput = document.getElementById('goal-desc');
+                const dateInput = document.getElementById('goal-date');
+                if (titleInput) titleInput.value = goal.title || '';
+                if (descInput) descInput.value = goal.description || '';
+                if (dateInput) {
+                    dateInput.value = goal.target_date ? goal.target_date : '';
+                }
+                openGoalModal();
+            };
+
+            if (addGoalButton) addGoalButton.addEventListener('click', () => {
+                if (goalForm) goalForm.reset();
+                openGoalModal();
+            });
+
+                        const renderAiGoalRecommendations = (items = [], state = 'ready') => {
+                if (!aiGoalRecommendList) return;
+
+                if (state === 'loading') {
+                    aiGoalRecommendList.classList.remove('hidden');
+                    aiGoalRecommendList.innerHTML = '<p class="text-sm text-gray-500">AI 正在想一个更适合你的目标...</p>';
+                    return;
+                }
+
+                if (state === 'error') {
+                    aiGoalRecommendList.classList.remove('hidden');
+                    aiGoalRecommendList.innerHTML = '<p class="text-sm text-red-500">推荐生成失败，请稍后再试。</p>';
+                    return;
+                }
+
+                if (!items.length) {
+                    aiGoalRecommendList.classList.remove('hidden');
+                    aiGoalRecommendList.innerHTML = '<p class="text-sm text-gray-500">暂时没有推荐，你也可以自己先加一个目标。</p>';
+                    return;
+                }
+
+                aiGoalRecommendList.classList.remove('hidden');
+                aiGoalRecommendList.innerHTML = items.slice(0, 1).map((item, index) => `
+                    <div class="rounded-[0.95rem] border border-primary/15 bg-white/70 px-4 py-3">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="text-sm font-semibold text-text-main dark:text-gray-100 truncate">${escapeHtml(item.title)}</p>
+                                ${item.target_date ? `<p class="mt-1 text-xs text-primary">建议日期：${escapeHtml(item.target_date)}</p>` : ''}
+                            </div>
+                            <button data-action="add-ai-goal" data-rec-index="${index}" class="shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-dark">
+                                添加
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            const loadAiGoalRecommendations = async () => {
+                if (!currentUserId) return;
+                renderAiGoalRecommendations([], 'loading');
+
+                try {
+                    const focusQuery = selectedDream ? `?dream_focus=${encodeURIComponent(selectedDream)}&count=1` : '?count=1';
+                    const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/goal-recommendations${focusQuery}`);
+                    if (!res.ok) throw new Error('目标保存失败');
+                    const data = await res.json();
+                    aiGoalRecommendations = Array.isArray(data.recommendations) ? data.recommendations : [];
+                    renderAiGoalRecommendations(aiGoalRecommendations, 'ready');
+                } catch (error) {
+                    console.error('AI goal recommendations error:', error);
+                    renderAiGoalRecommendations([], 'error');
+                }
+            };
+
+                        if (aiGoalRecommendList) {
+                aiGoalRecommendList.addEventListener('click', async (event) => {
+                    const target = event.target.closest('button[data-action="add-ai-goal"]');
+                    if (!target) return;
+                    const idx = Number(target.getAttribute('data-rec-index'));
+                    const recommendation = aiGoalRecommendations[idx];
+                    if (!recommendation || !currentUserId) return;
+
+                    target.disabled = true;
+                    target.textContent = '添加中...';
+
+                    try {
+                        const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/goals`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                title: recommendation.title,
+                                description: recommendation.description || null,
+                                target_date: recommendation.target_date || null,
+                                dream_tag: selectedDream || null
+                            })
+                        });
+                        if (!res.ok) throw new Error('目标保存失败');
+
+                        target.textContent = '已添加';
+                        target.classList.remove('bg-primary', 'hover:bg-primary-dark');
+                        target.classList.add('bg-green-500');
+                        await loadMilestones(currentUserId);
+                    } catch (error) {
+                        console.error('Add AI recommended goal error:', error);
+                        target.disabled = false;
+                        target.textContent = '重试';
+                    }
+                });
+            }
+
+            if (closeGoalModalButton) closeGoalModalButton.addEventListener('click', closeGoalModal);
+            if (cancelGoalButton) cancelGoalButton.addEventListener('click', closeGoalModal);
+            if (modalBackdrop) modalBackdrop.addEventListener('click', closeGoalModal);
+            goalSubmitFile?.addEventListener('change', () => {
+                const file = goalSubmitFile.files && goalSubmitFile.files[0];
+                if (goalSubmitError) {
+                    goalSubmitError.textContent = '';
+                    goalSubmitError.classList.add('hidden');
+                }
+                if (!file) {
+                    goalSubmitPreviewWrap?.classList.add('hidden');
+                    goalSubmitPreview?.removeAttribute('src');
+                    return;
+                }
+                if (file.size > EVIDENCE_MAX_SIZE_BYTES) {
+                    goalSubmitFile.value = '';
+                    goalSubmitPreviewWrap?.classList.add('hidden');
+                    goalSubmitPreview?.removeAttribute('src');
+                    if (goalSubmitError) {
+                        goalSubmitError.textContent = '图片不能超过 8MB，请重新选择。';
+                        goalSubmitError.classList.remove('hidden');
+                    }
+                    return;
+                }
+                if (goalSubmitPreview) {
+                    goalSubmitPreview.src = URL.createObjectURL(file);
+                }
+                goalSubmitPreviewWrap?.classList.remove('hidden');
+            });
+
+            goalSubmitForm?.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const file = goalSubmitFile?.files && goalSubmitFile.files[0];
+                const proofNote = goalSubmitNote?.value.trim() || '';
+
+                if (!file && !proofNote) {
+                    if (goalSubmitError) {
+                        goalSubmitError.textContent = '请上传一张照片，或写一句完成说明。';
+                        goalSubmitError.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                if (goalSubmitConfirmButton) {
+                    goalSubmitConfirmButton.disabled = true;
+                    goalSubmitConfirmButton.textContent = '准备提交...';
+                }
+                if (goalSubmitError) {
+                    goalSubmitError.textContent = '';
+                    goalSubmitError.classList.add('hidden');
+                }
+
+                try {
+                    let imageBase64 = null;
+                    let mimeType = null;
+                    if (file) {
+                        imageBase64 = await readFileAsDataUrl(file);
+                        mimeType = file.type || 'image/jpeg';
+                    }
+                    closeGoalSubmitModal({
+                        imageBase64,
+                        mimeType,
+                        proofNote: proofNote || null
+                    });
+                } catch (error) {
+                    if (goalSubmitError) {
+                        goalSubmitError.textContent = error.message || '整理材料失败，请重新选择。';
+                        goalSubmitError.classList.remove('hidden');
+                    }
+                    if (goalSubmitConfirmButton) {
+                        goalSubmitConfirmButton.disabled = false;
+                        goalSubmitConfirmButton.textContent = '提交给老师';
+                    }
+                }
+            });
+
+            goalSubmitCloseButton?.addEventListener('click', () => closeGoalSubmitModal(null));
+            goalSubmitCancelButton?.addEventListener('click', () => closeGoalSubmitModal(null));
+            goalSubmitBackdrop?.addEventListener('click', () => closeGoalSubmitModal(null));
+
+            if (milestonesList) {
+                milestonesList.addEventListener('click', async (event) => {
+                    const target = event.target.closest('button[data-action]');
+                    if (!target) return;
+                    const action = target.getAttribute('data-action');
+                    const goalId = target.getAttribute('data-goal-id');
+                    if (!action || !goalId) return;
+
+                    if (action === 'edit') {
+                        const goal = goalCache.get(goalId);
+                        if (goal) openEditModal(goal);
+                        return;
+                    }
+
+                    if (action === 'delete') {
+                        const confirmed = window.confirm('确定要删除这个目标吗？');
+                        if (!confirmed) return;
+                        try {
+                            const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/goals/${goalId}`, {
+                                method: 'DELETE'
+                            });
+                            if (!res.ok) throw new Error('删除失败');
+                            await loadMilestones(currentUserId);
+                        } catch (err) {
+                            console.error('Delete goal error:', err);
+                        }
+                        return;
+                    }
+
+                    if (action === 'complete' || action === 'reopen') {
+                        try {
+                            if (action === 'complete') {
+                                const goal = goalCache.get(goalId);
+                                const evidencePayload = await openGoalSubmitModal(goal);
+                                if (!evidencePayload) return;
+
+                                target.disabled = true;
+                                target.textContent = '提交中...';
+
+                                const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/goals/${goalId}/submit`, {
+                                    method: 'POST',
+                                    headers: getStudentAuthHeaders(),
+                                    body: JSON.stringify(evidencePayload)
+                                });
+                                const responseData = await res.json().catch(() => ({}));
+                                if (!res.ok) throw new Error(getApiErrorMessage(responseData, '提交材料失败，请稍后再试。'));
+
+                                await Promise.all([
+                                    loadMilestones(currentUserId),
+                                    loadStats(currentUserId)
+                                ]);
+                                window.showPageToast?.('材料已提交给老师，目标等待审核。', 'success');
+                            } else {
+                                const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/goals/${goalId}`, {
+                                    method: 'PATCH',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ status: 'active' })
+                                });
+                                if (!res.ok) throw new Error('更新失败');
+                                await Promise.all([
+                                    loadMilestones(currentUserId),
+                                    loadStats(currentUserId)
+                                ]);
+                            }
+                        } catch (err) {
+                            console.error('Update goal status error:', err);
+                            target.disabled = false;
+                            if (action === 'complete') {
+                                target.textContent = '标记完成';
+                                window.showPageToast?.(err.message || '提交材料失败，请稍后再试。', 'error');
+                            }
+                        }
+                        return;
+                    }
+
+                    if (action === 'log-time') {
+                        const goal = goalCache.get(goalId);
+                        if (goal) openTimeLogModal(goal);
+                        return;
+                    }
+                });
+            }
+
+            if (goalForm) {
+                goalForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const title = document.getElementById('goal-title')?.value.trim();
+                    const description = document.getElementById('goal-desc')?.value.trim();
+                    const targetDate = document.getElementById('goal-date')?.value;
+
+                    if (!title) {
+                        if (goalFormError) {
+                            goalFormError.textContent = '请填写目标名称。';
+                            goalFormError.classList.remove('hidden');
+                        }
+                        return;
+                    }
+
+                    try {
+                        const url = editingGoalId
+                            ? `http://localhost:3003/api/student/${currentUserId}/goals/${editingGoalId}`
+                            : `http://localhost:3003/api/student/${currentUserId}/goals`;
+                        const method = editingGoalId ? 'PATCH' : 'POST';
+                        const res = await fetch(url, {
+                            method,
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                title,
+                                description: description || null,
+                                target_date: targetDate || null,
+                                dream_tag: selectedDream || null
+                            })
+                        });
+
+                        if (!res.ok) throw new Error('目标保存失败');
+
+                        goalForm.reset();
+                        closeGoalModal();
+                        await loadMilestones(currentUserId);
+                    } catch (err) {
+                        if (goalFormError) {
+                            goalFormError.textContent = '保存失败，请稍后再试。';
+                            goalFormError.classList.remove('hidden');
+                        }
+                        console.error('Create goal error:', err);
+                    }
+                });
+            }
+
+            // Auto load first batch of AI goal recommendations
+            await loadAiGoalRecommendations();
+            await loadObstacles(currentUserId);
+            await loadObstacleSuggestion(currentUserId);
+
+            // Load time budget planner
+            await loadTimeBudget(currentUserId);
+
+            // Time budget event listeners
+            document.getElementById('increase-total-hours')?.addEventListener('click', () => {
+                if (timeBudgetData.totalHours < 40) {
+                    timeBudgetData.totalHours++;
+                    allocationChanged = true;
+                    renderTimeBudget();
+                }
+            });
+
+            document.getElementById('decrease-total-hours')?.addEventListener('click', () => {
+                if (timeBudgetData.totalHours > 1) {
+                    timeBudgetData.totalHours--;
+                    allocationChanged = true;
+                    renderTimeBudget();
+                }
+            });
+
+            document.getElementById('save-allocation-btn')?.addEventListener('click', () => {
+                saveTimeAllocation(currentUserId);
+            });
+
+                        // Toggle time budget visibility
+            const toggleTimeBtn = document.getElementById('toggle-time-budget-btn');
+            if (toggleTimeBtn) {
+                const timeBudgetBody = document.getElementById('time-budget-body');
+                const isTimeBudgetHidden = localStorage.getItem('hideTimeBudget') === 'true';
+                if (timeBudgetBody) {
+                    timeBudgetBody.classList.toggle('hidden', isTimeBudgetHidden);
+                }
+                toggleTimeBtn.innerHTML = isTimeBudgetHidden
+                    ? '<span class="material-icons-round text-sm">visibility</span> 展开安排'
+                    : '<span class="material-icons-round text-sm">visibility_off</span> 收起安排';
+                toggleTimeBtn.title = isTimeBudgetHidden ? '展开时间安排' : '收起时间安排';
+
+                toggleTimeBtn.addEventListener('click', () => {
+                    const hidden = timeBudgetBody?.classList.contains('hidden');
+                    if (hidden) {
+                        timeBudgetBody?.classList.remove('hidden');
+                        localStorage.removeItem('hideTimeBudget');
+                        toggleTimeBtn.innerHTML = '<span class="material-icons-round text-sm">visibility_off</span> 收起安排';
+                        toggleTimeBtn.title = '收起时间安排';
+                    } else {
+                        timeBudgetBody?.classList.add('hidden');
+                        localStorage.setItem('hideTimeBudget', 'true');
+                        toggleTimeBtn.innerHTML = '<span class="material-icons-round text-sm">visibility</span> 展开安排';
+                        toggleTimeBtn.title = '展开时间安排';
+                    }
+                });
+            }
+
+            // Time Log Modal Functions
+            let currentTimeLogGoalId = null;
+            const timeLogModal = document.getElementById('time-log-modal');
+            const timeLogForm = document.getElementById('time-log-form');
+            const closeTimeLogModalBtn = document.getElementById('close-time-log-modal');
+            const cancelTimeLogBtn = document.getElementById('cancel-time-log');
+            const timeLogBackdrop = document.querySelector('[data-close="time-log-modal"]');
+
+            function openTimeLogModal(goal) {
+                currentTimeLogGoalId = goal.id;
+                document.getElementById('time-log-goal-title').textContent = goal.title;
+                document.getElementById('time-log-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('time-log-minutes').value = '';
+                document.getElementById('time-log-note').value = '';
+                document.getElementById('time-log-error')?.classList.add('hidden');
+
+                timeLogModal?.classList.remove('hidden');
+                timeLogModal?.classList.add('flex');
+            }
+
+            function closeTimeLogModal() {
+                timeLogModal?.classList.add('hidden');
+                timeLogModal?.classList.remove('flex');
+                currentTimeLogGoalId = null;
+            }
+
+            // Time preset buttons
+            document.querySelectorAll('.time-preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const minutes = btn.dataset.minutes;
+                    document.getElementById('time-log-minutes').value = minutes;
+                });
+            });
+
+            // Time log form submit
+                        timeLogForm?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentTimeLogGoalId || !currentUserId) return;
+
+                const minutes = parseInt(document.getElementById('time-log-minutes').value, 10);
+                const note = document.getElementById('time-log-note').value.trim();
+                const logDate = document.getElementById('time-log-date').value;
+                const errorEl = document.getElementById('time-log-error');
+
+                if (!minutes || minutes <= 0) {
+                    errorEl.textContent = '请输入有效的分钟数';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                if (minutes > 480) {
+                    errorEl.textContent = '单次记录不能超过 8 小时';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/time-logs`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            goal_id: currentTimeLogGoalId,
+                            minutes: minutes,
+                            note: note || null,
+                            log_date: logDate
+                        })
+                    });
+
+                    if (!res.ok) throw new Error('目标保存失败');
+
+                    closeTimeLogModal();
+                    window.showPageToast?.(`已记录 ${minutes} 分钟投入时间`, 'success');
+                    await loadTimeBudget(currentUserId);
+                } catch (err) {
+                    console.error('Time log error:', err);
+                    errorEl.textContent = '记录失败，请重试';
+                    errorEl.classList.remove('hidden');
+                }
+            });
+
+
+            closeTimeLogModalBtn?.addEventListener('click', closeTimeLogModal);
+            cancelTimeLogBtn?.addEventListener('click', closeTimeLogModal);
+            timeLogBackdrop?.addEventListener('click', closeTimeLogModal);
+        });
+
+        async function loadStats(userId) {
+            try {
+                const [statsRes, growthRes] = await Promise.all([
+                    fetch(`http://localhost:3003/api/student/${userId}/stats`),
+                    fetch(`http://localhost:3003/api/student/${userId}/growth-chart`)
+                ]);
+
+                if (!statsRes.ok) throw new Error('stats failed');
+                const statsData = await statsRes.json();
+
+                document.getElementById('badge-count').textContent = statsData.badges || 0;
+                document.getElementById('task-count').textContent = (statsData.completed_tasks || 0) * 10 + ' XP';
+                document.getElementById('streak-count').textContent = (statsData.streak || 0) + ' 天';
+
+                if (growthRes.ok) {
+                    const growthData = await growthRes.json();
+                    if (growthData?.current) {
+                        drawRadarChart(growthData.current);
+                        return;
+                    }
+                }
+
+                if (statsData.radar) {
+                    drawRadarChart(statsData.radar);
+                }
+            } catch (err) {
+                console.error('Stats error:', err);
+            }
+        }
+
+        function drawRadarChart(dataValues) {
+            const dims = ['optimism', 'grit', 'achievement', 'social', 'creativity'];
+            const values = Array.isArray(dataValues)
+                ? dataValues
+                : dims.map((key) => Number(dataValues?.[key]) || 0);
+
+            const centerX = 50;
+            const centerY = 50;
+            const maxRadius = 40;
+            const angles = [-90, -18, 54, 126, 198];
+
+            const points = values.map((val, i) => {
+                const r = (val / 100) * maxRadius;
+                const angleRad = (angles[i] * Math.PI) / 180;
+                const x = centerX + r * Math.cos(angleRad);
+                const y = centerY + r * Math.sin(angleRad);
+                return `${x},${y}`;
+            }).join(' ');
+
+            const poly = document.getElementById('radar-polygon');
+            if (poly) poly.setAttribute('points', points);
+
+            const dotsGroup = document.getElementById('radar-dots');
+            if (dotsGroup) {
+                const circles = dotsGroup.querySelectorAll('circle');
+                const pointObjects = values.map((val, i) => {
+                    const r = (val / 100) * maxRadius;
+                    const angleRad = (angles[i] * Math.PI) / 180;
+                    const x = centerX + r * Math.cos(angleRad);
+                    const y = centerY + r * Math.sin(angleRad);
+                    return { x, y };
+                });
+
+                circles.forEach((circle, i) => {
+                    if (pointObjects[i]) {
+                        circle.setAttribute('cx', pointObjects[i].x);
+                        circle.setAttribute('cy', pointObjects[i].y);
+                    }
+                });
+            }
+        }
+
+                async function loadAiSuggestions(userId) {
+            try {
+                const focusQuery = selectedDream ? `?dream_focus=${encodeURIComponent(selectedDream)}` : '';
+                const res = await fetch(`http://localhost:3003/api/student/${userId}/suggestions${focusQuery}`);
+                if (!res.ok) throw new Error('目标保存失败');
+                const data = await res.json();
+
+                const container = document.getElementById('recommended-tasks-list');
+                if (!container) return;
+
+                const tips = Array.isArray(data.tips) && data.tips.length > 0
+                    ? data.tips
+                    : ['保持好奇心，每天记录一点点小进步。', '遇到困难时，先从最小的步骤开始。'];
+
+                const primaryTip = tips[0] || '保持好奇心，每天记录一点点小进步。';
+                const secondaryTip = tips[1] || '遇到困难时，先从最小的步骤开始。';
+
+                container.innerHTML = `
+                    <div class="relative overflow-hidden rounded-[1rem] border border-primary/20 bg-gradient-to-br from-white via-[#fff8ee] to-[#fff0d5] p-6 shadow-sm fade-in">
+                        <div class="absolute -top-12 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+                        <div class="relative">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary-dark">
+                                    <span class="material-icons-round">lightbulb</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-primary/80">AI 提醒</p>
+                                    <h3 class="mt-1 text-lg font-bold text-text-main dark:text-gray-100">${data.title || '今天先做一点点'}</h3>
+                                </div>
+                            </div>
+                            <p class="mt-4 text-sm leading-7 text-gray-700 dark:text-gray-300">${primaryTip}</p>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-[1rem] border border-primary/20 bg-white/85 p-6 shadow-sm fade-in" style="animation-delay: 80ms">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef6ff] text-[#4a78cc]">
+                                <span class="material-icons-round">task_alt</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#4a78cc]/80">本周锦囊</p>
+                                <h3 class="mt-1 text-lg font-bold text-text-main dark:text-gray-100">继续保持就会看到变化</h3>
+                            </div>
+                        </div>
+                        <ul class="mt-4 space-y-3 text-sm leading-7 text-gray-700 dark:text-gray-300">
+                            <li class="flex items-start gap-2"><span class="material-icons-round mt-0.5 text-base text-primary">arrow_right_alt</span><span>${primaryTip}</span></li>
+                            <li class="flex items-start gap-2"><span class="material-icons-round mt-0.5 text-base text-primary">arrow_right_alt</span><span>${secondaryTip}</span></li>
+                        </ul>
+                    </div>
+                `;
+            } catch (err) {
+                console.error('Suggestion error:', err);
+            }
+        }
+
+                async function loadMilestones(userId) {
+            try {
+                const dreamQuery = selectedDream ? `?dream_tag=${encodeURIComponent(selectedDream)}` : '';
+                const res = await fetch(`http://localhost:3003/api/student/${userId}/goals${dreamQuery}`);
+                let goals = [];
+                if (res.ok) goals = await res.json();
+
+                const listEl = document.getElementById('milestones-list');
+                if (!listEl) return;
+
+                const line = '<div class="absolute left-6 top-3 bottom-3 w-0.5 rounded-full bg-gradient-to-b from-primary/60 via-primary/30 to-transparent"></div>';
+                const formatDate = (value) => value ? new Date(value).toLocaleDateString('zh-CN') : '';
+
+                goalCache = new Map(goals.map(goal => [goal.id, goal]));
+                const completed = goals.filter(goal => goal.status === 'completed');
+                const active = goals.filter(goal => goal.status !== 'completed');
+
+                if (goals.length === 0) {
+                    listEl.innerHTML = `${line}<p class="py-2 pl-4 text-sm text-gray-400">还没有目标，先添加一个吧！</p>`;
+                    return;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const recentCompleted = completed.filter(g => new Date(g.completed_at || g.target_date || g.created_at) >= today);
+                const pastCompleted = completed.filter(g => new Date(g.completed_at || g.target_date || g.created_at) < today);
+
+                const renderCompletedGoal = (goal, index) => {
+                    const dateLabel = formatDate(goal.completed_at || goal.target_date || goal.created_at);
+                    return `
+                        <div class="relative flex items-start gap-5 fade-in" style="animation-delay: ${index * 80}ms">
+                            <div class="absolute -left-9 rounded-full border border-primary/40 bg-white p-1 z-10">
+                                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/90 text-white">
+                                    <span class="material-icons-round text-sm">check</span>
+                                </div>
+                            </div>
+                            <div class="w-full rounded-[0.95rem] border border-primary/10 bg-[#fffaf3] p-4">
+                                <div class="flex flex-wrap items-start justify-between gap-3">
+                                    <div>
+                                        <h3 class="text-base font-bold text-text-main dark:text-gray-100">${goal.title}</h3>
+                                        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">${goal.description || '你已经完成这个小目标了。'}</p>
+                                    </div>
+                                    ${dateLabel ? `<span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary-dark">${dateLabel}</span>` : ''}
+                                </div>
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    <button data-action="reopen" data-goal-id="${goal.id}" class="rounded-full border border-primary/30 px-3 py-1 text-xs font-semibold text-primary-dark transition hover:bg-primary/10">撤销完成</button>
+                                    <button data-action="delete" data-goal-id="${goal.id}" class="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-500 transition hover:bg-gray-100">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                let html = line;
+                if (recentCompleted.length > 0) html += recentCompleted.map(renderCompletedGoal).join('');
+
+                if (pastCompleted.length > 0) {
+                    html += `
+                        <div class="relative my-4 flex items-center justify-center">
+                            <button id="toggle-past-completed" class="flex items-center gap-1 rounded-full border border-gray-200 bg-white/70 px-4 py-2 text-xs text-gray-500 transition hover:text-primary">
+                                <span class="material-icons-round text-sm">history</span>
+                                查看历史 (${pastCompleted.length})
+                            </button>
+                        </div>`;
+                    html += '<div id="past-completed-list" class="hidden space-y-8">';
+                    html += pastCompleted.map(renderCompletedGoal).join('');
+                    html += '</div>';
+                }
+
+                if (active.length > 0) {
+                    html += active.map((goal, index) => {
+                        const dateLabel = formatDate(goal.target_date);
+                        return `
+                            <div class="relative flex items-start gap-5 fade-in" style="animation-delay: ${(index + completed.length) * 80}ms">
+                                <div class="absolute -left-9 rounded-full border border-primary/40 bg-white p-1 z-10">
+                                    <div class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-primary bg-white">
+                                        <div class="h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></div>
+                                    </div>
+                                </div>
+                                <div class="w-full rounded-[0.95rem] border border-primary/10 bg-white p-4">
+                                    <div class="flex flex-wrap items-start justify-between gap-3">
+                                        <div>
+                                            <h3 class="text-base font-bold text-text-main dark:text-gray-100">${goal.title}</h3>
+                                            <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">${goal.description || '继续努力，这一步已经开始了。'}</p>
+                                        </div>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary-dark">进行中</span>
+                                            ${dateLabel ? `<span class="rounded-full bg-[#eef6ff] px-3 py-1 text-xs font-semibold text-[#4a78cc]">${dateLabel}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <button data-action="edit" data-goal-id="${goal.id}" class="rounded-full border border-primary/30 px-3 py-1 text-xs font-semibold text-primary-dark transition hover:bg-primary/10">编辑</button>
+                                        <button data-action="log-time" data-goal-id="${goal.id}" class="flex items-center gap-1 rounded-full border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-600 transition hover:bg-blue-50" title="记录投入时间">
+                                            <span class="material-icons-round text-[10px]">access_time</span>
+                                            记时间
+                                        </button>
+                                        <button data-action="complete" data-goal-id="${goal.id}" class="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white transition hover:bg-primary-dark">标记完成</button>
+                                        <button data-action="delete" data-goal-id="${goal.id}" class="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-500 transition hover:bg-gray-100">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                listEl.innerHTML = html;
+
+                const toggleBtn = document.getElementById('toggle-past-completed');
+                const pastList = document.getElementById('past-completed-list');
+                if (toggleBtn && pastList) {
+                    toggleBtn.addEventListener('click', () => {
+                        const isHidden = pastList.classList.contains('hidden');
+                        pastList.classList.toggle('hidden');
+                        toggleBtn.innerHTML = isHidden
+                            ? '<span class="material-icons-round text-sm">expand_less</span> 收起历史'
+                            : `<span class="material-icons-round text-sm">history</span> 查看历史 (${pastCompleted.length})`;
+                    });
+                }
+            } catch (err) {
+                console.error('Milestones error:', err);
+            }
+        }
+
+                async function loadObstacles(userId) {
+            const listEl = document.getElementById('obstacle-list');
+            if (!listEl || !userId) return;
+
+            listEl.innerHTML = '<p class="py-4 text-sm text-gray-500 dark:text-gray-400">正在加载阻碍记录...</p>';
+
+            try {
+                const query = selectedDream ? `?dream_focus=${encodeURIComponent(selectedDream)}&limit=10` : '?limit=10';
+                const res = await fetch(`http://localhost:3003/api/student/${userId}/obstacles${query}`);
+                if (!res.ok) throw new Error('目标保存失败');
+
+                const rows = await res.json();
+                obstacleRows = Array.isArray(rows) ? rows : [];
+
+                if (!obstacleRows.length) {
+                    listEl.innerHTML = '<p class="py-4 text-sm text-gray-500 dark:text-gray-400">当前梦想还没有阻碍记录，先写一条吧。</p>';
+                    return;
+                }
+
+                listEl.innerHTML = obstacleRows.map((item) => `
+                    <div class="py-4" data-obstacle-row="${item.id}">
+                        <div data-status-wrap="${item.id}" class="flex flex-wrap items-start justify-between gap-3 border-l-2 ${obstacleCardAccent(item.status)} pl-4" data-status-line>
+                            <div class="min-w-0 flex-1">
+                                <div class="mb-2 flex flex-wrap items-center gap-2">
+                                    <span class="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary-dark">${escapeHtml(obstacleTypeLabel(item.obstacle_type))}</span>
+                                    <span class="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-semibold text-gray-600 dark:bg-white/10 dark:text-gray-300">难度 ${Number(item.severity) || 3}/5</span>
+                                    <span class="rounded-full px-2.5 py-1 text-[11px] font-semibold ${obstacleStatusClass(item.status)}">${obstacleStatusLabel(item.status)}</span>
+                                </div>
+                                <p class="text-sm font-semibold leading-6 text-text-main dark:text-gray-100">${escapeHtml(item.content || '')}</p>
+                                <p class="mt-2 text-[11px] text-gray-400">${item.created_at ? new Date(item.created_at).toLocaleString('zh-CN') : ''}</p>
+                            </div>
+                            <div class="relative shrink-0">
+                                <span data-status-dot class="absolute left-2.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full ${item.status === 'todo' ? 'bg-yellow-500' : item.status === 'in_progress' ? 'bg-blue-500' : 'bg-green-500'}"></span>
+                                <select data-action="change-obstacle-status" data-obstacle-id="${item.id}" data-current-status="${item.status || 'todo'}" class="rounded-full border border-primary/25 bg-white/90 pl-6 pr-7 py-1.5 text-xs font-semibold text-text-main focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                    <option value="todo" ${item.status === 'todo' ? 'selected' : ''}>未开始</option>
+                                    <option value="in_progress" ${item.status === 'in_progress' ? 'selected' : ''}>进行中</option>
+                                    <option value="resolved" ${item.status === 'resolved' ? 'selected' : ''}>已解决</option>
+                                </select>
+                                <span data-status-loading class="hidden absolute -right-5 top-1/2 -translate-y-1/2"><span class="block w-3 h-3 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></span></span>
+                            </div>
+                        </div>
+                        <div class="mt-3 ml-4 flex flex-wrap gap-2">
+                            ${(() => {
+                                const taskButtonMeta = getObstacleTaskButtonMeta(item);
+                                return `<button data-action="obstacle-create-task" data-task-button="1" data-obstacle-id="${item.id}" ${taskButtonMeta.disabled ? 'disabled' : ''} class="${taskButtonMeta.className}">${taskButtonMeta.label}</button>`;
+                            })()}
+                            <button data-action="delete-obstacle" data-obstacle-id="${item.id}" class="text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-300 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 transition">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load obstacles error:', error);
+                listEl.innerHTML = '<p class="py-4 text-sm text-red-500">阻碍加载失败，请稍后再试。</p>';
+            }
+        }
+
+                async function loadObstacleSuggestion(userId) {
+            const tipEl = document.getElementById('obstacle-ai-tip');
+            const tipTextEl = document.getElementById('obstacle-ai-tip-text');
+            const tipDescEl = document.getElementById('obstacle-ai-tip-desc');
+            if (!tipEl || !userId) return;
+
+            const fadeUpdateTip = (text, desc = '') => {
+                if (!tipTextEl) return;
+                tipTextEl.classList.add('opacity-0');
+                if (tipDescEl) tipDescEl.classList.add('opacity-0');
+
+                setTimeout(() => {
+                    tipTextEl.textContent = text;
+                    if (tipDescEl) {
+                        tipDescEl.textContent = desc || '';
+                        tipDescEl.classList.toggle('hidden', !desc);
+                    }
+                    tipTextEl.classList.remove('opacity-0');
+                    if (tipDescEl) tipDescEl.classList.remove('opacity-0');
+                }, 120);
+            };
+
+            try {
+                const query = selectedDream ? `?dream_focus=${encodeURIComponent(selectedDream)}` : '';
+                const res = await fetch(`http://localhost:3003/api/student/${userId}/obstacles/suggestion${query}`);
+                if (!res.ok) throw new Error('目标保存失败');
+                const data = await res.json();
+
+                const obstacleDesc = data?.obstacle?.content ? `当前阻碍：${data.obstacle.content}` : '还没有选中的阻碍';
+                fadeUpdateTip(data?.suggestion || '先写下一条阻碍，再看看 AI 给你的建议。', obstacleDesc);
+            } catch (error) {
+                console.error('Load obstacle suggestion error:', error);
+                fadeUpdateTip('先写下一个你最想突破的困难，AI 会帮你想第一步。', '还没有选中的阻碍');
+            }
+        }
+
+                async function loadStudentSummary(userId) {
+            try {
+                let data = {};
+                try {
+                    const res = await fetch(`http://localhost:3003/api/student/${userId}/summary`);
+                    if (res.ok) data = await res.json();
+                } catch (e) {
+                    console.warn('API Summary fetch failed:', e);
+                }
+
+                const nameEl = document.getElementById('user-name');
+                if (nameEl) nameEl.textContent = data.full_name || '同学';
+
+                allDreams = getDreamsFromData(data);
+                selectedDream = allDreams[0] || '';
+                renderDreamTags();
+
+                const primaryDream = selectedDream || '';
+                const dreamDisplay = primaryDream ? `${primaryDream}${allDreams.length > 1 ? ` +${allDreams.length - 1}` : ''}` : '小学生';
+
+                const bioEl = document.getElementById('user-bio');
+                if (bioEl) {
+                    const text = data.bio || primaryDream || '快乐成长中';
+                    bioEl.innerHTML = `<span class="material-icons-round text-sm">rocket</span> ${text}`;
+                }
+
+                const commentEl = document.getElementById('ai-comment');
+                if (commentEl) commentEl.textContent = '正在生成小鼓励...';
+
+                const dreamEl = document.getElementById('growth-dream');
+                if (dreamEl) dreamEl.textContent = dreamDisplay;
+
+                const obstacleDreamBadgeEl = document.getElementById('obstacle-dream-badge');
+                if (obstacleDreamBadgeEl) {
+                    obstacleDreamBadgeEl.textContent = `当前梦想：${selectedDream || allDreams[0] || '未选择'}`;
+                }
+
+                const avatarNavEl = document.getElementById('user-avatar-nav');
+                if (avatarNavEl) {
+                    if (data.avatar_url) {
+                        avatarNavEl.src = data.avatar_url;
+                    } else {
+                        const seed = userId ? userId.substring(0, 5) : 'guest';
+                        avatarNavEl.src = `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=e6dac6`;
+                    }
+                }
+
+                try {
+                    const commentRes = await fetch(`http://localhost:3003/api/student/${userId}/ai-comment`);
+                    if (commentRes.ok) {
+                        const commentData = await commentRes.json();
+                        if (commentEl) commentEl.textContent = commentData.comment || '今天也要继续加油呀！';
+                    }
+                } catch (commentErr) {
+                    if (commentEl) commentEl.textContent = '今天也要继续加油呀！';
+                    console.error('AI comment fetch error:', commentErr);
+                }
+
+                const avatarEl = document.getElementById('user-avatar-main');
+                if (avatarEl) {
+                    if (data.avatar_url) {
+                        avatarEl.src = data.avatar_url;
+                    } else {
+                        const seed = userId ? userId.substring(0, 5) : 'guest';
+                        avatarEl.src = `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=e6dac6`;
+                    }
+                    avatarEl.classList.remove('opacity-0');
+                }
+            } catch (err) {
+                console.error('Summary critical error:', err);
+            }
+        }
+    </script>
+
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

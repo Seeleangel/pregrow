@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>Register - LeGrow</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#91d27a',
+                        'primary-dark': '#7db967',
+                        'primary-ink': '#35542b',
+                        cream: '#fbf5ea',
+                        card: '#fffdf9',
+                        line: '#e7decd',
+                        ink: '#4c4237',
+                        mute: '#7f7366',
+                        sand: '#f6efe2'
+                    },
+                    boxShadow: {
+                        soft: '0 18px 40px -28px rgba(100, 77, 46, 0.22)'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Lexend', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        ::selection {
+            background: rgba(145, 210, 122, 0.28);
+            color: #3d342a;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.24s ease-out forwards;
+        }
+
+        .animate-spin {
+            animation: spin 0.9s linear infinite;
+        }
+
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+        }
+
+        .field-shell:focus-within {
+            border-color: rgba(145, 210, 122, 0.92);
+            box-shadow: 0 0 0 4px rgba(145, 210, 122, 0.16);
+            background: #fffdf9;
+        }
+
+        .role-pill::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            width: calc(50% - 5px);
+            border-radius: 9999px;
+            background: #fffdf9;
+            box-shadow: 0 6px 18px -16px rgba(0, 0, 0, 0.3);
+            transform: translateX(var(--role-shift, 0%));
+            transition: transform 180ms ease;
+        }
+
+        .role-pill[data-role='teacher']::before {
+            --role-shift: 100%;
+        }
+
+        .login-hero-art {
+            background-image:
+                linear-gradient(90deg, rgba(251, 245, 234, 0.95) 0%, rgba(251, 245, 234, 0.84) 34%, rgba(251, 245, 234, 0.42) 58%, rgba(251, 245, 234, 0.12) 100%),
+                var(--login-hero-image, none);
+            background-size: cover;
+            background-position: center left;
+        }
+    </style>
+    <script src="shared/api.js"></script>
+    <script src="shared/images.js"></script>
+    <link rel="stylesheet" href="shared/page-loading.css" />
+</head>
+<body class="min-h-screen bg-cream text-ink">
+    <div id="toast-container" class="fixed inset-x-0 top-4 z-[9999] flex justify-center px-4 pointer-events-none"></div>
+
+    <main class="min-h-screen lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(440px,540px)]">
+        <section class="login-hero-art relative hidden min-h-screen overflow-hidden border-r border-line/70 lg:flex">
+            <div class="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/85 bg-white/72 text-primary-ink shadow-soft">
+                        <span class="material-icons-round text-[22px]">auto_stories</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-mute">LeGrow</p>
+                        <h1 id="brand-name" class="mt-1 text-xl font-semibold text-ink">LeGrow</h1>
+                    </div>
+                </div>
+
+                <div class="max-w-[29rem] rounded-[2rem] border border-white/70 bg-white/46 p-8 backdrop-blur-[6px]">
+                    <h2 id="hero-title" class="text-4xl font-semibold leading-[1.18] text-ink">
+                        Start with a new, structured workspace.
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex min-h-screen items-center justify-center px-5 py-8 sm:px-8 lg:px-10">
+            <div class="w-full max-w-[32rem]">
+                <div class="rounded-[1.6rem] border border-line/80 bg-card/95 p-6 shadow-soft sm:p-8">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/20 bg-primary/14 text-primary-ink">
+                            <span class="material-icons-round text-[20px]">person_add</span>
+                        </div>
+                        <h2 id="panel-title" class="text-[1.55rem] font-semibold text-ink">Create account</h2>
+                    </div>
+
+                    <div class="mt-6 rounded-[1.2rem] border border-line/80 bg-sand/80 p-1.5">
+                        <div id="role-switcher" class="role-pill relative grid grid-cols-2" data-role="student">
+                            <button
+                                id="btn-student"
+                                type="button"
+                                aria-pressed="true"
+                                onclick="selectRole('student')"
+                                class="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-primary-ink transition-colors"
+                            >
+                                <span class="material-icons-round text-[18px]">face</span>
+                                <span id="student-role-label">Student</span>
+                            </button>
+                            <button
+                                id="btn-teacher"
+                                type="button"
+                                aria-pressed="false"
+                                onclick="selectRole('teacher')"
+                                class="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-mute transition-colors"
+                            >
+                                <span class="material-icons-round text-[18px]">co_present</span>
+                                <span id="teacher-role-label">Teacher</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form class="mt-6 space-y-4" id="register-form" novalidate>
+                        <div id="student-name-field">
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="student-name" id="student-name-label">Name</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">badge</span>
+                                <input
+                                    id="student-name"
+                                    type="text"
+                                    autocomplete="name"
+                                    placeholder="Enter name"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="student-name-error"
+                                />
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="student-name-error">Please enter name</p>
+                        </div>
+
+                        <div id="teacher-school-field" class="hidden">
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="school-name" id="school-name-label">School</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">school</span>
+                                <input
+                                    id="school-name"
+                                    type="text"
+                                    autocomplete="organization"
+                                    placeholder="Enter school"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="school-name-error"
+                                />
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="school-name-error">Please enter school</p>
+                        </div>
+
+                        <div id="teacher-class-field" class="hidden">
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="class-name" id="class-name-label">Class</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">groups</span>
+                                <input
+                                    id="class-name"
+                                    type="text"
+                                    autocomplete="off"
+                                    placeholder="Enter class"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="class-name-error"
+                                />
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="class-name-error">Please enter class</p>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="email" id="email-label">Email</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">mail</span>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    autocomplete="email"
+                                    placeholder="Enter email"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="email-error"
+                                />
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="email-error">Please enter email</p>
+                        </div>
+
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-ink" for="password" id="password-label">Password</label>
+                            <div class="field-shell flex min-h-14 items-center rounded-[1.1rem] border border-line/90 bg-[#fffaf1] px-4 transition">
+                                <span class="material-icons-round mr-3 text-[20px] text-mute">lock</span>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    placeholder="Set password"
+                                    class="w-full border-0 bg-transparent px-0 py-0 text-[15px] text-ink placeholder:text-mute focus:outline-none focus:ring-0"
+                                    aria-describedby="password-error"
+                                />
+                                <button
+                                    type="button"
+                                    onclick="togglePassword()"
+                                    class="ml-3 inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-mute transition hover:bg-white hover:text-ink focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <span class="material-icons-round text-[20px]" id="password-toggle-icon">visibility_off</span>
+                                </button>
+                            </div>
+                            <p class="mt-2 hidden text-sm text-red-500" id="password-error">Please enter password</p>
+                        </div>
+
+                        <button
+                            id="register-btn"
+                            type="submit"
+                            class="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-base font-semibold text-primary-ink transition hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
+                            <span id="register-btn-text">Create account</span>
+                            <span class="material-icons-round text-[20px]" id="register-btn-icon">arrow_forward</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 border-t border-line/80 pt-4 text-sm text-mute">
+                        <p><span id="footer-prefix">Already have an account?</span> <a id="login-link-bottom" class="font-semibold text-primary-ink underline-offset-4 transition hover:underline" href="index.html">Back to login</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentRole = 'student';
+        const LOGIN_HERO_IMAGE_PATH = 'https://your-project.supabase.co/storage/v1/object/public/images/student/img/login/login_bk.png';
+
+        function applyLoginHeroBackground() {
+            const hero = document.querySelector('.login-hero-art');
+            if (!hero || typeof buildMediaUrl !== 'function') return;
+            const heroUrl = buildMediaUrl(LOGIN_HERO_IMAGE_PATH);
+            if (!heroUrl) return;
+            hero.style.setProperty('--login-hero-image', `url("${heroUrl}")`);
+        }
+
+        const TEXT = {
+            title: '\u6ce8\u518c - \u4e50\u5b66\u6210\u957f\u5e73\u53f0',
+            brand: '\u4e50\u5b66\u6210\u957f\u5e73\u53f0',
+            heroTitleStudent: '\u5efa\u7acb\u4e2a\u4eba\u6210\u957f\u6863\u6848\uff0c\u5f00\u59cb\u6301\u7eed\u8bb0\u5f55\u3002',
+            heroTitleTeacher: '\u5efa\u7acb\u73ed\u7ea7\u5de5\u4f5c\u53f0\uff0c\u5f00\u59cb\u7edf\u4e00\u7ba1\u7406\u4e0e\u652f\u6301\u3002',
+            panelTitle: '\u6ce8\u518c',
+            studentRole: '\u5b66\u751f\u6ce8\u518c',
+            teacherRole: '\u6559\u5e08\u6ce8\u518c',
+            studentNameLabel: '\u59d3\u540d',
+            studentNamePlaceholder: '\u8bf7\u8f93\u5165\u771f\u5b9e\u59d3\u540d',
+            schoolNameLabel: '\u5b66\u6821',
+            schoolNamePlaceholder: '\u8bf7\u8f93\u5165\u5b66\u6821\u540d\u79f0',
+            classNameLabel: '\u73ed\u7ea7',
+            classNamePlaceholder: '\u4f8b\u5982\uff1a\u4e09\u5e74\u7ea7\u4e8c\u73ed',
+            emailLabel: '\u7535\u5b50\u90ae\u7bb1',
+            emailPlaceholder: '\u8bf7\u8f93\u5165\u90ae\u7bb1',
+            passwordLabel: '\u8bbe\u7f6e\u5bc6\u7801',
+            passwordPlaceholder: '\u8bbe\u7f6e\u767b\u5f55\u5bc6\u7801',
+            register: '\u7acb\u5373\u6ce8\u518c',
+            footerPrefix: '\u5df2\u6709\u8d26\u53f7\uff1f',
+            backToLogin: '\u8fd4\u56de\u767b\u5f55',
+            nameError: '\u8bf7\u8f93\u5165\u59d3\u540d',
+            schoolError: '\u8bf7\u8f93\u5165\u5b66\u6821',
+            classError: '\u8bf7\u8f93\u5165\u73ed\u7ea7',
+            emailError: '\u8bf7\u8f93\u5165\u90ae\u7bb1',
+            passwordError: '\u8bf7\u8f93\u5165\u5bc6\u7801',
+            passwordLengthError: '\u5bc6\u7801\u957f\u5ea6\u81f3\u5c11\u4e3a 6 \u4f4d',
+            registerLoading: '\u6ce8\u518c\u4e2d...',
+            registerSuccess: '\u6ce8\u518c\u6210\u529f\uff0c\u8bf7\u767b\u5f55',
+            registerFailed: '\u6ce8\u518c\u5931\u8d25',
+            responseError: '\u670d\u52a1\u8fd4\u56de\u683c\u5f0f\u5f02\u5e38\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5',
+            networkError: '\u6ce8\u518c\u53d1\u751f\u9519\u8bef\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u540e\u91cd\u8bd5'
+        };
+
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function applyStaticCopy() {
+            document.title = TEXT.title;
+            setText('brand-name', TEXT.brand);
+            setText('panel-title', TEXT.panelTitle);
+            setText('student-role-label', TEXT.studentRole);
+            setText('teacher-role-label', TEXT.teacherRole);
+            setText('student-name-label', TEXT.studentNameLabel);
+            setText('school-name-label', TEXT.schoolNameLabel);
+            setText('class-name-label', TEXT.classNameLabel);
+            setText('email-label', TEXT.emailLabel);
+            setText('password-label', TEXT.passwordLabel);
+            setText('register-btn-text', TEXT.register);
+            setText('footer-prefix', TEXT.footerPrefix);
+            setText('login-link-bottom', TEXT.backToLogin);
+
+            document.getElementById('student-name').placeholder = TEXT.studentNamePlaceholder;
+            document.getElementById('school-name').placeholder = TEXT.schoolNamePlaceholder;
+            document.getElementById('class-name').placeholder = TEXT.classNamePlaceholder;
+            document.getElementById('email').placeholder = TEXT.emailPlaceholder;
+            document.getElementById('password').placeholder = TEXT.passwordPlaceholder;
+        }
+
+        function createToast(message, type = 'error') {
+            const toast = document.createElement('div');
+            toast.className = [
+                'pointer-events-auto flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium shadow-soft animate-fade-in-up',
+                type === 'success'
+                    ? 'border-green-200 bg-green-50 text-green-700'
+                    : 'border-red-200 bg-red-50 text-red-600'
+            ].join(' ');
+
+            const icon = document.createElement('span');
+            icon.className = 'material-icons-round text-[18px]';
+            icon.textContent = type === 'success' ? 'check_circle' : 'error';
+
+            const text = document.createElement('span');
+            text.textContent = String(message || '');
+
+            toast.append(icon, text);
+            return toast;
+        }
+
+        function showToast(message, type = 'error') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = createToast(message, type);
+            container.appendChild(toast);
+
+            window.setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                toast.style.transition = 'opacity 180ms ease, transform 180ms ease';
+                window.setTimeout(() => toast.remove(), 180);
+            }, 2600);
+        }
+
+        function clearFieldError(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            input?.classList.remove('input-error');
+            error?.classList.add('hidden');
+        }
+
+        function setFieldError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            input?.classList.add('input-error');
+            if (error) {
+                error.textContent = message;
+                error.classList.remove('hidden');
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('password-toggle-icon');
+            const isHidden = passwordInput.type === 'password';
+            passwordInput.type = isHidden ? 'text' : 'password';
+            icon.textContent = isHidden ? 'visibility' : 'visibility_off';
+        }
+
+        function selectRole(role) {
+            currentRole = role === 'teacher' ? 'teacher' : 'student';
+            const switcher = document.getElementById('role-switcher');
+            const btnStudent = document.getElementById('btn-student');
+            const btnTeacher = document.getElementById('btn-teacher');
+            const studentField = document.getElementById('student-name-field');
+            const schoolField = document.getElementById('teacher-school-field');
+            const classField = document.getElementById('teacher-class-field');
+
+            switcher.dataset.role = currentRole;
+            btnStudent.setAttribute('aria-pressed', String(currentRole === 'student'));
+            btnTeacher.setAttribute('aria-pressed', String(currentRole === 'teacher'));
+            btnStudent.classList.toggle('text-primary-ink', currentRole === 'student');
+            btnStudent.classList.toggle('text-mute', currentRole !== 'student');
+            btnTeacher.classList.toggle('text-primary-ink', currentRole === 'teacher');
+            btnTeacher.classList.toggle('text-mute', currentRole !== 'teacher');
+
+            studentField.classList.toggle('hidden', currentRole !== 'student');
+            schoolField.classList.toggle('hidden', currentRole !== 'teacher');
+            classField.classList.toggle('hidden', currentRole !== 'teacher');
+
+            setText('hero-title', currentRole === 'teacher' ? TEXT.heroTitleTeacher : TEXT.heroTitleStudent);
+        }
+
+        function validateRegisterForm() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            clearFieldError('student-name', 'student-name-error');
+            clearFieldError('school-name', 'school-name-error');
+            clearFieldError('class-name', 'class-name-error');
+            clearFieldError('email', 'email-error');
+            clearFieldError('password', 'password-error');
+
+            if (currentRole === 'student') {
+                const name = document.getElementById('student-name').value.trim();
+                if (!name) {
+                    setFieldError('student-name', 'student-name-error', TEXT.nameError);
+                    document.getElementById('student-name').focus();
+                    return false;
+                }
+            } else {
+                const schoolName = document.getElementById('school-name').value.trim();
+                const className = document.getElementById('class-name').value.trim();
+
+                if (!schoolName) {
+                    setFieldError('school-name', 'school-name-error', TEXT.schoolError);
+                    document.getElementById('school-name').focus();
+                    return false;
+                }
+
+                if (!className) {
+                    setFieldError('class-name', 'class-name-error', TEXT.classError);
+                    document.getElementById('class-name').focus();
+                    return false;
+                }
+            }
+
+            if (!email) {
+                setFieldError('email', 'email-error', TEXT.emailError);
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            if (!password) {
+                setFieldError('password', 'password-error', TEXT.passwordError);
+                document.getElementById('password').focus();
+                return false;
+            }
+
+            if (password.length < 6) {
+                setFieldError('password', 'password-error', TEXT.passwordLengthError);
+                document.getElementById('password').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        function setRegisterLoading(isLoading) {
+            const btn = document.getElementById('register-btn');
+            const btnText = document.getElementById('register-btn-text');
+            const btnIcon = document.getElementById('register-btn-icon');
+
+            btn.disabled = isLoading;
+            if (isLoading) {
+                btnText.textContent = TEXT.registerLoading;
+                btnIcon.innerHTML = '<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.37 0 0 5.37 0 12h4zm2 5.29A7.96 7.96 0 014 12H0c0 3.04 1.14 5.82 3 7.94l3-2.65z"></path></svg>';
+            } else {
+                btnText.textContent = TEXT.register;
+                btnIcon.textContent = 'arrow_forward';
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            if (!validateRegisterForm()) {
+                return;
+            }
+
+            const payload = {
+                role: currentRole,
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value
+            };
+
+            if (currentRole === 'student') {
+                payload.name = document.getElementById('student-name').value.trim();
+            } else {
+                payload.schoolName = document.getElementById('school-name').value.trim();
+                payload.className = document.getElementById('class-name').value.trim();
+            }
+
+            setRegisterLoading(true);
+
+            try {
+                const response = await fetch(buildApiUrl('/api/register'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const contentType = response.headers.get('content-type') || '';
+                const data = contentType.includes('application/json')
+                    ? await response.json()
+                    : { error: TEXT.responseError };
+
+                if (!response.ok) {
+                    showToast(data.error || data.message || TEXT.registerFailed, 'error');
+                    return;
+                }
+
+                showToast(TEXT.registerSuccess, 'success');
+                window.setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 700);
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast(TEXT.networkError, 'error');
+            } finally {
+                setRegisterLoading(false);
+            }
+        }
+
+        document.getElementById('register-form').addEventListener('submit', handleRegister);
+        document.getElementById('student-name').addEventListener('input', () => clearFieldError('student-name', 'student-name-error'));
+        document.getElementById('school-name').addEventListener('input', () => clearFieldError('school-name', 'school-name-error'));
+        document.getElementById('class-name').addEventListener('input', () => clearFieldError('class-name', 'class-name-error'));
+        document.getElementById('email').addEventListener('input', () => clearFieldError('email', 'email-error'));
+        document.getElementById('password').addEventListener('input', () => clearFieldError('password', 'password-error'));
+
+        applyLoginHeroBackground();
+        applyStaticCopy();
+        selectRole('student');
+    </script>
+    <script src="shared/page-loading.js"></script>
+</body>
+</html>

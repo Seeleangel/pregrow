@@ -1,0 +1,250 @@
+/**
+ * Typography System - 统一排版系统
+ *
+ * 设计原则:
+ * 1. 统一字体家族 - 全站使用 Lexend
+ * 2. 建立清晰的视觉层级
+ * 3. 优化可读性
+ * 4. 保持温暖、友好的调性
+ */
+
+/* ===== 基础字体设置 ===== */
+:root {
+  /* 字体家族 */
+  --font-family-base: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-display: 'Lexend', system-ui, sans-serif;
+  --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+
+  /* 字体大小 - 使用 1.25 比例尺 */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  --text-5xl: 3rem;        /* 48px */
+
+  /* 行高 */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* 字重 */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* 字间距 */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+
+  /* 段落宽度 */
+  --prose-width: 65ch;
+}
+
+/* ===== 全局字体继承 ===== */
+html {
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-main, #4a4036);
+}
+
+/* ===== 标题层级系统 ===== */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-main, #4a4036);
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+}
+
+h4 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+}
+
+h5 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+}
+
+h6 {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ===== 正文文本 ===== */
+p {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-width);
+}
+
+.text-body {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+.text-body-sm {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.text-body-lg {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+
+/* ===== 标签与辅助文本 ===== */
+.text-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.text-caption {
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-snug);
+  color: var(--text-sub, #9ca3af);
+}
+
+.text-button {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ===== 数据与数字 ===== */
+.text-number {
+  font-family: var(--font-family-base);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ===== 导航与菜单 ===== */
+.text-nav {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* ===== 卡片标题 ===== */
+.text-card-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+}
+
+/* ===== 页面标题 ===== */
+.text-page-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ===== 大数字/统计 ===== */
+.text-stat {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-none);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 链接样式 ===== */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary, #ee9d2b);
+}
+
+/* ===== 强调文本 ===== */
+strong, b {
+  font-weight: var(--font-semibold);
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* ===== 代码文本 ===== */
+code, pre {
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+
+/* ===== 响应式调整 ===== */
+@media (max-width: 640px) {
+  :root {
+    --text-4xl: 1.875rem;  /* 30px */
+    --text-3xl: 1.5rem;    /* 24px */
+    --text-2xl: 1.25rem;   /* 20px */
+    --text-xl: 1.125rem;   /* 18px */
+  }
+
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+  h3 { font-size: var(--text-xl); }
+}
+
+/* ===== 减少动画偏好 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ===== 打印样式 ===== */
+@media print {
+  html {
+    font-size: 12pt;
+  }
+
+  body {
+    color: #000;
+  }
+}

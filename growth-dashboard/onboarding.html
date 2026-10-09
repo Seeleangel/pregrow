@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>新手引导 - 成长档案</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" /><!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee8c2b",
+                        "primary-dark": "#d0731a",
+                        "primary-light": "#fff4eb",
+                        "secondary": "#f4e4d4",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                        "warm-beige": "#FDFBF7",
+                        "soft-brown": "#5d4e43",
+                        "text-main": "#3D342B",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "2xl": "4rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+                        body {
+            font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Floating decorative elements */
+        .floating-shape {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #ee8c2b, #d0731a);
+            top: -100px;
+            right: -100px;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            bottom: 100px;
+            left: -50px;
+            animation: float2 10s ease-in-out infinite;
+        }
+
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            top: 50%;
+            right: 5%;
+            animation: float3 12s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, 30px) rotate(10deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, -20px) rotate(-10deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-15px, 15px); }
+        }
+
+        /* Step indicator styles */
+        .step-indicator {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .step-indicator::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            background: linear-gradient(135deg, #ee8c2b 0%, #d0731a 100%);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(238, 140, 43, 0.4);
+        }
+
+        .step-indicator.active::after {
+            border-color: rgba(238, 140, 43, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .step-indicator.completed {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            transform: scale(1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        .step-line {
+            transition: all 0.4s ease;
+        }
+
+        .step-line.active {
+            background: linear-gradient(90deg, #22c55e, #ee8c2b);
+        }
+
+        /* Content animations */
+        .step-content {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Avatar styles */
+        .avatar-option {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar-option.ring-4 {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(238, 140, 43, 0.4);
+            border-color: #ee8c2b;
+        }
+
+        .avatar-preview {
+            background: linear-gradient(135deg, #f4e4d4 0%, #fff4eb 100%);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-preview.has-avatar {
+            background: white;
+            box-shadow: 0 8px 30px rgba(238, 140, 43, 0.2);
+        }
+
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #ee8c2b 0%, #d0731a 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(238, 140, 43, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(238, 140, 43, 0.5);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            color: #3D342B;
+            background: rgba(93, 78, 67, 0.1);
+        }
+
+        /* Card styles */
+        .onboarding-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Template button styles */
+        .dream-template {
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .dream-template:hover {
+            background: linear-gradient(135deg, #ee8c2b 0%, #d0731a 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(238, 140, 43, 0.3);
+        }
+
+        /* Textarea styles */
+        .custom-textarea {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e5e5;
+        }
+
+        .custom-textarea:focus {
+            border-color: #ee8c2b;
+            box-shadow: 0 0 0 4px rgba(238, 140, 43, 0.1);
+            outline: none;
+        }
+
+        /* Input styles */
+        .invite-input {
+            transition: all 0.3s ease;
+            letter-spacing: 0.5em;
+            font-weight: 600;
+        }
+
+        .invite-input:focus {
+            border-color: #ee8c2b;
+            box-shadow: 0 0 0 4px rgba(238, 140, 43, 0.1);
+        }
+
+        /* Feature item styles */
+        .feature-item {
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+
+        /* Upload button */
+        .upload-btn {
+            transition: all 0.3s ease;
+            border: 2px dashed #d0731a;
+        }
+
+        .upload-btn:hover {
+            background: rgba(238, 140, 43, 0.1);
+            border-color: #ee8c2b;
+        }
+    </style>
+    <link rel="stylesheet" href="shared/page-loading.css" />
+    <link rel="stylesheet" href="shared/typography-system.css" />
+</head>
+
+<body class="min-h-screen relative overflow-x-hidden">
+    <!-- Floating Decorative Shapes -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+
+    <div class="relative z-10 max-w-2xl mx-auto px-4 py-8 md:py-12">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 rounded-full shadow-sm mb-4">
+                <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                <span class="text-sm font-medium text-soft-brown">新手引导</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-text-main mb-3">欢迎来到成长档案</h1>
+            <p class="text-soft-brown text-lg">让我们开始设置你的个人档案吧</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="flex items-center justify-center gap-1 md:gap-2 mb-10 px-4">
+            <div id="step-1" class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold bg-gray-200 text-gray-500">
+                <span class="material-icons-round text-lg">waving_hand</span>
+            </div>
+            <div class="step-line w-8 md:w-12 h-1 bg-gray-200 rounded" id="line-1"></div>
+            <div id="step-2" class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold bg-gray-200 text-gray-500">
+                <span class="material-icons-round text-lg">face</span>
+            </div>
+            <div class="step-line w-8 md:w-12 h-1 bg-gray-200 rounded" id="line-2"></div>
+            <div id="step-3" class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold bg-gray-200 text-gray-500">
+                <span class="material-icons-round text-lg">stars</span>
+            </div>
+            <div class="step-line w-8 md:w-12 h-1 bg-gray-200 rounded" id="line-3"></div>
+            <div id="step-4" class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold bg-gray-200 text-gray-500">
+                <span class="material-icons-round text-lg">edit_note</span>
+            </div>
+            <div class="step-line w-8 md:w-12 h-1 bg-gray-200 rounded" id="line-4"></div>
+            <div id="step-5" class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold bg-gray-200 text-gray-500">
+                <span class="material-icons-round text-lg">celebration</span>
+            </div>
+        </div>
+
+        <!-- Step Contents -->
+        <div class="onboarding-card rounded-3xl p-6 md:p-10">
+
+            <!-- Step 1: Welcome -->
+            <div id="content-1" class="step-content active">
+                <div class="text-center">
+                    <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary-light to-secondary flex items-center justify-center">
+                        <span class="text-5xl">🎉</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-text-main mb-4">欢迎使用成长档案系统！</h2>
+                    <p class="text-soft-brown text-lg mb-8 leading-relaxed">
+                        这里将记录你的成长旅程和精彩瞬间<br>
+                        通过完成每日任务、设定目标、记录心情<br>
+                        你将看到自己的进步和成长
+                    </p>
+                    <div class="bg-gradient-to-r from-primary-light to-secondary rounded-lg p-6 text-left">
+                        <h3 class="font-semibold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-icons-round text-primary">list_alt</span>
+                            接下来我们将：
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="feature-item flex items-center gap-3 p-3 bg-white/60 rounded-md">
+                                <span class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span class="material-icons-round text-blue-500 text-lg">face</span>
+                                </span>
+                                <span class="text-text-main">设置你的头像</span>
+                            </div>
+                            <div class="feature-item flex items-center gap-3 p-3 bg-white/60 rounded-md">
+                                <span class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                                    <span class="material-icons-round text-yellow-600 text-lg">stars</span>
+                                </span>
+                                <span class="text-text-main">写下你的期待</span>
+                            </div>
+                            <div class="feature-item flex items-center gap-3 p-3 bg-white/60 rounded-md">
+                                <span class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                    <span class="material-icons-round text-green-500 text-lg">edit_note</span>
+                                </span>
+                                <span class="text-text-main">写一段自我介绍</span>
+                            </div>
+                            <div class="feature-item flex items-center gap-3 p-3 bg-white/60 rounded-md">
+                                <span class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                                    <span class="material-icons-round text-purple-500 text-lg">groups</span>
+                                </span>
+                                <span class="text-text-main">加入你的班级</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Avatar -->
+            <div id="content-2" class="step-content">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-text-main mb-2">选择你的头像</h2>
+                    <p class="text-soft-brown text-lg mb-8">选择一个喜欢的头像来代表自己</p>
+
+                    <div id="avatarPreview" class="avatar-preview w-28 h-28 mx-auto mb-8 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
+                        <span class="material-icons-round text-gray-300 text-5xl">person</span>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4 mb-6 max-w-xs mx-auto">
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-3xl shadow-md" data-avatar="😊">😊</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center text-3xl shadow-md" data-avatar="🌟">🌟</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-yellow-100 to-yellow-200 flex items-center justify-center text-3xl shadow-md" data-avatar="🚀">🚀</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-3xl shadow-md" data-avatar="🎨">🎨</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center text-3xl shadow-md" data-avatar="💡">💡</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-3xl shadow-md" data-avatar="🌈">🌈</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-cyan-100 to-cyan-200 flex items-center justify-center text-3xl shadow-md" data-avatar="🎯">🎯</div>
+                        <div class="avatar-option w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center text-3xl shadow-md" data-avatar="❤️">❤️</div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="upload-btn inline-flex items-center gap-2 px-5 py-3 rounded-md cursor-pointer text-primary font-medium">
+                            <input type="file" id="avatarUpload" accept="image/*" class="hidden" />
+                            <span class="material-icons-round">upload</span>
+                            上传自定义头像
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Dream -->
+            <div id="content-3" class="step-content">
+                <div>
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center">
+                            <span class="text-3xl">✨</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-text-main mb-2">你最期待的未来是什么？</h2>
+                        <p class="text-soft-brown text-lg">写下你对未来最期待的一件事，让系统帮你规划成长路径</p>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-md p-4 mb-6 flex items-start gap-3">
+                        <span class="material-icons-round text-yellow-600 mt-0.5">lightbulb</span>
+                        <p class="text-soft-brown text-sm leading-relaxed">期待可以是一个想靠近的未来状态、一个想学会的本领，或一件你真心希望发生的事。大胆写下你的期待吧！</p>
+                    </div>
+
+                    <textarea
+                        id="dreamInput"
+                        class="custom-textarea w-full h-36 p-5 rounded-lg resize-none text-text-main text-lg"
+                        placeholder="例如：我期待自己将来成为一名科学家，去探索未知的世界..."
+                    ></textarea>
+
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-soft-brown mb-3 flex items-center gap-2">
+                            <span class="material-icons-round text-primary text-lg">auto_awesome</span>
+                            或选择一个期待模板
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为一名科学家">🔬 科学家</button>
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为一名艺术家">🎨 艺术家</button>
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为一名程序员">💻 程序员</button>
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为一名医生">👨‍⚕️ 医生</button>
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为一名老师">👩‍🏫 老师</button>
+                            <button class="dream-template px-4 py-2 text-sm bg-gray-100 rounded-full font-medium" data-dream="我想成为运动员">⚽ 运动员</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Bio -->
+            <div id="content-4" class="step-content">
+                <div>
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-100 to-teal-100 flex items-center justify-center">
+                            <span class="text-3xl">📝</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-text-main mb-2">介绍一下自己</h2>
+                        <p class="text-soft-brown text-lg">写一段简短的自我介绍，让大家更了解你</p>
+                    </div>
+
+                    <textarea
+                        id="bioInput"
+                        class="custom-textarea w-full h-40 p-5 rounded-lg resize-none text-text-main text-lg"
+                        placeholder="介绍一下你的兴趣爱好、性格特点..."
+                    ></textarea>
+
+                    <div class="mt-4 flex justify-between items-center">
+                        <div class="flex items-center gap-2 text-soft-brown text-sm">
+                            <span class="material-icons-round text-lg">tips_and_updates</span>
+                            可以写你的爱好、特长、性格等
+                        </div>
+                        <span id="bioCounter" class="text-sm font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-full">0/200</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Complete -->
+            <div id="content-5" class="step-content">
+                <div class="text-center">
+                    <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center shadow-lg">
+                        <span class="text-6xl">🎊</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-text-main mb-4">太棒了！设置完成！</h2>
+                    <p class="text-soft-brown text-lg mb-8 leading-relaxed">
+                        你已经完成了基本设置<br>
+                        现在可以开始记录你的成长旅程了！
+                    </p>
+
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
+                        <div class="flex items-center justify-center gap-2 mb-4">
+                            <span class="material-icons-round text-primary">school</span>
+                            <h3 class="font-semibold text-text-main">想要加入班级？</h3>
+                        </div>
+                        <p class="text-soft-brown text-sm mb-4">如果你有班级邀请码，可以在这里输入</p>
+                        <input
+                            type="text"
+                            id="inviteCodeInput"
+                            class="invite-input w-full p-4 border-2 border-gray-200 rounded-md focus:border-primary focus:outline-none uppercase text-center text-xl bg-white"
+                            placeholder="输入邀请码"
+                            maxlength="6"
+                        />
+                    </div>
+
+                    <p class="text-soft-brown text-sm flex items-center justify-center gap-1">
+                        <span class="material-icons-round text-lg">info</span>
+                        也可以稍后在设置中加入班级
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center mt-10 pt-6 border-t border-gray-100">
+                <button
+                    id="prevBtn"
+                    class="btn-secondary px-5 py-3 rounded-md font-medium text-soft-brown flex items-center gap-1 hidden"
+                >
+                    <span class="material-icons-round">arrow_back</span>
+                    上一步
+                </button>
+                <div class="flex-1"></div>
+                <button
+                    id="nextBtn"
+                    class="btn-primary px-8 py-4 text-white rounded-lg font-semibold flex items-center gap-2"
+                >
+                    开始设置
+                    <span class="material-icons-round">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Skip Link -->
+        <div class="text-center mt-8">
+            <a href="student/dashboard.html" class="inline-flex items-center gap-1 text-soft-brown hover:text-primary text-sm transition">
+                <span class="material-icons-round text-lg">skip_next</span>
+                跳过引导，稍后设置
+            </a>
+        </div>
+    </div>
+
+    <!-- API Helper -->
+    <script src="shared/api.js"></script>
+    <!-- Onboarding Logic -->
+    <script src="js/onboarding.js"></script>
+    <script src="shared/page-loading.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>学生管理 - 乐学成长平台</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6a23c",
+                        "primary-dark": "#d48806",
+                        "secondary": "#faecd8",
+                        "background-light": "#fdfbf7",
+                        "background-dark": "#2b2520",
+                        "surface-light": "#fffefc",
+                        "surface-dark": "#3a322b",
+                        "text-main-light": "#4a4238",
+                        "text-main-dark": "#f0e6d2",
+                        "text-sub-light": "#8c8174",
+                        "text-sub-dark": "#b0a69a"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(5px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(230, 162, 60, 0.08), transparent 30%),
+                linear-gradient(180deg, #fffcf6 0%, #f9f2e7 100%);
+        }
+
+        .teacher-shell {
+            background:
+                radial-gradient(circle at top left, rgba(250, 236, 216, 0.75), transparent 28%),
+                linear-gradient(180deg, #fffdf9 0%, #fbf6ed 100%);
+        }
+
+        .teacher-surface-warm {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(250, 243, 232, 0.98));
+        }
+
+        .teacher-surface-amber {
+            background: linear-gradient(135deg, #fffaf1 0%, #f9efe2 100%);
+        }
+    </style>
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <link rel="stylesheet" href="../shared/typography-system.css" />
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="hidden md:flex flex-col w-64 teacher-shell dark:bg-surface-dark border-r border-[#eadfce] dark:border-[#4a4238] p-6 z-20">
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer"
+                data-teacher-nav="dashboard.html">
+                <div
+                    class="w-10 h-10 rounded-full bg-[linear-gradient(135deg,_#f3bb67_0%,_#df9a2a_100%)] flex items-center justify-center text-white font-bold text-xl shadow-[0_10px_20px_-12px_rgba(212,136,6,0.7)]">
+                    O</div>
+                <div class="min-w-0">
+                    <h1 class="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">OptiClass</h1>
+                    <p id="brand-context" class="text-xs text-text-sub-light dark:text-text-sub-dark truncate">教师工作台</p>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="dashboard.html"><span class="material-icons">dashboard</span>工作台</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="analytics.html"><span class="material-icons">bar_chart</span>数据分析</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[linear-gradient(135deg,_#fff5e6_0%,_#f7ead6_100%)] dark:bg-primary/20 text-primary-dark dark:text-primary font-medium shadow-[0_8px_18px_-16px_rgba(212,136,6,0.45)]"
+                    href="students.html"><span class="material-icons">groups</span>学生管理</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="submissions.html"><span class="material-icons">assignment_turned_in</span>作业审核</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="settings.html"><span class="material-icons">settings</span>班级设置</a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-[#efebe0] dark:border-[#4a4238]">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors cursor-pointer"
+                    data-teacher-nav="../index.html"><span class="material-icons">logout</span>退出登录</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7] dark:bg-[#2b2520]">
+            <header data-teacher-header="true"
+                class="sticky top-0 z-50 bg-[linear-gradient(180deg,_rgba(255,252,247,0.96)_0%,_rgba(251,246,237,0.96)_100%)] dark:bg-background-dark px-8 py-5 flex items-center justify-between border-b border-[#efebe0] dark:border-[#4a4238] backdrop-blur-sm">
+                <div>
+                    <h2 class="text-2xl font-bold">学生管理</h2>
+                    <p id="header-class-context" class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">正在加载班级信息...</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <notification-bell></notification-bell>
+                    <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#efebe0] dark:border-[#4a4238] cursor-pointer"
+                        data-teacher-nav="settings.html?section=profile" title="维护个人信息">
+                        <img id="teacher-avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white dark:border-[#3a322b] shadow-sm" alt="教师头像" />
+                        <span id="teacher-name" class="text-sm font-medium text-text-main-light dark:text-text-main-dark max-w-[110px] truncate">老师</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 max-w-7xl mx-auto space-y-6">
+                <div
+                    class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-5 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between shadow-[0_12px_26px_-24px_rgba(212,136,6,0.45)]">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span id="attention-mode-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-200">需关注学生模式</span>
+                        <input id="student-search" type="text" placeholder="搜索学生姓名..."
+                            class="w-72 max-w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5 text-sm" />
+                        <button id="student-search-btn"
+                            class="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors shadow-[0_10px_20px_-16px_rgba(212,136,6,0.65)]">搜索</button>
+                        <select id="attention-level-filter" class="hidden rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-3 py-2.5 text-sm">
+                            <option value="all">全部风险等级</option>
+                            <option value="high">高风险</option>
+                            <option value="medium">中风险</option>
+                            <option value="low">低风险</option>
+                        </select>
+                    </div>
+                    <button id="student-export-btn"
+                        class="px-4 py-2.5 rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/80 dark:bg-[#2b2520] text-sm font-medium text-text-main-light dark:text-text-main-dark">导出学生名单</button>
+                </div>
+
+                <div
+                    class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] overflow-hidden shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                    <table class="w-full text-left">
+                        <thead
+                            class="bg-[#fcf5ea] dark:bg-surface-dark/50 border-b border-[#efebe0] dark:border-[#4a4238]">
+                            <tr>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                    学生</th>
+                                <th id="students-metric-header"
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                     本周完成</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                     班级</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark text-right">
+                                     操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body" class="divide-y divide-[#efebe0] dark:divide-[#4a4238]">
+                            <!-- Skeleton 1 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                            <div class="h-3 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 2 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                            <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 3 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-28 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                            <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="students-pagination" class="hidden teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] p-4 flex items-center justify-between shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                    <button id="students-page-prev" class="px-3 py-2 rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/70 dark:bg-[#2b2520] text-sm disabled:opacity-50 disabled:cursor-not-allowed">上一页</button>
+                    <div id="students-page-info" class="text-sm text-text-sub-light dark:text-text-sub-dark">第 1 / 1 页 · 共 0 人</div>
+                    <button id="students-page-next" class="px-3 py-2 rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/70 dark:bg-[#2b2520] text-sm disabled:opacity-50 disabled:cursor-not-allowed">下一页</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentTeacherId = null;
+        let allStudents = [];
+        let displayedStudents = [];
+        let isAttentionMode = false;
+        let attentionFilters = { level: 'all', keyword: '' };
+        let attentionPagination = { page: 1, limit: 12, total: 0, total_pages: 1, has_prev: false, has_next: false };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentTeacherId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+            if (currentTeacherId && typeof hydrateTeacherIdentity === 'function') {
+                hydrateTeacherIdentity({
+                    teacherId: currentTeacherId,
+                    brandContextElementId: 'brand-context',
+                    subtitleElementId: 'header-class-context',
+                    subtitleSuffix: '学生名单、状态与成长摘要',
+                    avatarElementId: 'teacher-avatar',
+                    nameElementId: 'teacher-name'
+                });
+            }
+
+            const searchInput = document.getElementById('student-search');
+            const searchBtn = document.getElementById('student-search-btn');
+            const exportBtn = document.getElementById('student-export-btn');
+            const levelFilter = document.getElementById('attention-level-filter');
+            const prevBtn = document.getElementById('students-page-prev');
+            const nextBtn = document.getElementById('students-page-next');
+            const params = new URLSearchParams(window.location.search || '');
+            isAttentionMode = String(params.get('attention') || '').trim() === '1';
+
+            if (searchInput) {
+                searchInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        applySearch(searchInput.value || '');
+                    }
+                });
+            }
+
+            if (searchBtn && searchInput) {
+                searchBtn.addEventListener('click', () => applySearch(searchInput.value || ''));
+            }
+
+            if (levelFilter) {
+                levelFilter.addEventListener('change', () => {
+                    attentionFilters.level = String(levelFilter.value || 'all');
+                    attentionPagination.page = 1;
+                    fetchAttentionStudents();
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (!attentionPagination.has_prev) return;
+                    attentionPagination.page -= 1;
+                    fetchAttentionStudents();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (!attentionPagination.has_next) return;
+                    attentionPagination.page += 1;
+                    fetchAttentionStudents();
+                });
+            }
+
+            if (exportBtn) {
+                exportBtn.addEventListener('click', exportStudentsCsv);
+            }
+
+            bindStudentRowActions();
+
+            const initialKeyword = String(params.get('q') || '').trim();
+            if (initialKeyword && searchInput) {
+                searchInput.value = initialKeyword;
+            }
+
+            if (isAttentionMode) {
+                attentionFilters.keyword = initialKeyword;
+                attentionFilters.level = String(params.get('level') || 'all').trim().toLowerCase() || 'all';
+                if (levelFilter) {
+                    levelFilter.value = attentionFilters.level;
+                }
+            }
+
+            updateModeUi();
+
+            if (isAttentionMode) {
+                await fetchAttentionStudents();
+            } else {
+                await fetchStudents();
+                if (initialKeyword) {
+                    applySearch(initialKeyword);
+                }
+            }
+        });
+
+        function renderAvatar(student) {
+            if (student.avatar_url) {
+                return `<img class="w-9 h-9 rounded-full object-cover" src="${escapeHtml(student.avatar_url)}" alt="" />`;
+            }
+            const initial = student.full_name?.[0] || '学';
+            return `<div class="w-9 h-9 rounded-full bg-primary/20 text-primary text-sm font-bold flex items-center justify-center">${escapeHtml(initial)}</div>`;
+        }
+
+        function renderRows(students) {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody) return;
+
+            displayedStudents = Array.isArray(students) ? students : [];
+
+            if (!Array.isArray(students) || students.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-5 text-center text-sm text-text-sub-light dark:text-text-sub-dark">暂无学生数据</td></tr>';
+                return;
+            }
+
+            const getRiskLevelChip = (level) => {
+                const key = String(level || 'low').toLowerCase();
+                if (key === 'high') return '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-200">高风险</span>';
+                if (key === 'medium') return '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-200">中风险</span>';
+                return '<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200">低风险</span>';
+            };
+
+            tbody.innerHTML = students.map((student) => `
+                <tr class="hover:bg-secondary/20 dark:hover:bg-surface-light/5 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            ${renderAvatar(student)}
+                            <div>
+                                <div class="text-sm font-medium text-text-main-light dark:text-text-main-dark">${escapeHtml(student.full_name || '未知学生')}</div>
+                                <div class="text-xs text-text-sub-light dark:text-text-sub-dark">${escapeHtml(student.school_name || '未设置学校')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-text-main-light dark:text-text-main-dark">
+                        ${isAttentionMode
+                            ? `<div class="space-y-1">${getRiskLevelChip(student.risk_level)}<div class="text-xs text-text-sub-light dark:text-text-sub-dark">${escapeHtml(student.risk_text || '趋势：需关注')}</div><div class="flex flex-wrap gap-1">${(student.risk_reasons || []).slice(0, 3).map((tag) => `<span class='px-1.5 py-0.5 rounded bg-[#fdf1df] dark:bg-primary/20 text-[11px]'>${escapeHtml(tag)}</span>`).join('')}</div></div>`
+                            : `${Number(student.weekly_completed || 0)} 项`}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-text-sub-light dark:text-text-sub-dark">${escapeHtml(student.class_name || '未分班')}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button data-view-student="${escapeHtml(student.full_name || '')}" data-student-id="${student.id || ''}" class="text-primary hover:text-primary-dark text-sm font-medium transition-colors">查看档案</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateModeUi() {
+            const badgeEl = document.getElementById('attention-mode-badge');
+            const levelFilter = document.getElementById('attention-level-filter');
+            const paginationWrap = document.getElementById('students-pagination');
+            const metricHeader = document.getElementById('students-metric-header');
+            const searchInput = document.getElementById('student-search');
+
+            if (badgeEl) badgeEl.classList.toggle('hidden', !isAttentionMode);
+            if (levelFilter) levelFilter.classList.toggle('hidden', !isAttentionMode);
+            if (paginationWrap) paginationWrap.classList.toggle('hidden', !isAttentionMode);
+            if (metricHeader) {
+                metricHeader.textContent = isAttentionMode ? '风险信息' : '本周完成';
+            }
+            if (searchInput) {
+                searchInput.placeholder = isAttentionMode ? '搜索需关注学生或风险原因...' : '搜索学生姓名...';
+            }
+        }
+
+        function renderAttentionPagination(meta) {
+            const infoEl = document.getElementById('students-page-info');
+            const prevBtn = document.getElementById('students-page-prev');
+            const nextBtn = document.getElementById('students-page-next');
+
+            attentionPagination = {
+                ...attentionPagination,
+                ...(meta || {})
+            };
+
+            if (infoEl) {
+                const page = Number(attentionPagination.page || 1);
+                const totalPages = Number(attentionPagination.total_pages || 1);
+                const total = Number(attentionPagination.total || 0);
+                infoEl.textContent = `第 ${page} / ${totalPages} 页 · 共 ${total} 人`;
+            }
+            if (prevBtn) prevBtn.disabled = !attentionPagination.has_prev;
+            if (nextBtn) nextBtn.disabled = !attentionPagination.has_next;
+        }
+
+        function renderLoadingRows() {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody) return;
+            // Add fade-in animation by modifying class dynamically or inline template
+            const html = `
+                            <!-- Skeleton 1 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-3 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                     <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 2 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                     <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 3 -->
+                            <tr class="animate-pulse">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-4 outline-none w-28 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-8 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                     <div class="h-4 outline-none w-16 ml-auto rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                            </tr>
+            `;
+
+            tbody.innerHTML = html;
+        }
+
+        function bindStudentRowActions() {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody) return;
+
+            tbody.addEventListener('click', (event) => {
+                const profileBtn = event.target.closest('button[data-view-student]');
+                if (!profileBtn) return;
+                const studentId = String(profileBtn.getAttribute('data-student-id') || '').trim();
+                const studentName = String(profileBtn.getAttribute('data-view-student') || '').trim();
+
+                if (!studentId) {
+                    if (window.showPageToast) {
+                        window.showPageToast('无法查看该学生：缺少学生 ID', 'error');
+                    }
+                    return;
+                }
+
+                if (window.showPageToast) {
+                    window.showPageToast(`正在打开 ${studentName || '该学生'} 的成长档案`, 'info');
+                }
+
+                if (typeof navigateTeacher === 'function') {
+                    navigateTeacher(`student-profile.html?id=${encodeURIComponent(studentId)}`);
+                } else {
+                    window.location.href = `student-profile.html?id=${encodeURIComponent(studentId)}`;
+                }
+            });
+        }
+
+        function applySearch(keyword) {
+            const normalized = String(keyword || '').trim().toLowerCase();
+            if (isAttentionMode) {
+                attentionFilters.keyword = normalized;
+                attentionPagination.page = 1;
+                fetchAttentionStudents();
+                return;
+            }
+
+            if (!normalized) {
+                renderRows(allStudents);
+                return;
+            }
+            const filtered = allStudents.filter((student) => {
+                const name = String(student.full_name || '').toLowerCase();
+                const school = String(student.school_name || '').toLowerCase();
+                const klass = String(student.class_name || '').toLowerCase();
+                return name.includes(normalized) || school.includes(normalized) || klass.includes(normalized);
+            });
+            renderRows(filtered);
+        }
+
+        async function fetchStudents() {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody) return;
+
+            renderLoadingRows();
+
+            try {
+                const params = new URLSearchParams();
+                params.set('limit', '100');
+                if (currentTeacherId) {
+                    params.set('teacher_id', currentTeacherId);
+                }
+
+                const query = `?${params.toString()}`;
+                const res = await apiFetch(API_BASE_URL + `/api/students${query}`);
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({ error: 'Failed to fetch students' }));
+                    throw new Error(errData.error || 'Failed to fetch students');
+                }
+
+                const students = await res.json();
+                allStudents = Array.isArray(students) ? students : [];
+                displayedStudents = allStudents;
+                renderRows(allStudents);
+            } catch (error) {
+                console.error('Error fetching students:', error);
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-5 text-center text-sm text-red-500">学生列表加载失败：${error.message || '请稍后重试'}</td></tr>`;
+            }
+        }
+
+        async function fetchAttentionStudents() {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody || !currentTeacherId) return;
+
+            renderLoadingRows();
+
+            try {
+                const params = new URLSearchParams();
+                params.set('page', String(attentionPagination.page || 1));
+                params.set('limit', String(attentionPagination.limit || 12));
+                if (attentionFilters.level && attentionFilters.level !== 'all') {
+                    params.set('level', attentionFilters.level);
+                }
+                if (attentionFilters.keyword) {
+                    params.set('q', attentionFilters.keyword);
+                }
+
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/attention-students?${params.toString()}`);
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({ error: 'Failed to fetch attention students' }));
+                    throw new Error(errData.error || 'Failed to fetch attention students');
+                }
+
+                const data = await res.json();
+                const items = Array.isArray(data.items) ? data.items : [];
+                allStudents = items;
+                displayedStudents = items;
+                renderRows(items);
+                renderAttentionPagination(data.pagination || null);
+            } catch (error) {
+                console.error('Error fetching attention students:', error);
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-5 text-center text-sm text-red-500">需关注学生加载失败：${error.message || '请稍后重试'}</td></tr>`;
+                renderAttentionPagination({ page: 1, total_pages: 1, total: 0, has_prev: false, has_next: false });
+            }
+        }
+
+        function exportStudentsCsv() {
+            const rowsSource = Array.isArray(displayedStudents) ? displayedStudents : [];
+            if (!rowsSource.length) {
+                if (window.showPageToast) {
+                    window.showPageToast('暂无可导出的学生数据', 'info');
+                }
+                return;
+            }
+
+            const headers = isAttentionMode
+                ? ['姓名', '学校', '班级', '风险等级', '风险趋势', '风险标签']
+                : ['姓名', '学校', '班级'];
+            const rows = rowsSource.map((student) => {
+                if (!isAttentionMode) {
+                    return [student.full_name || '', student.school_name || '', student.class_name || ''];
+                }
+                return [
+                    student.full_name || '',
+                    student.school_name || '',
+                    student.class_name || '',
+                    student.risk_level || '',
+                    student.risk_text || '',
+                    (student.risk_reasons || []).join(' / ')
+                ];
+            });
+            const csv = [headers, ...rows]
+                .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `students-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            if (window.showPageToast) {
+                window.showPageToast('学生名单导出成功', 'success');
+            }
+        }
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

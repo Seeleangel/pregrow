@@ -1,0 +1,558 @@
+<!-- Dreams Analytics Page - Multi-Dream Insights -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>梦想分析 - 乐学成长平台</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee9d2b",
+                        "primary-dark": "#d98b1f",
+                        "primary-light": "#fef3e2",
+                        "beige-bg": "#fcf9f4",
+                        "beige-card": "#ffffff",
+                        "warm-border": "#f0e6d0",
+                        "accent-yellow": "#f4d03f",
+                        "text-main": "#4a4036",
+                        "text-sub": "#9ca3af",
+                        "background-dark": "#292520",
+                        "surface-dark": "#36322b",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2.5rem",
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(238, 157, 43, 0.15)',
+                        'card': '0 4px 6px -1px rgba(92, 84, 70, 0.05), 0 10px 15px -3px rgba(92, 84, 70, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #FDF5E6;
+        }
+
+        .heatmap-day {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+
+        .heatmap-day:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* MVP Focus states for accessibility */
+        .focus-ring:focus,
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        .focus-ring:focus-visible {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        /* Disabled state */
+        .disabled,
+        button:disabled,
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0e6d0;
+            border-top-color: #ee9d2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state styling */
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button, a, input, select, textarea {
+            transition: all 0.2s ease;
+        }
+
+    </style>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+</head>
+
+<body class="bg-beige-bg dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen font-display">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-beige-card/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-warm-border/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <a href="dashboard.html" class="flex items-center gap-2 text-text-sub hover:text-primary-dark transition">
+                        <span class="material-icons-round">arrow_back</span>
+                    </a>
+                    <h1 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
+                        <span class="material-icons-round text-primary">analytics</span>
+                        梦想分析
+                    </h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-text-sub hidden sm:block">追踪多梦想进度</span>
+                    <a href="portfolio.html" class="px-4 py-2 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-dark transition">
+                        管理梦想
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-20">
+            <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-text-sub">正在加载梦想数据...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <div class="w-20 h-20 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <span class="text-4xl">🌱</span>
+            </div>
+            <h2 class="text-xl font-bold text-text-main mb-2">还没有梦想数据</h2>
+            <p class="text-text-sub mb-6">添加梦想后，这里会显示详细的进度分析</p>
+            <a href="portfolio.html" class="px-6 py-3 bg-primary text-white rounded-full font-bold hover:bg-primary-dark transition">
+                去添加梦想
+            </a>
+        </div>
+
+        <!-- Content -->
+        <div id="analytics-content" class="hidden space-y-8">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-5 border border-warm-border/50 shadow-soft">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-green-100 rounded-md flex items-center justify-center">
+                            <span class="material-icons-round text-green-600">auto_awesome</span>
+                        </div>
+                        <span class="text-xs text-text-sub">总梦想数</span>
+                    </div>
+                    <p id="stat-total-dreams" class="text-3xl font-bold text-text-main">0</p>
+                </div>
+
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-5 border border-warm-border/50 shadow-soft">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-blue-100 rounded-md flex items-center justify-center">
+                            <span class="material-icons-round text-blue-600">trending_up</span>
+                        </div>
+                        <span class="text-xs text-text-sub">进行中</span>
+                    </div>
+                    <p id="stat-active-dreams" class="text-3xl font-bold text-text-main">0</p>
+                </div>
+
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-5 border border-warm-border/50 shadow-soft">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-md flex items-center justify-center">
+                            <span class="material-icons-round text-yellow-600">emoji_events</span>
+                        </div>
+                        <span class="text-xs text-text-sub">已完成</span>
+                    </div>
+                    <p id="stat-completed-dreams" class="text-3xl font-bold text-text-main">0</p>
+                </div>
+
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-5 border border-warm-border/50 shadow-soft">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 bg-purple-100 rounded-md flex items-center justify-center">
+                            <span class="material-icons-round text-purple-600">schedule</span>
+                        </div>
+                        <span class="text-xs text-text-sub">本周投入</span>
+                    </div>
+                    <p id="stat-weekly-hours" class="text-3xl font-bold text-text-main">0h</p>
+                </div>
+            </div>
+
+            <!-- Dream Comparison Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-6 border border-warm-border/50 shadow-soft">
+                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+                        <span class="material-icons-round text-primary">bar_chart</span>
+                        各梦想进度对比
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="dream-progress-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-6 border border-warm-border/50 shadow-soft">
+                    <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+                        <span class="material-icons-round text-primary">pie_chart</span>
+                        时间分配比例
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="time-allocation-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dream Heatmap -->
+            <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-6 border border-warm-border/50 shadow-soft">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-text-main dark:text-white flex items-center gap-2">
+                        <span class="material-icons-round text-primary">calendar_view_month</span>
+                        梦想行动热力图
+                    </h3>
+                    <div class="flex items-center gap-2 text-xs text-text-sub">
+                        <span>少</span>
+                        <div class="flex gap-0.5">
+                            <div class="w-3 h-3 rounded bg-gray-200"></div>
+                            <div class="w-3 h-3 rounded bg-green-200"></div>
+                            <div class="w-3 h-3 rounded bg-green-300"></div>
+                            <div class="w-3 h-3 rounded bg-green-400"></div>
+                            <div class="w-3 h-3 rounded bg-green-500"></div>
+                        </div>
+                        <span>多</span>
+                    </div>
+                </div>
+                <div id="dream-heatmap" class="overflow-x-auto scrollbar-hide">
+                    <!-- Heatmap injected by JS -->
+                </div>
+            </div>
+
+            <!-- Dream Efficiency Analysis -->
+            <div class="bg-beige-card dark:bg-surface-dark rounded-lg p-6 border border-warm-border/50 shadow-soft">
+                <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+                    <span class="material-icons-round text-primary">insights</span>
+                    梦想完成效率分析
+                </h3>
+                <div id="efficiency-analysis" class="space-y-4">
+                    <!-- Analysis cards injected by JS -->
+                </div>
+            </div>
+
+            <!-- Multi-Dream Insights -->
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg p-6 border border-purple-200 dark:border-purple-800/30">
+                <h3 class="text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+                    <span class="material-icons-round text-purple-600">psychology</span>
+                    AI 洞察建议
+                </h3>
+                <div id="ai-insights" class="space-y-3">
+                    <!-- Insights injected by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentUserId = null;
+        let dreamsData = null;
+        let progressChart = null;
+        let allocationChart = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            const user = JSON.parse(userStr);
+            currentUserId = user.id;
+
+            await loadDreamsAnalytics();
+        });
+
+        async function loadDreamsAnalytics() {
+            try {
+                const res = await fetch(`http://localhost:3003/api/student/${currentUserId}/dreams/overview`);
+                if (!res.ok) throw new Error('Failed to load dreams');
+
+                dreamsData = await res.json();
+
+                document.getElementById('loading-state').classList.add('hidden');
+
+                if (dreamsData.total_dreams === 0) {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('analytics-content').classList.remove('hidden');
+                renderSummaryCards();
+                renderProgressChart();
+                renderAllocationChart();
+                renderHeatmap();
+                renderEfficiencyAnalysis();
+                renderAIInsights();
+            } catch (err) {
+                console.error('Load analytics error:', err);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+            }
+        }
+
+        function renderSummaryCards() {
+            document.getElementById('stat-total-dreams').textContent = dreamsData.total_dreams;
+            document.getElementById('stat-active-dreams').textContent = dreamsData.active_count;
+            document.getElementById('stat-completed-dreams').textContent = dreamsData.completed_count;
+            document.getElementById('stat-weekly-hours').textContent =
+                (dreamsData.resource_allocation?.total_weekly_hours || 0) + 'h';
+        }
+
+        function renderProgressChart() {
+            const ctx = document.getElementById('dream-progress-chart').getContext('2d');
+            const dreams = dreamsData.dreams || [];
+
+            progressChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dreams.map(d => d.tag.length > 6 ? d.tag.slice(0, 6) + '...' : d.tag),
+                    datasets: [{
+                        label: '进度 (%)',
+                        data: dreams.map(d => d.progress || 0),
+                        backgroundColor: dreams.map(d => d.is_focused ? '#a855f7' : '#86ef5b'),
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: v => v + '%' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderAllocationChart() {
+            const ctx = document.getElementById('time-allocation-chart').getContext('2d');
+            const dreams = (dreamsData.dreams || []).filter(d => d.weekly_hours > 0);
+
+            if (dreams.length === 0) {
+                ctx.canvas.parentElement.innerHTML = '<p class="text-center text-text-sub py-10">暂无时间分配数据</p>';
+                return;
+            }
+
+            allocationChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: dreams.map(d => d.tag),
+                    datasets: [{
+                        data: dreams.map(d => d.weekly_hours),
+                        backgroundColor: ['#86ef5b', '#60a5fa', '#a855f7', '#fbbf24', '#f472b6', '#22d3d1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { boxWidth: 12 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderHeatmap() {
+            const container = document.getElementById('dream-heatmap');
+            const dreams = dreamsData.dreams || [];
+
+            // Generate mock heatmap data (in production, this would come from actual activity logs)
+            const weeks = 12;
+            const daysPerWeek = 7;
+            const colors = ['bg-gray-200', 'bg-green-200', 'bg-green-300', 'bg-green-400', 'bg-green-500'];
+
+            let html = '<div class="flex gap-1">';
+
+            for (let w = 0; w < weeks; w++) {
+                html += '<div class="flex flex-col gap-1">';
+                for (let d = 0; d < daysPerWeek; d++) {
+                    // Mock intensity based on random + dream progress
+                    const intensity = Math.floor(Math.random() * 5);
+                    const color = colors[intensity];
+                    const date = new Date();
+                    date.setDate(date.getDate() - (weeks * 7 - w * 7 - d));
+                    const dateStr = date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+
+                    html += `<div class="heatmap-day ${color}" title="${dateStr}: ${intensity} 个梦想有行动"></div>`;
+                }
+                html += '</div>';
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderEfficiencyAnalysis() {
+            const container = document.getElementById('efficiency-analysis');
+            const dreams = dreamsData.dreams || [];
+
+            if (dreams.length === 0) {
+                container.innerHTML = '<p class="text-text-sub">暂无数据</p>';
+                return;
+            }
+
+            // Sort by progress (descending) for efficiency ranking
+            const sortedDreams = [...dreams].sort((a, b) => (b.progress || 0) - (a.progress || 0));
+
+            container.innerHTML = sortedDreams.map((dream, index) => {
+                const efficiency = dream.progress || 0;
+                const status = efficiency >= 80 ? 'excellent' : efficiency >= 50 ? 'good' : 'progressing';
+                const statusConfig = {
+                    excellent: { color: 'text-green-600', bg: 'bg-green-100', label: '进度优秀' },
+                    good: { color: 'text-blue-600', bg: 'bg-blue-100', label: '进展良好' },
+                    progressing: { color: 'text-orange-600', bg: 'bg-orange-100', label: '继续努力' }
+                };
+                const statusInfo = statusConfig[status];
+
+                return `
+                    <div class="flex items-center gap-4 p-4 bg-white dark:bg-white/5 rounded-md border border-warm-border/30">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full ${statusInfo.bg} flex items-center justify-center font-bold ${statusInfo.color}">
+                            ${index + 1}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-bold text-text-main truncate">${dream.tag}</h4>
+                                ${dream.is_focused ? '<span class="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-600 rounded-full">专注中</span>' : ''}
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary rounded-full" style="width: ${efficiency}%"></div>
+                                </div>
+                                <span class="text-sm font-bold text-text-main">${efficiency}%</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs ${statusInfo.color} ${statusInfo.bg} px-2 py-1 rounded-full">${statusInfo.label}</span>
+                            <p class="text-xs text-text-sub mt-1">${dream.completed_tasks}/${dream.total_tasks} 任务</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAIInsights() {
+            const container = document.getElementById('ai-insights');
+            const dreams = dreamsData.dreams || [];
+
+            const insights = [];
+
+            // Generate insights based on data
+            if (dreams.length >= 3) {
+                insights.push({
+                    icon: 'psychology',
+                    color: 'text-purple-600',
+                    text: '你正在管理 3+ 个梦想！建议每次专注 1-2 个重点梦想，完成后再推进其他。'
+                });
+            }
+
+            const completedDreams = dreams.filter(d => d.status === 'completed');
+            if (completedDreams.length > 0) {
+                insights.push({
+                    icon: 'emoji_events',
+                    color: 'text-yellow-600',
+                    text: `太棒了！你已完成 "${completedDreams[0].tag}"，这种成功经验可以应用到其他梦想中。`
+                });
+            }
+
+            const lowProgressDreams = dreams.filter(d => d.status === 'active' && (d.progress || 0) < 30);
+            if (lowProgressDreams.length > 0) {
+                insights.push({
+                    icon: 'lightbulb',
+                    color: 'text-orange-600',
+                    text: `"${lowProgressDreams[0].tag}" 进展较慢，试试把它设为专注梦想，或分解成更小的步骤。`
+                });
+            }
+
+            const highPriorityDreams = dreams.filter(d => d.priority === 1 && d.status === 'active');
+            if (highPriorityDreams.length === 0 && dreams.filter(d => d.status === 'active').length > 1) {
+                insights.push({
+                    icon: 'flag',
+                    color: 'text-blue-600',
+                    text: '建议标记一个重点梦想，把更多时间分配给它，完成后再处理其他梦想。'
+                });
+            }
+
+            if (insights.length === 0) {
+                insights.push({
+                    icon: 'auto_awesome',
+                    color: 'text-primary',
+                    text: '继续按照现在的节奏努力，记得定期回顾和调整你的梦想进度！'
+                });
+            }
+
+            container.innerHTML = insights.map(i => `
+                <div class="flex items-start gap-3 p-3 bg-white dark:bg-white/10 rounded-md">
+                    <span class="material-icons-round ${i.color}">${i.icon}</span>
+                    <p class="text-sm text-text-main dark:text-gray-200">${i.text}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

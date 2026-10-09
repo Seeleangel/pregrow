@@ -1,0 +1,9285 @@
+﻿<!-- Student Growth Dashboard -->
+
+
+
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+
+
+
+
+
+
+<head>
+
+
+
+    <meta charset="utf-8" />
+
+
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+
+
+
+    <title>学生成长仪表盘 - 乐学成长平台</title>
+
+
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+
+
+
+    </script>
+
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap"
+
+
+
+        rel="stylesheet" /><link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+
+
+    <link
+
+
+
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+
+
+
+        rel="stylesheet" />
+
+
+
+    <script id="tailwind-config">
+
+
+
+        tailwind.config = {
+
+
+
+            darkMode: "class",
+
+
+
+            theme: {
+
+
+
+                extend: {
+
+
+
+                    colors: {
+                        "primary": "#ee9d2b",
+                        "primary-dark": "#d98b1f",
+                        "primary-light": "#fef3e2",
+                        "beige-bg": "#fcf9f4",
+                        "beige-card": "#ffffff",
+                        "warm-border": "#f0e6d0",
+                        "accent-yellow": "#f4d03f",
+                        "text-main": "#4a4036",
+                        "text-sub": "#9ca3af",
+                        "background-dark": "#292520"
+                    },
+
+
+
+                    fontFamily: {
+
+
+
+                        "display": ["Lexend", "sans-serif"],
+
+
+
+                        "body": ["Lexend", "sans-serif"]
+
+
+
+                    },
+
+
+
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2.5rem",
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+
+
+
+                    boxShadow: {
+
+
+
+                        'soft': '0 8px 30px -6px rgba(189, 172, 140, 0.25)',
+
+
+
+                        'card': '0 4px 6px -1px rgba(92, 84, 70, 0.05), 0 10px 15px -3px rgba(92, 84, 70, 0.05)',
+
+
+
+                        'bubbly': '0 6px 0 #5fb346',
+
+
+
+                        'warm-glow': '0 0 20px rgba(253, 230, 198, 0.6)'
+                    }
+
+
+
+                }
+                    }
+                    }
+
+
+
+    </script>
+
+
+
+    <style>
+
+
+
+        body {
+
+
+
+            font-family: 'Lexend', system-ui, sans-serif;
+
+
+
+            background-color: #FDF5E6;
+
+
+
+        }
+
+
+
+
+
+
+
+        h1,
+
+
+
+        h2,
+
+
+
+        h3,
+
+
+
+        .font-display {
+
+
+
+            font-family: 'Lexend', system-ui, sans-serif;
+
+
+
+            letter-spacing: 0.05em;
+
+
+
+        }
+
+
+
+
+
+
+
+        ::-webkit-scrollbar {
+
+
+
+            width: 10px;
+
+
+
+            height: 10px;
+
+
+
+        }
+
+
+
+
+
+
+
+        ::-webkit-scrollbar-track {
+
+
+
+            background: transparent;
+
+
+
+        }
+
+
+
+
+
+
+
+        ::-webkit-scrollbar-thumb {
+
+
+
+            background: #e6dac6;
+
+
+
+            border-radius: 99px;
+
+
+
+            border: 2px solid #FDF5E6;
+
+
+
+        }
+
+
+
+
+
+
+
+        ::-webkit-scrollbar-thumb:hover {
+
+
+
+            background: #d4c5ad;
+
+
+
+        }
+
+
+
+
+
+
+
+        .hover-bounce {
+
+
+
+            transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease;
+
+
+
+        }
+
+
+
+
+
+
+
+        .hover-bounce:hover {
+
+
+
+            transform: scale(1.015);
+
+
+
+        }
+
+
+
+
+
+
+
+        .progress-striped {
+
+
+
+            background-image: linear-gradient(45deg,
+
+
+
+                    rgba(255, 255, 255, 0.4) 25%,
+
+
+
+                    transparent 25%,
+
+
+
+                    transparent 50%,
+
+
+
+                    rgba(255, 255, 255, 0.4) 50%,
+
+
+
+                    rgba(255, 255, 255, 0.4) 75%,
+
+
+
+                    transparent 75%,
+
+
+
+                    transparent);
+
+
+
+            background-size: 1.5rem 1.5rem;
+
+
+
+        }
+
+
+
+
+
+
+
+        .fade-in {
+
+
+
+            animation: fadeIn 0.5s ease-out forwards;
+
+
+
+            opacity: 0;
+
+
+
+        }
+
+
+
+
+
+
+
+        .checkin-toast-enter {
+
+
+
+            animation: checkinToastIn 0.35s ease-out forwards;
+
+
+
+        }
+
+
+
+
+
+
+
+        .checkin-toast-exit {
+
+
+
+            animation: checkinToastOut 0.35s ease-in forwards;
+
+
+
+        }
+
+
+
+
+
+
+
+        .dream-card {
+
+
+
+            transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease, border-color 180ms ease, background 180ms ease, opacity 180ms ease;
+
+
+
+            transform-origin: center;
+
+
+
+            will-change: transform, box-shadow;
+
+
+
+        }
+
+
+
+
+
+
+
+        .dream-card:hover {
+
+
+
+            transform: translateY(-1px);
+
+
+
+            box-shadow: 0 8px 18px -18px rgba(92, 84, 70, 0.42);
+
+
+
+        }
+
+
+
+
+
+
+
+        .dream-card.is-focus {
+
+
+
+            transform: translateY(-1px) scale(1.004);
+
+
+
+            position: relative;
+
+
+
+            z-index: 1;
+
+
+
+            box-shadow: 0 0 0 2px rgba(196, 181, 253, 0.82), 0 12px 24px -22px rgba(168, 85, 247, 0.24);
+
+
+
+        }
+
+
+
+
+
+
+
+        .dream-card.is-switching {
+
+
+
+            animation: dreamFocusPulse 240ms cubic-bezier(0.22, 1, 0.36, 1);
+
+
+
+        }
+
+
+
+
+
+
+
+        @keyframes dreamFocusPulse {
+
+
+
+            0% { transform: scale(0.992); }
+
+
+
+            45% { transform: scale(1.008); }
+
+
+
+            100% { transform: scale(1.004); }
+
+
+
+        }
+
+
+
+
+
+
+
+        @keyframes fadeIn {
+
+
+
+            from {
+
+
+
+                opacity: 0;
+
+
+
+                transform: translateY(10px);
+
+
+
+            }
+
+
+
+
+
+
+
+            to {
+
+
+
+                opacity: 1;
+
+
+
+                transform: translateY(0);
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        @keyframes checkinToastIn {
+
+
+
+            from {
+
+
+
+                opacity: 0;
+
+
+
+                transform: translateY(-8px) scale(0.96);
+
+
+
+            }
+
+
+
+
+
+
+
+            to {
+
+
+
+                opacity: 1;
+
+
+
+                transform: translateY(0) scale(1);
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        @keyframes checkinToastOut {
+
+
+
+            from {
+
+
+
+                opacity: 1;
+
+
+
+                transform: translateY(0) scale(1);
+
+
+
+            }
+
+
+
+
+
+
+
+            to {
+
+
+
+                opacity: 0;
+
+
+
+                transform: translateY(-8px) scale(0.96);
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+        /* MVP Focus states for accessibility */
+        .focus-ring:focus,
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        .focus-ring:focus-visible {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        /* Disabled state */
+        .disabled,
+        button:disabled,
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0e6d0;
+            border-top-color: #ee9d2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state styling */
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button, a, input, select, textarea {
+            transition: all 0.2s ease;
+        }
+
+    </style>
+
+
+
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+</head>
+
+
+
+
+
+
+
+<body
+
+
+
+    class="bg-beige-bg dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen font-body overflow-x-hidden transition-colors duration-300">
+
+
+
+    <div class="flex h-screen w-full">
+
+
+
+        <aside class="hidden md:flex flex-col w-24 lg:w-32 py-6 pl-6 h-full fixed z-20">
+
+
+
+            <div
+
+
+
+                class="flex-1 bg-beige-card dark:bg-surface-dark shadow-soft rounded-[2rem] flex flex-col items-center py-8 gap-8 border-2 border-white/60 dark:border-surface-dark/50 ring-1 ring-warm-border/50">
+
+
+
+                <div
+
+
+
+                    class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4 cursor-pointer hover-bounce border-4 border-white shadow-sm">
+
+
+
+                    <img alt="Smiling sunflower mascot illustration"
+
+
+
+                        class="w-full h-full object-cover rounded-full p-0.5"
+
+
+
+                        data-alt="Smiling sunflower mascot illustration"
+
+
+
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQlU2qIkYO_pgyM0wxCuAmksTr_OuVAndMNdK6ofQ8oLe4tGS9X5DJ3XJKi7LKC3Qf8zL6nmWu2YO385GFru8dW1tCUrrrWWMTwrLmN9Nmqc4PmeqURz9PR1-afC-77J7WpFPmddL5ftHkNQU-7o7xHgErZu4TaEhSIzg0e6LOnNf_kC05r7d2qOPAdM1BudjmECFHz7GiNHnpvMh2orWPWN7OX-n51YqVhDWGBIHIhoZBbmYGVvxzB9ThhZXF81dxfQjxWw2rlHs" />
+
+
+
+                </div>
+
+
+
+                <nav class="flex flex-col gap-6 w-full items-center"><a
+
+
+
+                        class="group flex flex-col items-center gap-1 w-full relative" href="dashboard.html">
+
+
+
+                        <div
+
+
+
+                            class="w-12 h-12 rounded-md bg-primary text-white flex items-center justify-center shadow-md shadow-primary/20 transform transition-transform duration-200 group-hover:scale-[1.03]">
+
+
+
+                            <span class="material-icons-round text-3xl">home</span>
+
+
+
+                        </div><span
+
+
+
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">首页</span>
+
+
+
+                        <div
+
+
+
+                            class="absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary rounded-l-full shadow-sm">
+
+
+
+                        </div>
+
+
+
+                    </a><a class="group flex flex-col items-center gap-1" href="portfolio.html">
+
+
+
+                        <div
+
+
+
+                            class="w-12 h-12 rounded-md bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+
+
+
+                            <span class="material-icons-round text-2xl">rocket_launch</span>
+
+
+
+                        </div><span
+
+
+
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">期待</span>
+
+
+
+                    </a><a class="group flex flex-col items-center gap-1" href="challenge.html">
+
+
+
+                        <div
+
+
+
+                            class="w-12 h-12 rounded-md bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+
+
+
+                            <span class="material-icons-round text-2xl">bolt</span>
+
+
+
+                        </div><span
+
+
+
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">挑战</span>
+
+
+
+                    </a><a class="group flex flex-col items-center gap-1" href="growth.html">
+
+
+
+                        <div
+
+
+
+                            class="w-12 h-12 rounded-md bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+
+
+
+                            <span class="material-icons-round text-2xl">psychology</span>
+
+
+
+                        </div><span
+
+
+
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">成长</span>
+
+
+
+                    </a></nav>
+
+
+
+                <div class="mt-auto"><button
+
+
+
+                        class="w-10 h-10 rounded-full bg-warm-border/50 dark:bg-gray-800 text-text-sub flex items-center justify-center hover:bg-orange-100 dark:hover:bg-gray-700 transition-colors"
+
+
+
+                        onclick="window.location.href='../index.html'"><span
+
+
+
+                            class="material-icons-round text-xl">logout</span></button></div>
+
+
+
+            </div>
+
+
+
+        </aside>
+
+
+
+        <main class="flex-1 md:ml-32 lg:ml-40 p-6 md:p-8 lg:p-10 overflow-y-auto">
+
+
+
+            <header class="flex flex-col xl:flex-row justify-between items-start mb-10 gap-5">
+                <div class="min-w-0">
+                    <div class="flex items-start gap-3 flex-wrap lg:flex-nowrap">
+                        <h1 class="text-3xl md:text-5xl font-bold text-text-main dark:text-white mb-2 tracking-wide leading-tight min-w-0" id="user-greeting">
+                            早上好，<span class="text-primary-dark drop-shadow-sm">小明同学</span>!
+                        </h1>
+                    </div>
+                    <p class="text-text-sub dark:text-gray-400 text-lg font-medium">今天准备好让大脑升级了吗？</p>
+                </div>
+                <div class="flex w-full xl:w-auto items-start xl:items-stretch gap-3 flex-wrap 2xl:flex-nowrap xl:justify-end">
+                    <div class="hidden xl:flex items-center gap-2 bg-white/90 dark:bg-surface-dark rounded-full px-4 py-2.5 shadow-soft border-2 border-white ring-1 ring-warm-border/80 shrink-0">
+                        <div class="flex items-start gap-2 flex-nowrap">
+                            <button data-mood="joy" data-label="愉快" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-lg group-hover:bg-amber-200/90 transition-colors duration-200 shadow-sm border-2 border-amber-50">😊</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">愉快</span>
+                            </button>
+                            <button data-mood="surprise" data-label="惊奇" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-lg group-hover:bg-violet-200/90 transition-colors duration-200 shadow-sm border-2 border-violet-50">😮</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">惊奇</span>
+                            </button>
+                            <button data-mood="sadness" data-label="悲伤" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800/60 flex items-center justify-center text-lg group-hover:bg-slate-200/90 transition-colors duration-200 shadow-sm border-2 border-slate-50">😢</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">悲伤</span>
+                            </button>
+                            <button data-mood="anger" data-label="愤怒" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg group-hover:bg-red-200/90 transition-colors duration-200 shadow-sm border-2 border-red-50">😠</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">愤怒</span>
+                            </button>
+                            <button data-mood="disgust" data-label="厌恶" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-lg group-hover:bg-emerald-200/90 transition-colors duration-200 shadow-sm border-2 border-emerald-50">🤢</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">厌恶</span>
+                            </button>
+                            <button data-mood="fear" data-label="惧怕" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center text-lg group-hover:bg-sky-200/90 transition-colors duration-200 shadow-sm border-2 border-sky-50">😨</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">惧怕</span>
+                            </button>
+                            <button data-mood="interest" data-label="兴趣/好奇" class="mood-btn flex flex-col items-center gap-1 group min-w-[58px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center text-lg group-hover:bg-cyan-200/90 transition-colors duration-200 shadow-sm border-2 border-cyan-50">🧐</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none whitespace-nowrap">兴趣/好奇</span>
+                            </button>
+                            <button data-mood="contempt" data-label="轻蔑" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800/60 flex items-center justify-center text-lg group-hover:bg-stone-200/90 transition-colors duration-200 shadow-sm border-2 border-stone-50">😒</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">轻蔑</span>
+                            </button>
+                            <button data-mood="distress" data-label="痛苦" class="mood-btn flex flex-col items-center gap-1 group min-w-[50px]">
+                                <div class="mood-face w-9 h-9 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-lg group-hover:bg-orange-200/90 transition-colors duration-200 shadow-sm border-2 border-orange-50">😣</div>
+                                <span class="text-[11px] font-semibold text-text-main dark:text-gray-200 leading-none">痛苦</span>
+                            </button>
+                        </div>
+                        <p id="mood-feedback" class="sr-only" aria-live="polite"></p>
+                    </div>
+                    <div class="hidden sm:flex bg-white dark:bg-surface-dark rounded-full px-5 py-2.5 shadow-soft items-center gap-3 border-2 border-white ring-1 ring-warm-border shrink-0 xl:self-stretch">
+                        <span class="material-icons-round text-orange-400 text-2xl">local_fire_department</span>
+                        <span id="streak-display" class="font-bold text-text-main dark:text-gray-200 font-display text-lg">连续打卡 0 天!</span>
+                        <button id="checkin-btn" class="px-3 py-1.5 rounded-full text-xs font-bold bg-primary-light text-primary-dark border border-primary/20 hover:bg-primary hover:text-white transition-colors">今日打卡</button>
+                    </div>
+                    <div class="flex items-center gap-3 shrink-0 self-start">
+                        <notification-bell></notification-bell>
+                        <button type="button" class="w-14 h-14 rounded-full overflow-hidden border-4 border-white shadow-soft hover-bounce cursor-pointer ring-2 ring-primary/30 bg-gray-200 shrink-0 focus:outline-none focus:ring-4 focus:ring-primary/30" onclick="window.location.href='profile.html'" aria-label="打开个人信息">
+                            <img alt="个人头像" class="w-full h-full object-cover transition-opacity duration-500 opacity-0" id="user-avatar-header" onload="this.classList.remove('opacity-0')" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+
+
+                <div class="lg:col-span-8 flex flex-col gap-8">
+
+
+
+                    <!-- Multi-Dream Panel -->
+
+
+
+                    <section
+
+
+
+                        id="multi-dream-panel"
+
+
+
+                        class="bg-beige-card dark:bg-surface-dark rounded-2xl p-6 relative overflow-visible shadow-soft border-2 border-white ring-1 ring-warm-border/40">
+
+
+
+                        <!-- Stats Bar -->
+
+
+
+                        <div class="flex items-center justify-between mb-6">
+
+
+
+                            <div class="flex items-center gap-4">
+
+
+
+                                <h3 class="text-lg font-bold text-text-main dark:text-white font-display flex items-center gap-2">
+
+
+
+                                    <span class="material-icons-round text-primary">auto_awesome</span>
+
+
+
+                                    我的期待
+
+
+
+                                </h3>
+
+
+
+                                <div id="dream-stats-bar" class="flex items-center gap-2 text-xs">
+
+
+
+                                    <!-- Stats injected by JS -->
+
+
+
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">进行中 0</span>
+
+
+
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full font-medium">已完成 0</span>
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            <div class="flex items-center gap-2">
+
+
+
+                                <button id="focus-mode-toggle"
+
+
+
+                                    class="hidden px-3 py-1.5 rounded-full text-xs font-bold bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors flex items-center gap-1">
+
+
+
+                                    <span class="material-icons-round text-sm">center_focus_strong</span>
+
+
+
+                                    专注模式
+
+
+
+                                </button>
+
+
+
+                                <a href="profile.html?focus=dream"
+
+
+
+                                    class="px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-white hover:bg-primary-dark transition-colors flex items-center gap-1">
+
+
+
+                                    <span class="material-icons-round text-sm">add</span>
+
+
+
+                                    添加期待
+
+
+
+                                </a>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <!-- Empty State -->
+
+
+
+                        <div id="dreams-empty-state" class="hidden text-center py-8">
+
+
+
+                            <div class="w-20 h-20 mx-auto bg-orange-100 rounded-md flex items-center justify-center mb-4">
+
+
+
+                                <span class="text-4xl">🌱</span>
+
+
+
+                            </div>
+
+
+
+                            <h4 class="text-lg font-bold text-text-main mb-2">还没有期待</h4>
+
+
+
+                            <p class="text-sm text-text-sub mb-4">去添加你的第一个期待吧</p>
+
+
+
+                            <a href="profile.html?focus=dream" class="px-4 py-2 bg-primary text-white rounded-full text-sm font-bold hover:bg-primary-dark transition-colors">
+
+
+
+                                创建期待
+
+
+
+                            </a>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <!-- Focus Mode View -->
+
+
+
+                        <div id="focus-mode-view" class="hidden">
+
+
+
+                            <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-md p-6 border-2 border-purple-200 dark:border-purple-800/30 relative">
+
+
+
+                                <div class="absolute top-3 right-3">
+
+
+
+                                    <button id="exit-focus-mode" class="w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-colors">
+
+
+
+                                        <span class="material-icons-round text-purple-600 text-sm">close</span>
+
+
+
+                                    </button>
+
+
+
+                                </div>
+
+
+
+                                <div class="flex items-center gap-3 mb-4">
+
+
+
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold">专注中</span>
+
+
+
+                                </div>
+
+
+
+                                <div id="focus-dream-content">
+
+
+
+                                    <!-- Focus dream content injected by JS -->
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                            <!-- Other dreams mini list -->
+
+
+
+                            <div class="mt-4">
+
+
+
+                                <h4 class="text-xs font-bold text-text-sub mb-3">其他期待</h4>
+
+
+
+                                <div id="other-dreams-list" class="space-y-2">
+
+
+
+                                    <!-- Injected by JS -->
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <div id="dreams-cards-container" class="relative px-1 pt-2 -mx-1 -mt-2">
+
+
+
+                            <div id="dreams-scroll" class="flex gap-4 overflow-x-auto px-1 pt-1 pb-3 snap-x snap-mandatory scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+
+
+
+                                <!-- Dream cards injected by JS -->
+
+
+
+                            </div>
+
+
+
+                            <!-- Scroll indicators -->
+
+
+
+                            <button id="dreams-scroll-left" type="button" aria-label="向左查看更多期待" class="hidden absolute left-0 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 dark:bg-surface-dark/90 rounded-full shadow-md flex items-center justify-center hover:bg-white transition-colors">
+
+
+
+                                <span class="material-icons-round text-text-sub text-sm">chevron_left</span>
+
+
+
+                            </button>
+
+
+
+                            <button id="dreams-scroll-right" type="button" aria-label="向右查看更多期待" class="hidden absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 dark:bg-surface-dark/90 rounded-full shadow-md flex items-center justify-center hover:bg-white transition-colors">
+
+
+
+                                <span class="material-icons-round text-text-sub text-sm">chevron_right</span>
+
+
+
+                            </button>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <!-- Resource Allocation Summary -->
+
+
+
+                        <div id="resource-allocation-section" class="mt-4 pt-4 border-t border-warm-border/30 hidden">
+
+
+
+                            <div class="flex items-center justify-between">
+
+
+
+                                <div class="flex items-center gap-2">
+
+
+
+                                    <span class="material-icons-round text-text-sub text-sm">schedule</span>
+
+
+
+                                    <span class="text-xs font-bold text-text-sub">本周时间分配</span>
+
+
+
+                                </div>
+
+
+
+                                <span id="total-weekly-hours" class="text-sm font-bold text-primary-dark">0 小时</span>
+
+
+
+                            </div>
+
+
+
+                            <div id="allocation-bars" class="mt-2 flex gap-1 h-2 rounded-full overflow-hidden bg-warm-border/30">
+
+
+
+                                <!-- Allocation bars injected by JS -->
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </section>
+
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-beige-card dark:bg-surface-dark rounded-2xl p-7 shadow-card border-2 border-white ring-1 ring-warm-border/40 flex flex-col h-full hover:border-orange-100 transition-colors duration-200 group">
+                            <div class="flex justify-between items-start mb-4 gap-3">
+                                <div class="bg-orange-100/85 dark:bg-orange-900/25 p-3 rounded-md shadow-sm border border-white/80">
+                                    <span id="achievement-unlock-icon" class="material-icons-round text-orange-500 text-3xl">emoji_events</span>
+                                </div>
+                                <div class="flex flex-wrap justify-end gap-2">
+                                    <span id="achievement-unlock-chip" class="bg-orange-50 text-orange-700 text-xs font-bold px-3 py-1 rounded-full border border-orange-100/80">奖励进行中</span>
+                                    <span id="achievement-unlock-count" class="bg-white/75 text-text-sub text-xs font-bold px-3 py-1 rounded-full border border-warm-border/30">已收集 0 枚贴纸</span>
+                                </div>
+                            </div>
+                            <h3 id="achievement-unlock-title" class="text-2xl font-bold text-text-main dark:text-white mb-2 font-display">再完成 1 个计划，解锁下一枚贴纸</h3>
+                            <p id="achievement-unlock-desc" class="text-text-sub dark:text-gray-400 text-base mb-5 leading-relaxed">完成今天最前面的任务，就会更接近新的奖励。</p>
+                            <div class="mb-6 rounded-xl bg-white/70 dark:bg-black/10 border border-warm-border/40 px-4 py-3">
+                                <div class="flex items-center justify-between gap-3 text-sm">
+                                    <span id="achievement-unlock-progress" class="font-bold text-primary-dark">还差 1 步</span>
+                                    <span id="achievement-unlock-reward" class="text-text-sub dark:text-gray-300">奖励：新贴纸</span>
+                                </div>
+                            </div>
+                            <button id="achievement-unlock-action" class="w-full bg-primary text-white font-bold py-4 rounded-md shadow-soft hover:bg-primary-dark transition-colors duration-200 flex items-center justify-center gap-2 text-xl border border-primary-dark/15">
+                                <span class="material-icons-round">play_arrow</span><span id="achievement-unlock-action-text">去完成</span>
+                            </button>
+                        </div>
+                        <div class="bg-gradient-to-br from-[#f2f9fb] to-[#f5f7ff] dark:from-blue-900/18 dark:to-indigo-900/16 rounded-2xl p-7 shadow-card border-2 border-white ring-1 ring-blue-100/70 dark:ring-blue-800/20 flex flex-col h-full relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100/45 rounded-full blur-2xl opacity-70"></div>
+                            <div class="relative z-10 flex flex-col h-full">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-md">
+                                            <span class="material-icons-round text-blue-500 text-xl">insights</span>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-text-main dark:text-white font-display">我的成长图表</h3>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div id="view-mode-toggle" class="flex gap-1 bg-white/55 dark:bg-black/10 p-1 rounded-full border border-blue-100/40">
+                                            <button id="view-mode-daily" class="view-mode-btn text-xs font-bold px-2.5 py-1 rounded-full text-text-sub hover:bg-white/60 transition-all">日</button>
+                                            <button id="view-mode-weekly" class="view-mode-btn text-xs font-bold px-2.5 py-1 rounded-full bg-blue-400 text-white shadow-sm transition-all">周</button>
+                                        </div>
+                                        <div class="flex gap-1 bg-white/70 dark:bg-black/20 p-1 rounded-full border border-blue-100/60">
+                                            <button id="chart-tab-trend" class="chart-tab text-xs font-bold px-3 py-1 rounded-full bg-blue-500 text-white shadow-sm transition-all">趋势</button>
+                                            <button id="chart-tab-radar" class="chart-tab text-xs font-bold px-3 py-1 rounded-full text-text-sub hover:bg-white/60 transition-all">雷达</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="h-[300px] w-full relative">
+                                    <div id="trend-wrapper" class="w-full h-full absolute inset-0 transition-opacity duration-300">
+                                        <canvas id="growth-trend-chart"></canvas>
+                                    </div>
+                                    <div id="radar-wrapper" class="w-full h-full absolute inset-0 transition-opacity duration-300 opacity-0 pointer-events-none">
+                                        <canvas id="growth-radar-chart"></canvas>
+                                    </div>
+                                    <div id="growth-chart-loading" class="absolute inset-0 flex items-center justify-center bg-white/65 transition-opacity duration-300">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="w-8 h-8 border-3 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
+                                            <span class="text-xs text-text-sub">加载中...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-center gap-3 flex-wrap" id="growth-chart-legend"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-beige-card dark:bg-surface-dark rounded-2xl p-7 shadow-soft border-2 border-white ring-1 ring-warm-border/40">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-text-main dark:text-white font-display">班级动态</h3>
+                            <a class="text-primary-dark font-bold text-sm hover:underline bg-primary-light/50 px-3 py-1 rounded-md" href="#">查看全部</a>
+                        </div>
+                        <div class="mb-5 p-4 bg-white/70 dark:bg-background-dark rounded-md border border-warm-border/40">
+                            <textarea id="moment-content" rows="2" class="w-full resize-none bg-transparent text-sm text-text-main dark:text-gray-200 placeholder:text-text-sub border-0 focus:ring-0" placeholder="分享今天的小进步，给同学们一点鼓励吧"></textarea>
+                            <div id="moment-media-preview" class="hidden mt-3"></div>
+                            <div class="mt-3 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <input id="moment-image-input" type="file" accept="image/*" class="hidden" />
+                                    <input id="moment-audio-input" type="file" accept="audio/*" class="hidden" />
+                                    <button id="moment-image-btn" class="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100 transition">上传图片</button>
+                                    <button id="moment-audio-btn" class="px-3 py-1.5 rounded-full text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100 hover:bg-purple-100 transition">上传语音</button>
+                                </div>
+                                <button id="moment-publish-btn" class="px-4 py-2 rounded-full text-xs font-bold bg-primary text-white border border-primary-dark/20 hover:bg-primary-dark transition">发布动态</button>
+                            </div>
+                            <p id="moment-feedback" class="mt-2 text-xs text-text-sub dark:text-gray-400"></p>
+                        </div>
+                        <div class="space-y-4" id="class-moments-list">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-4 flex flex-col gap-8">
+                    <div class="bg-beige-card dark:bg-surface-dark rounded-2xl p-7 shadow-card border-2 border-white ring-1 ring-warm-border/40">
+                        <div class="mb-6 flex items-center justify-between gap-3">
+                            <h3 class="text-xl font-bold text-text-main dark:text-white flex items-center gap-3 font-display">
+                                <div class="p-2 bg-orange-100 rounded-md"><span class="material-icons-round text-orange-500 text-xl">calendar_today</span></div>
+                                今日计划
+                            </h3>
+                            <button id="add-today-plan-btn" class="px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-white hover:bg-primary-dark transition">添加</button>
+                        </div>
+                        <div class="space-y-6 relative pl-2" id="todays-plan-list">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-b from-purple-50/90 to-white dark:from-purple-900/18 dark:to-surface-dark rounded-2xl p-7 shadow-card border-2 border-white ring-1 ring-purple-100/70 dark:ring-purple-800/20 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-purple-100/45 rounded-full blur-2xl opacity-70"></div>
+                        <h3 class="text-xl font-bold text-text-main dark:text-white mb-2 font-display">我的贴纸簿</h3>
+                        <p class="text-xs text-text-sub mb-6 font-medium">本周你收集了 <span class="text-purple-600 font-bold">5 颗星星</span>！</p>
+                        <div class="flex flex-wrap justify-center gap-4 min-h-[5rem]" id="sticker-board-list">
+                            <!-- Dynamic Content -->
+                        </div>
+                        <button id="open-sticker-book" class="mt-8 w-full bg-white py-3 rounded-md shadow-sm text-sm font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors border border-purple-100">查看所有贴纸 -></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+    </div>
+
+
+
+    <div id="sticker-book-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="sticker-book-backdrop"></div>
+        <div class="relative w-[92vw] max-w-4xl max-h-[88vh] overflow-hidden rounded-2xl bg-beige-card dark:bg-surface-dark border-2 border-white ring-1 ring-warm-border/40 shadow-soft">
+            <div class="px-6 py-5 border-b border-warm-border/40 dark:border-gray-700 flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-bold text-text-main dark:text-white font-display">我的贴纸簿</h3>
+                    <p id="sticker-book-subtitle" class="text-sm text-text-sub dark:text-gray-400 mt-1">共 0 枚，已解锁 0 枚</p>
+                </div>
+                <button id="close-sticker-book" class="w-10 h-10 rounded-full bg-white dark:bg-surface-dark border border-warm-border/50 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-icons-round text-text-sub">close</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 min-h-[420px]">
+                <div class="md:col-span-2 p-6 overflow-y-auto">
+                    <div id="sticker-book-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+                </div>
+                <div class="border-l border-warm-border/40 dark:border-gray-700 p-6 bg-white/40 dark:bg-black/10">
+                    <div id="sticker-detail" class="text-center text-text-sub dark:text-gray-400">选择一枚贴纸查看详情</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="today-plan-modal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+        <div id="today-plan-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="relative w-full max-w-md rounded-2xl bg-beige-card dark:bg-surface-dark border-2 border-white ring-1 ring-warm-border/40 shadow-soft overflow-hidden">
+            <div class="px-6 py-5 border-b border-warm-border/40 dark:border-gray-700 flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-text-main dark:text-white font-display">添加今日计划</h3>
+                    <p class="text-xs text-text-sub dark:text-gray-400 mt-1">写下今天想完成的一件小事</p>
+                </div>
+                <button id="close-today-plan-modal" class="w-9 h-9 rounded-full bg-white dark:bg-surface-dark border border-warm-border/50 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-icons-round text-text-sub text-lg">close</span>
+                </button>
+            </div>
+            <form id="today-plan-form" class="p-6 space-y-4">
+                <div>
+                    <label for="today-plan-title" class="block text-xs font-bold text-text-sub dark:text-gray-300 mb-2">计划名称</label>
+                    <input id="today-plan-title" type="text" maxlength="80" placeholder="例：自己整理玩具" class="w-full rounded-md border border-warm-border/60 dark:border-gray-700 bg-white/90 dark:bg-background-dark px-4 py-3 text-sm text-text-main dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                    <label for="today-plan-description" class="block text-xs font-bold text-text-sub dark:text-gray-300 mb-2">小步骤（可选）</label>
+                    <textarea id="today-plan-description" rows="3" maxlength="200" placeholder="补充一句怎么做会更容易完成" class="w-full resize-none rounded-md border border-warm-border/60 dark:border-gray-700 bg-white/90 dark:bg-background-dark px-4 py-3 text-sm text-text-main dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                </div>
+                <p id="today-plan-feedback" class="text-xs min-h-[1rem] text-text-sub dark:text-gray-400"></p>
+                <div class="flex items-center justify-end gap-2 pt-1">
+                    <button type="button" id="today-plan-cancel" class="px-4 py-2 rounded-full text-xs font-bold border border-gray-300 text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 transition">取消</button>
+                    <button type="submit" id="today-plan-submit" class="px-4 py-2 rounded-full text-xs font-bold bg-primary text-white hover:bg-primary-dark border border-primary-dark/20 transition">添加计划</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="task-evidence-modal" class="fixed inset-0 z-[60] hidden items-center justify-center px-4">
+        <div id="task-evidence-backdrop" class="absolute inset-0 bg-black/45 backdrop-blur-sm"></div>
+        <div class="relative w-full max-w-md rounded-2xl bg-beige-card dark:bg-surface-dark border-2 border-white ring-1 ring-warm-border/40 shadow-soft overflow-hidden">
+            <div class="px-6 py-5 border-b border-warm-border/40 dark:border-gray-700 flex items-center justify-between">
+                <div>
+                    <h3 id="task-evidence-title" class="text-xl font-bold text-text-main dark:text-white font-display">提交完成材料</h3>
+                    <p id="task-evidence-subtitle" class="text-xs text-text-sub dark:text-gray-400 mt-1">给老师看看你是怎么完成的吧</p>
+                </div>
+                <button id="close-task-evidence-modal" class="w-9 h-9 rounded-full bg-white dark:bg-surface-dark border border-warm-border/50 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-icons-round text-text-sub text-lg">close</span>
+                </button>
+            </div>
+            <form id="task-evidence-form" class="p-6 space-y-4">
+                <div>
+                    <label for="task-evidence-file" class="block text-xs font-bold text-text-sub dark:text-gray-300 mb-2">上传照片（可选）</label>
+                    <input id="task-evidence-file" type="file" accept="image/*" class="block w-full text-sm text-text-main file:mr-3 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-xs file:font-bold file:text-primary-dark hover:file:bg-primary/20" />
+                    <p class="mt-2 text-[11px] text-text-sub dark:text-gray-400">支持 jpg、png、webp，单张不超过 8MB。</p>
+                </div>
+                <div id="task-evidence-preview-wrap" class="hidden rounded-2xl border border-primary/15 bg-white/70 p-3">
+                    <img id="task-evidence-preview" src="" alt="任务完成预览" class="h-40 w-full rounded-xl object-cover" />
+                </div>
+                <div>
+                    <label for="task-evidence-note" class="block text-xs font-bold text-text-sub dark:text-gray-300 mb-2">一句说明（可选）</label>
+                    <textarea id="task-evidence-note" rows="3" maxlength="300" placeholder="例如：我把玩具按颜色放回盒子里了。" class="w-full resize-none rounded-md border border-warm-border/60 dark:border-gray-700 bg-white/90 dark:bg-background-dark px-4 py-3 text-sm text-text-main dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                    <p class="mt-2 text-[11px] text-text-sub dark:text-gray-400">照片和说明至少提交一项。</p>
+                </div>
+                <p id="task-evidence-feedback" class="text-xs min-h-[1rem] text-text-sub dark:text-gray-400"></p>
+                <div class="flex items-center justify-end gap-2 pt-1">
+                    <button type="button" id="task-evidence-cancel" class="px-4 py-2 rounded-full text-xs font-bold border border-gray-300 text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 transition">取消</button>
+                    <button type="submit" id="task-evidence-submit" class="px-4 py-2 rounded-full text-xs font-bold bg-primary text-white hover:bg-primary-dark border border-primary-dark/20 transition">提交给老师</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="checkin-toast"
+
+
+
+        class="fixed top-6 right-6 z-[60] hidden items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-surface-dark border border-warm-border/60 shadow-soft">
+
+
+
+        <span class="material-icons-round text-orange-400 text-lg">local_fire_department</span>
+
+
+
+        <span id="checkin-toast-text" class="text-sm font-bold text-text-main dark:text-white">打卡成功 +1天</span>
+
+
+
+    </div>
+
+
+
+    <script> // Dashboard Logic
+
+
+
+
+
+
+
+        let currentStickerBoard = [];
+
+
+
+        let currentUserId = null;
+
+        const achievementUnlockState = {
+            streak: 0,
+            checkedInToday: false,
+            pendingTasksCount: 0,
+            completedTodayCount: 0,
+            unlockedBadgesCount: 0,
+            totalStickerCount: 0,
+            unlockedTodayCount: 0,
+            nextPendingTaskTitle: '',
+            stickerBoard: [],
+            focusStickerId: null,
+            ctaAction: 'task'
+        };
+
+        let pendingMomentMedia = null;
+
+        const STICKER_ACTION_METRIC_MAP = Object.freeze({
+            verifiedTaskCount: 'task',
+            evidenceSubmissionCount: 'task',
+            verifiedChallengeCount: 'challenge',
+            verifiedGoalPlanCount: 'portfolio',
+            checkinLongestStreak: 'checkin'
+        });
+
+        const EVIDENCE_MAX_SIZE_BYTES = 8 * 1024 * 1024;
+
+        let taskEvidenceModalReady = false;
+
+        let taskEvidenceResolver = null;
+
+
+
+        let multiDreamData = null;
+
+
+
+        let isFocusMode = false;
+
+
+
+        let isSettingFocusDream = false;
+
+        function readFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('读取图片失败，请重新选择。'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getApiErrorMessage(responseData, fallback = '提交失败，请稍后再试。') {
+            if (responseData && typeof responseData.error === 'string' && responseData.error.trim()) {
+                return responseData.error.trim();
+            }
+            return fallback;
+        }
+
+        function isPossiblyBrokenText(value) {
+            const text = String(value || '').trim();
+            if (!text) return true;
+            return /锟|�|Ã|æ|å|ç|é|ö|¼|ɵ|ѽ|δ/.test(text);
+        }
+
+        function getStickerMetricKey(sticker) {
+            return String(sticker?.progress_metric_key || '').trim();
+        }
+
+        function getStickerProgressValues(sticker) {
+            const current = Number(sticker?.progress_current);
+            const target = Number(sticker?.progress_target);
+            const remaining = Number(sticker?.progress_remaining);
+            return {
+                current: Number.isFinite(current) ? current : null,
+                target: Number.isFinite(target) ? target : null,
+                remaining: Number.isFinite(remaining) ? Math.max(0, remaining) : null
+            };
+        }
+
+        function getStickerDisplayName(sticker, fallback = '新贴纸') {
+            const name = String(sticker?.name || '').trim();
+            return name && !isPossiblyBrokenText(name) ? name : fallback;
+        }
+
+        function getStickerDisplayIcon(sticker, fallback = '🏅') {
+            const icon = String(sticker?.icon || '').trim();
+            return icon && !isPossiblyBrokenText(icon) ? icon : fallback;
+        }
+
+        function getStickerAction(sticker) {
+            const metricKey = getStickerMetricKey(sticker);
+            return STICKER_ACTION_METRIC_MAP[metricKey] || 'task';
+        }
+
+        function isSameLocalDate(dateValue, compareDate = new Date()) {
+            if (!dateValue) return false;
+            const date = new Date(dateValue);
+            if (Number.isNaN(date.getTime())) return false;
+            return date.getFullYear() === compareDate.getFullYear()
+                && date.getMonth() === compareDate.getMonth()
+                && date.getDate() === compareDate.getDate();
+        }
+
+        function pickNearestSticker(stickers) {
+            const list = (Array.isArray(stickers) ? stickers : []).filter(Boolean);
+            if (list.length === 0) return null;
+            return list.slice().sort((a, b) => {
+                const aProgress = getStickerProgressValues(a);
+                const bProgress = getStickerProgressValues(b);
+                const aRemaining = aProgress.remaining === null ? Number.MAX_SAFE_INTEGER : aProgress.remaining;
+                const bRemaining = bProgress.remaining === null ? Number.MAX_SAFE_INTEGER : bProgress.remaining;
+                if (aRemaining !== bRemaining) return aRemaining - bRemaining;
+                const aPercent = Number(a?.progress_percent) || 0;
+                const bPercent = Number(b?.progress_percent) || 0;
+                return bPercent - aPercent;
+            })[0];
+        }
+
+        function getStickerFallbackDescription(sticker) {
+            switch (getStickerMetricKey(sticker)) {
+                case 'checkinLongestStreak':
+                    return '坚持每天打卡，连续的努力会慢慢点亮这枚贴纸。';
+                case 'verifiedChallengeCount':
+                    return '去挑战页完成题目，并提交给老师审核，就能推进这枚贴纸。';
+                case 'verifiedGoalPlanCount':
+                    return '去期待档案里继续完成计划，提交后就会更接近这枚贴纸。';
+                case 'evidenceSubmissionCount':
+                    return '完成任务时附上照片或说明，材料累计得越认真，越容易解锁这枚贴纸。';
+                case 'verifiedTaskCount':
+                    return '继续把计划做完并提交给老师，贴纸奖励就会往前走。';
+                default:
+                    return '继续加油，解锁更多贴纸。';
+            }
+        }
+
+        function getStickerProgressHint(sticker) {
+            const { current, target, remaining } = getStickerProgressValues(sticker);
+            const metricKey = getStickerMetricKey(sticker);
+            if (current !== null && target !== null) {
+                switch (metricKey) {
+                    case 'checkinLongestStreak':
+                        return `当前进度 ${current}/${target} 天`;
+                    case 'verifiedChallengeCount':
+                        return `当前进度 ${current}/${target} 次挑战`;
+                    case 'verifiedGoalPlanCount':
+                        return `当前进度 ${current}/${target} 个期待计划`;
+                    case 'evidenceSubmissionCount':
+                        return `当前进度 ${current}/${target} 次材料`;
+                    case 'verifiedTaskCount':
+                    default:
+                        return `当前进度 ${current}/${target} 个计划`;
+                }
+            }
+
+            if (remaining !== null) {
+                return remaining > 0 ? `还差 ${remaining} 步` : '已经达到解锁条件';
+            }
+
+            return '继续完成就能推进奖励';
+        }
+
+        function buildStickerAchievementConfig(sticker) {
+            if (!sticker) return null;
+
+            const metricKey = getStickerMetricKey(sticker);
+            const action = getStickerAction(sticker);
+            const { current, target, remaining } = getStickerProgressValues(sticker);
+            const stickerName = getStickerDisplayName(sticker);
+            const stickerIcon = getStickerDisplayIcon(sticker);
+            const safeRemaining = remaining === null ? 1 : Math.max(1, remaining);
+            const rewardText = `奖励：${stickerIcon} ${stickerName}`;
+            const baseProgress = getStickerProgressHint(sticker);
+
+            if (metricKey === 'checkinLongestStreak') {
+                if (!achievementUnlockState.checkedInToday) {
+                    return {
+                        icon: 'local_fire_department',
+                        chip: '打卡就有奖励',
+                        title: `今天先打卡，朝“${stickerName}”更近一步`,
+                        desc: current !== null && target !== null
+                            ? `当前最长连续打卡 ${current}/${target} 天，今天打卡后会继续累积进度。`
+                            : '今天打卡后，就能继续推进这枚贴纸的解锁进度。',
+                        progress: baseProgress,
+                        reward: rewardText,
+                        action: 'checkin',
+                        buttonText: '去打卡',
+                        stickerId: sticker.id
+                    };
+                }
+
+                return {
+                    icon: 'emoji_events',
+                    chip: '明天继续',
+                    title: `连续打卡再坚持一下，就能解锁“${stickerName}”`,
+                    desc: current !== null && target !== null
+                        ? `今天已经打过卡了，明天继续就会把进度从 ${current}/${target} 往前推进。`
+                        : '今天的打卡已经完成啦，明天继续就会更接近新的贴纸。',
+                    progress: baseProgress,
+                    reward: rewardText,
+                    action: 'sticker',
+                    buttonText: '查看贴纸',
+                    stickerId: sticker.id
+                };
+            }
+
+            if (metricKey === 'verifiedChallengeCount') {
+                return {
+                    icon: 'bolt',
+                    chip: '挑战进行中',
+                    title: `再完成 ${safeRemaining} 次挑战，解锁“${stickerName}”`,
+                    desc: '去挑战页完成题目，并把结果提交给老师审核，这枚贴纸就会更近一点。',
+                    progress: baseProgress,
+                    reward: rewardText,
+                    action: 'challenge',
+                    buttonText: '去挑战',
+                    stickerId: sticker.id
+                };
+            }
+
+            if (metricKey === 'verifiedGoalPlanCount') {
+                return {
+                    icon: 'auto_awesome',
+                    chip: '期待进行中',
+                    title: `再完成 ${safeRemaining} 个期待计划，解锁“${stickerName}”`,
+                    desc: '去期待档案里继续完成计划并提交给老师，就能推进这枚贴纸。',
+                    progress: baseProgress,
+                    reward: rewardText,
+                    action: 'portfolio',
+                    buttonText: '去期待档案',
+                    stickerId: sticker.id
+                };
+            }
+
+            if (metricKey === 'evidenceSubmissionCount') {
+                const hasPendingTasks = (achievementUnlockState.pendingTasksCount || 0) > 0;
+                return {
+                    icon: 'photo_camera',
+                    chip: '材料进行中',
+                    title: `再提交 ${safeRemaining} 次完成材料，解锁“${stickerName}”`,
+                    desc: achievementUnlockState.nextPendingTaskTitle
+                        ? `先完成“${achievementUnlockState.nextPendingTaskTitle}”，再补上一句说明或照片，会更快接近奖励。`
+                        : '完成任务时附上照片或说明，材料累计得越认真，解锁得越快。',
+                    progress: baseProgress,
+                    reward: rewardText,
+                    action: hasPendingTasks ? 'task' : 'add-plan',
+                    buttonText: hasPendingTasks ? '去完成' : '添加计划',
+                    stickerId: sticker.id
+                };
+            }
+
+            const hasPendingTasks = (achievementUnlockState.pendingTasksCount || 0) > 0;
+            return {
+                icon: 'emoji_events',
+                chip: '奖励进行中',
+                title: `再完成 ${safeRemaining} 个计划，解锁“${stickerName}”`,
+                desc: achievementUnlockState.nextPendingTaskTitle
+                    ? `先完成“${achievementUnlockState.nextPendingTaskTitle}”，奖励就会更近一点。`
+                    : '给自己安排并完成一个小计划，贴纸奖励就会继续往前走。',
+                progress: baseProgress,
+                reward: rewardText,
+                action: hasPendingTasks ? action : 'add-plan',
+                buttonText: hasPendingTasks ? '去完成' : '添加计划',
+                stickerId: sticker.id
+            };
+        }
+
+        function syncAchievementStickerState(stickerBoard) {
+            const board = Array.isArray(stickerBoard) ? stickerBoard : [];
+            const unlocked = board.filter((item) => item?.unlocked);
+            const locked = board.filter((item) => !item?.unlocked);
+            const unlockedToday = unlocked.filter((item) => isSameLocalDate(item?.awarded_at));
+            const latestUnlocked = unlocked
+                .slice()
+                .sort((a, b) => new Date(b?.awarded_at || 0).getTime() - new Date(a?.awarded_at || 0).getTime())[0] || null;
+
+            achievementUnlockState.stickerBoard = board;
+            achievementUnlockState.unlockedBadgesCount = unlocked.length;
+            achievementUnlockState.totalStickerCount = board.length;
+            achievementUnlockState.unlockedTodayCount = unlockedToday.length;
+            achievementUnlockState.focusStickerId = (unlockedToday[0] || pickNearestSticker(locked) || latestUnlocked || null)?.id || null;
+        }
+
+        function renderStickerPreviewList(stickerBoard) {
+            const stickerListEl = document.getElementById('sticker-board-list');
+
+            if (!stickerListEl) return;
+
+            const board = Array.isArray(stickerBoard) ? stickerBoard : [];
+            const unlocked = board.filter((item) => item?.unlocked);
+            const previewUnlocked = unlocked.slice(0, 8);
+            const lockedPreview = pickNearestSticker(board.filter((item) => !item?.unlocked));
+            const showLockedPreview = lockedPreview && !previewUnlocked.some((item) => item?.id === lockedPreview?.id);
+
+            if (board.length === 0) {
+                stickerListEl.innerHTML = '<div class="w-16 h-16 rounded-md bg-white/55 dark:bg-surface-dark shadow-inner border-2 dashed border-gray-300 flex items-center justify-center text-2xl text-gray-400 cursor-help" title="完成计划、挑战或打卡后解锁新贴纸">?</div>';
+                return;
+            }
+
+            const unlockedHtml = previewUnlocked.map((sticker, index) => `
+                <div class="w-16 h-16 rounded-md bg-white dark:bg-surface-dark shadow-sm border-2 border-yellow-200 flex items-center justify-center text-4xl hover-bounce cursor-help transition-transform fade-in" style="animation-delay: ${index * 80}ms" title="${escapeHtml(getStickerDisplayName(sticker, '贴纸'))}">
+                    ${escapeHtml(getStickerDisplayIcon(sticker))}
+                </div>
+            `).join('');
+
+            const lockedHtml = showLockedPreview
+                ? `
+                    <div class="w-16 h-16 rounded-md bg-white/55 dark:bg-surface-dark shadow-inner border-2 dashed border-gray-300 flex items-center justify-center text-2xl text-gray-400 cursor-help" title="继续努力，解锁“${escapeHtml(getStickerDisplayName(lockedPreview, '新贴纸'))}”">?</div>
+                `
+                : '';
+
+            stickerListEl.innerHTML = unlockedHtml + lockedHtml;
+        }
+
+        var escapeHtml = window.escapeHtml || ((value) => String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;'));
+
+        var safeTextToHtml = window.safeTextToHtml || ((value) => escapeHtml(value).replace(/\r?\n/g, '<br>'));
+
+        function getStudentAuthHeaders() {
+            return typeof getJsonAuthHeaders === 'function'
+                ? getJsonAuthHeaders()
+                : { 'Content-Type': 'application/json' };
+        }
+
+        function openTaskEvidenceModal(taskTitle) {
+            const modal = document.getElementById('task-evidence-modal');
+            const backdrop = document.getElementById('task-evidence-backdrop');
+            const closeBtn = document.getElementById('close-task-evidence-modal');
+            const cancelBtn = document.getElementById('task-evidence-cancel');
+            const form = document.getElementById('task-evidence-form');
+            const titleEl = document.getElementById('task-evidence-title');
+            const subtitleEl = document.getElementById('task-evidence-subtitle');
+            const fileInput = document.getElementById('task-evidence-file');
+            const noteInput = document.getElementById('task-evidence-note');
+            const feedbackEl = document.getElementById('task-evidence-feedback');
+            const submitBtn = document.getElementById('task-evidence-submit');
+            const previewWrap = document.getElementById('task-evidence-preview-wrap');
+            const previewImg = document.getElementById('task-evidence-preview');
+
+            if (!modal || !form || !fileInput || !noteInput || !feedbackEl || !submitBtn || !previewWrap || !previewImg) {
+                return Promise.resolve(null);
+            }
+
+            const resetForm = () => {
+                form.reset();
+                feedbackEl.textContent = '';
+                feedbackEl.className = 'text-xs min-h-[1rem] text-text-sub dark:text-gray-400';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交给老师';
+                previewWrap.classList.add('hidden');
+                previewImg.removeAttribute('src');
+            };
+
+            const closeModal = (result = null) => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.classList.remove('overflow-hidden');
+                const resolver = taskEvidenceResolver;
+                taskEvidenceResolver = null;
+                resetForm();
+                if (typeof resolver === 'function') resolver(result);
+            };
+
+            if (!taskEvidenceModalReady) {
+                fileInput.addEventListener('change', () => {
+                    const file = fileInput.files && fileInput.files[0];
+                    feedbackEl.textContent = '';
+                    feedbackEl.className = 'text-xs min-h-[1rem] text-text-sub dark:text-gray-400';
+
+                    if (!file) {
+                        previewWrap.classList.add('hidden');
+                        previewImg.removeAttribute('src');
+                        return;
+                    }
+
+                    if (file.size > EVIDENCE_MAX_SIZE_BYTES) {
+                        fileInput.value = '';
+                        previewWrap.classList.add('hidden');
+                        previewImg.removeAttribute('src');
+                        feedbackEl.textContent = '图片不能超过 8MB，请重新选择。';
+                        feedbackEl.className = 'text-xs min-h-[1rem] text-red-500';
+                        return;
+                    }
+
+                    previewImg.src = URL.createObjectURL(file);
+                    previewWrap.classList.remove('hidden');
+                });
+
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+
+                    const file = fileInput.files && fileInput.files[0];
+                    const proofNote = noteInput.value.trim();
+
+                    if (!file && !proofNote) {
+                        feedbackEl.textContent = '请上传一张照片，或写一句完成说明。';
+                        feedbackEl.className = 'text-xs min-h-[1rem] text-red-500';
+                        return;
+                    }
+
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '准备提交...';
+                    feedbackEl.textContent = '正在整理要提交给老师的材料...';
+                    feedbackEl.className = 'text-xs min-h-[1rem] text-text-sub dark:text-gray-400';
+
+                    try {
+                        let imageBase64 = null;
+                        let mimeType = null;
+
+                        if (file) {
+                            imageBase64 = await readFileAsDataUrl(file);
+                            mimeType = file.type || 'image/jpeg';
+                        }
+
+                        closeModal({
+                            imageBase64,
+                            mimeType,
+                            proofNote: proofNote || null
+                        });
+                    } catch (error) {
+                        feedbackEl.textContent = error.message || '整理材料失败，请重新选择。';
+                        feedbackEl.className = 'text-xs min-h-[1rem] text-red-500';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '提交给老师';
+                    }
+                });
+
+                closeBtn?.addEventListener('click', () => closeModal(null));
+                cancelBtn?.addEventListener('click', () => closeModal(null));
+                backdrop?.addEventListener('click', () => closeModal(null));
+                taskEvidenceModalReady = true;
+            }
+
+            return new Promise((resolve) => {
+                taskEvidenceResolver = resolve;
+                resetForm();
+                if (titleEl) titleEl.textContent = '提交完成材料';
+                if (subtitleEl) {
+                    subtitleEl.textContent = taskTitle
+                        ? `完成“${taskTitle}”后，把照片或说明交给老师。`
+                        : '给老师看看你是怎么完成的吧';
+                }
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.classList.add('overflow-hidden');
+                setTimeout(() => noteInput.focus(), 0);
+            });
+        }
+
+
+
+
+
+
+
+        // ============================================
+
+
+
+        // Multi-Dream Panel Functions
+
+
+
+        // ============================================
+
+
+
+
+
+
+
+        async function loadMultiDreamPanel(userId) {
+
+
+
+            if (!userId) return;
+
+
+
+
+
+
+
+            try {
+
+
+
+                const [overviewRes, summaryRes] = await Promise.all([
+
+
+
+                    apiFetch(`${API_BASE_URL}/api/student/${userId}/dreams/overview`),
+
+
+
+                    apiFetch(`${API_BASE_URL}/api/student/${userId}/summary`)
+
+
+
+                ]);
+
+
+
+                if (!overviewRes.ok) throw new Error('Failed to load dreams overview');
+
+
+
+
+
+
+
+                const overviewData = await overviewRes.json();
+
+
+
+                let summaryDreams = [];
+
+
+
+                if (summaryRes.ok) {
+
+
+
+                    const summaryData = await summaryRes.json();
+
+
+
+                    if (Array.isArray(summaryData?.dreams) && summaryData.dreams.length > 0) {
+
+
+
+                        summaryDreams = summaryData.dreams.filter(Boolean);
+
+
+
+                    } else if (summaryData?.dream) {
+
+
+
+                        summaryDreams = String(summaryData.dream)
+
+
+
+                            .split(/\r?\n|[，。、；;]+/)
+
+
+
+                            .map(item => item.trim())
+
+
+
+                            .filter(Boolean);
+
+
+
+                    }
+
+
+
+                }
+
+
+
+
+
+
+
+                if (summaryDreams.length > 0) {
+
+
+
+                    const overviewDreams = Array.isArray(overviewData?.dreams) ? overviewData.dreams : [];
+
+
+
+                    const mergedDreams = summaryDreams.map((title, index) => {
+
+
+
+                        const matched = overviewDreams.find((dream) => (dream.tag || dream.title) === title);
+
+
+
+                        return matched || {
+
+
+
+                            id: `profile-dream-${index}`,
+
+
+
+                            tag: title,
+
+
+
+                            title,
+
+
+
+                            status: 'active',
+
+
+
+                            progress: 0,
+
+
+
+                            priority: index === 0 ? 1 : 2,
+
+
+
+                            is_focused: index === 0,
+
+
+
+                            weekly_hours: 0,
+
+
+
+                            completed_goal_count: 0,
+
+
+
+                            goal_count: 0
+
+
+
+                        };
+
+
+
+                    });
+
+
+
+
+
+
+
+                    multiDreamData = {
+
+
+
+                        ...overviewData,
+
+
+
+                        total_dreams: mergedDreams.length,
+
+
+
+                        active_count: mergedDreams.filter((dream) => dream.status === 'active').length,
+
+
+
+                        dreams: mergedDreams,
+
+
+
+                        current_focus_dream: mergedDreams.find((dream) => dream.is_focused) || mergedDreams[0] || null
+
+
+
+                    };
+
+
+
+                } else {
+
+
+
+                    multiDreamData = overviewData;
+
+
+
+                }
+
+
+
+
+
+
+
+                renderMultiDreamPanel();
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Multi-dream panel error:', err);
+
+
+
+                // Fallback: hide panel if error
+
+
+
+                const panel = document.getElementById('multi-dream-panel');
+
+
+
+                if (panel) panel.style.display = 'none';
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function renderMultiDreamPanel() {
+
+
+
+            if (!multiDreamData) return;
+
+
+
+
+
+
+
+            const { total_dreams, active_count, completed_count, paused_count, dreams, current_focus_dream, resource_allocation } = multiDreamData;
+
+
+
+
+
+
+
+            // Update stats bar
+
+
+
+            const statsBar = document.getElementById('dream-stats-bar');
+
+
+
+            if (statsBar) {
+
+
+
+                statsBar.innerHTML = `
+
+
+
+                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">进行中 ${active_count}</span>
+
+
+
+                    ${completed_count > 0 ? `<span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full font-medium">已完成 ${completed_count}</span>` : ''}
+
+
+
+                    ${paused_count > 0 ? `<span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full font-medium">已暂停 ${paused_count}</span>` : ''}
+
+
+
+                `;
+
+
+
+            }
+
+
+
+
+
+
+
+            // Show/hide empty state
+
+
+
+            const emptyState = document.getElementById('dreams-empty-state');
+
+
+
+            const cardsContainer = document.getElementById('dreams-cards-container');
+
+
+
+            const resourceSection = document.getElementById('resource-allocation-section');
+
+
+
+
+
+
+
+            if (total_dreams === 0) {
+
+
+
+                if (emptyState) emptyState.classList.remove('hidden');
+
+
+
+                if (cardsContainer) cardsContainer.classList.add('hidden');
+
+
+
+                if (resourceSection) resourceSection.classList.add('hidden');
+
+
+
+                return;
+
+
+
+            }
+
+
+
+
+
+
+
+            if (emptyState) emptyState.classList.add('hidden');
+
+
+
+            if (cardsContainer) cardsContainer.classList.remove('hidden');
+
+
+
+
+
+
+
+            // Show focus mode toggle if we have dreams
+
+
+
+            const focusToggle = document.getElementById('focus-mode-toggle');
+
+
+
+            if (focusToggle && total_dreams > 0) {
+
+
+
+                focusToggle.classList.remove('hidden');
+
+
+
+                focusToggle.onclick = toggleFocusMode;
+
+
+
+            }
+
+
+
+
+
+
+
+            // Render dream cards
+
+
+
+            const scrollContainer = document.getElementById('dreams-scroll');
+
+
+
+            if (scrollContainer) {
+
+
+
+                const previousScrollLeft = scrollContainer.scrollLeft;
+
+
+
+                const activeDreams = dreams.filter(d => d.status === 'active');
+
+
+
+
+
+
+
+                if (activeDreams.length === 0) {
+
+
+
+                    scrollContainer.innerHTML = `
+
+
+
+                        <div class="text-center py-8 text-text-sub">
+
+
+
+                            <p>没有进行中的期待</p>
+
+
+
+                            <a href="profile.html?focus=dream" class="text-primary hover:underline text-sm">ȥ</a>
+
+
+
+                        </div>
+
+
+
+                    `;
+
+
+
+                } else {
+
+
+
+                    scrollContainer.innerHTML = activeDreams.map((dream, index) => {
+
+
+
+                        const isFocus = dream.is_focused;
+
+
+
+                        const progress = dream.progress || 0;
+
+
+
+                        const statusColors = {
+
+
+
+                            active: 'border-l-4 border-l-green-400',
+
+
+
+                            paused: 'border-l-4 border-l-gray-400',
+
+
+
+                            completed: 'border-l-4 border-l-yellow-400'
+
+
+
+                        };
+
+
+
+                        const cardClasses = isFocus
+
+
+
+                            ? 'is-focus bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-300'
+
+
+
+                            : 'bg-white dark:bg-surface-dark hover:border-primary/30';
+
+
+
+
+
+
+
+                        return `
+
+
+
+                            <button type="button" class="snap-start flex-shrink-0 w-64 ${cardClasses} rounded-md p-4 border border-warm-border/40 dark:border-gray-700 cursor-pointer dream-card text-left focus:outline-none focus:ring-4 focus:ring-primary/20"
+                                 onclick="handleDreamCardClick(event, '${dream.id}')"
+                                  data-dream-id="${dream.id}"
+                                  aria-label="查看期待：${escapeHtml(dream.tag)}"
+                            >
+
+
+
+                                <div class="flex items-start justify-between mb-2">
+
+
+
+                                    <h4 class="font-bold text-text-main dark:text-white truncate pr-2" title="${dream.tag}">${dream.tag}</h4>
+
+
+
+                                    ${isFocus ? '<span class="material-icons-round text-purple-500 text-sm">center_focus_strong</span>' : ''}
+
+
+
+                                </div>
+
+
+
+                                <div class="flex items-center gap-2 mb-3">
+
+
+
+                                    <span class="text-xs px-2 py-0.5 rounded-full ${dream.priority === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">
+
+
+
+                                        ${dream.priority === 1 ? '重点' : '普通'}
+
+
+
+                                    </span>
+
+
+
+                                    ${dream.weekly_hours > 0 ? `<span class="text-xs text-text-sub">${dream.weekly_hours}h/周</span>` : ''}
+
+
+
+                                </div>
+
+
+
+                                <div class="mb-2">
+
+
+
+                                    <div class="flex justify-between text-xs text-text-sub mb-1">
+
+
+
+                                        <span>进度</span>
+
+
+
+                                        <span class="font-bold text-primary-dark">${progress}%</span>
+
+
+
+                                    </div>
+
+
+
+                                    <div class="h-2 bg-warm-border/50 rounded-full overflow-hidden">
+
+
+
+                                        <div class="h-full bg-primary rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+                                <div class="flex items-center justify-between text-xs text-text-sub">
+
+
+
+                                    <span>${dream.completed_goal_count || 0}/${dream.goal_count || 0} 目标</span>
+
+
+
+                                    ${dream.is_focused ? `<span class="text-purple-600 font-medium flex items-center gap-1"><span class="material-icons-round text-[10px]">center_focus_strong</span>专注中</span>` : ''}
+
+
+
+                                </div>
+
+
+
+                            </button>
+
+
+
+                        `;
+
+
+
+                    }).join('');
+
+
+
+                }
+
+
+
+
+
+
+
+                scrollContainer.scrollLeft = previousScrollLeft;
+
+
+
+
+
+
+
+                // Show/hide scroll buttons
+
+
+
+                const scrollLeft = document.getElementById('dreams-scroll-left');
+
+
+
+                const scrollRight = document.getElementById('dreams-scroll-right');
+
+
+
+                if (scrollLeft && scrollRight) {
+
+
+
+                    const hasOverflow = scrollContainer.scrollWidth > scrollContainer.clientWidth;
+
+
+
+                    scrollLeft.classList.toggle('hidden', !hasOverflow);
+
+
+
+                    scrollRight.classList.toggle('hidden', !hasOverflow);
+
+
+
+
+
+
+
+                    scrollLeft.onclick = () => scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+
+
+
+                    scrollRight.onclick = () => scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+
+
+
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+            // Render resource allocation
+
+
+
+            if (resourceSection && resource_allocation.total_weekly_hours > 0) {
+
+
+
+                resourceSection.classList.remove('hidden');
+
+
+
+                const totalHoursEl = document.getElementById('total-weekly-hours');
+
+
+
+                if (totalHoursEl) totalHoursEl.textContent = `${resource_allocation.total_weekly_hours} 小时`;
+
+
+
+
+
+
+
+                const barsContainer = document.getElementById('allocation-bars');
+
+
+
+                if (barsContainer) {
+
+
+
+                    const colors = ['bg-green-400', 'bg-blue-400', 'bg-purple-400', 'bg-orange-400', 'bg-pink-400'];
+
+
+
+                    barsContainer.innerHTML = dreams
+
+
+
+                        .filter(d => d.status === 'active' && d.weekly_hours > 0)
+
+
+
+                        .map((d, i) => {
+
+
+
+                            const percentage = resource_allocation.total_weekly_hours > 0
+
+
+
+                                ? (d.weekly_hours / resource_allocation.total_weekly_hours) * 100
+
+
+
+                                : 0;
+
+
+
+                            return `<div class="${colors[i % colors.length]} h-full transition-all duration-500" style="width: ${percentage}%" title="${d.tag}: ${d.weekly_hours}h"></div>`;
+
+
+
+                        }).join('');
+
+
+
+                }
+
+
+
+            } else if (resourceSection) {
+
+
+
+                resourceSection.classList.add('hidden');
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function toggleFocusMode() {
+
+
+
+            isFocusMode = !isFocusMode;
+
+
+
+
+
+
+
+            const focusView = document.getElementById('focus-mode-view');
+
+
+
+            const cardsContainer = document.getElementById('dreams-cards-container');
+
+
+
+            const focusToggle = document.getElementById('focus-mode-toggle');
+
+
+
+
+
+
+
+            if (isFocusMode) {
+
+
+
+                if (focusView) focusView.classList.remove('hidden');
+
+
+
+                if (cardsContainer) cardsContainer.classList.add('hidden');
+
+
+
+                if (focusToggle) {
+
+
+
+                    focusToggle.innerHTML = `<span class="material-icons-round text-sm">view_module</span> 查看全部`;
+
+
+
+                    focusToggle.classList.add('bg-purple-200');
+
+
+
+                }
+
+
+
+                renderFocusMode();
+
+
+
+            } else {
+
+
+
+                if (focusView) focusView.classList.add('hidden');
+
+
+
+                if (cardsContainer) cardsContainer.classList.remove('hidden');
+
+
+
+                if (focusToggle) {
+
+
+
+                    focusToggle.innerHTML = `<span class="material-icons-round text-sm">center_focus_strong</span> 专注模式`;
+
+
+
+                    focusToggle.classList.remove('bg-purple-200');
+
+
+
+                }
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function renderFocusMode() {
+
+
+
+            if (!multiDreamData) return;
+
+
+
+
+
+
+
+            const { current_focus_dream, dreams } = multiDreamData;
+
+
+
+            const focusDream = current_focus_dream || dreams[0];
+
+
+
+
+
+
+
+            const contentEl = document.getElementById('focus-dream-content');
+
+
+
+            if (contentEl && focusDream) {
+
+
+
+                const progress = focusDream.progress || 0;
+
+
+
+                contentEl.innerHTML = `
+
+
+
+                    <h3 class="text-2xl font-bold text-text-main dark:text-white mb-2 font-display">${focusDream.tag}</h3>
+
+
+
+                    <div class="flex items-center gap-2 mb-4">
+
+
+
+                        <span class="text-xs px-2 py-1 rounded-full ${focusDream.priority === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">
+
+
+
+                            ${focusDream.priority === 1 ? '重点期待' : '普通期待'}
+
+
+
+                        </span>
+
+
+
+                        ${focusDream.weekly_hours > 0 ? `<span class="text-xs text-text-sub">每周 ${focusDream.weekly_hours} 小时</span>` : ''}
+
+
+
+                    </div>
+
+
+
+                    <div class="bg-white/50 dark:bg-black/20 rounded-md p-4 mb-4">
+
+
+
+                        <div class="flex justify-between text-sm font-bold text-text-sub mb-2">
+
+
+
+                            <span>进度</span>
+
+
+
+                            <span class="text-primary-dark">${progress}%</span>
+
+
+
+                        </div>
+
+
+
+                        <div class="h-4 bg-warm-border/50 rounded-full overflow-hidden">
+
+
+
+                            <div class="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+
+
+
+                        </div>
+
+
+
+                        <div class="mt-2 text-xs text-text-sub">
+
+
+
+                            已完成 ${focusDream.completed_goal_count || 0} / ${focusDream.goal_count || 0} 个目标
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <a href="portfolio.html?dream=${focusDream.id}" class="inline-flex items-center gap-1 text-sm font-bold text-purple-600 hover:text-purple-700 transition-colors">
+
+
+
+                        去完成任务 -></a>
+
+
+
+                `;
+
+
+
+            }
+
+
+
+
+
+
+
+            // Render other dreams list
+
+
+
+            const otherList = document.getElementById('other-dreams-list');
+
+
+
+            if (otherList) {
+
+
+
+                const otherDreams = dreams.filter(d => d.id !== focusDream?.id && d.status === 'active');
+
+
+
+                if (otherDreams.length === 0) {
+
+
+
+                    otherList.innerHTML = '<p class="text-xs text-text-sub">没有其他进行中的期待</p>';
+
+
+
+                } else {
+
+
+
+                    otherList.innerHTML = otherDreams.map(d => `
+
+
+
+                        <button type="button" class="w-full flex items-center justify-between p-2 bg-white/50 dark:bg-black/20 rounded-md cursor-pointer hover:bg-white transition-colors text-left focus:outline-none focus:ring-2 focus:ring-primary/20"
+                             onclick="handleDreamCardClick(event, '${d.id}')"
+                             aria-label="设为专注：${escapeHtml(d.tag)}"
+                        >
+
+
+
+                            <div class="flex items-center gap-2">
+
+
+
+                                <span class="text-sm">${d.tag}</span>
+
+
+
+                                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">${d.progress || 0}%</span>
+
+
+
+                            </div>
+
+
+
+                            <span class="text-xs text-purple-600 font-medium hover:underline">设为专注</span>
+
+
+
+                        </div>
+
+
+
+                    `).join('');
+
+
+
+                }
+
+
+
+            }
+
+
+
+
+
+
+
+            // Bind exit button
+
+
+
+            const exitBtn = document.getElementById('exit-focus-mode');
+
+
+
+            if (exitBtn) exitBtn.onclick = toggleFocusMode;
+
+
+
+        }
+
+
+
+
+
+
+
+        // Handle dream card click with proper event handling
+
+
+
+        function handleDreamCardClick(event, dreamId) {
+
+
+
+            event.preventDefault();
+
+
+
+            event.stopPropagation();
+
+
+
+            setFocusDream(dreamId);
+
+
+
+        }
+
+
+
+
+
+
+
+        function syncDreamUi() {
+
+
+
+            renderMultiDreamPanel();
+
+
+
+            if (isFocusMode) {
+
+
+
+                renderFocusMode();
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function animateFocusedDreamCard(dreamId) {
+
+
+
+            const card = document.querySelector(`.dream-card[data-dream-id="${dreamId}"]`);
+
+
+
+            if (!card) return;
+
+
+
+            card.classList.remove('is-switching');
+
+
+
+            void card.offsetWidth;
+
+
+
+            card.classList.add('is-switching');
+
+
+
+            setTimeout(() => card.classList.remove('is-switching'), 360);
+
+
+
+        }
+
+
+
+
+
+
+
+        function applyFocusedDreamLocally(dreamId) {
+
+
+
+            if (!multiDreamData || !Array.isArray(multiDreamData.dreams)) return;
+
+
+
+            let nextFocus = null;
+
+
+
+            multiDreamData.dreams = multiDreamData.dreams.map((dream) => {
+
+
+
+                const nextDream = { ...dream, is_focused: dream.id === dreamId };
+
+
+
+                if (nextDream.is_focused) nextFocus = nextDream;
+
+
+
+                return nextDream;
+
+
+
+            });
+
+
+
+            multiDreamData.current_focus_dream = nextFocus || multiDreamData.dreams[0] || null;
+
+
+
+        }
+
+
+
+
+
+
+
+        async function setFocusDream(dreamId) {
+
+
+
+            if (!currentUserId || !dreamId || !multiDreamData || isSettingFocusDream) return;
+
+
+
+            if (multiDreamData.current_focus_dream?.id === dreamId) return;
+
+
+
+
+
+
+
+            const previousSnapshot = JSON.stringify(multiDreamData);
+
+
+
+            isSettingFocusDream = true;
+
+
+
+            applyFocusedDreamLocally(dreamId);
+
+
+
+            syncDreamUi();
+
+
+
+            animateFocusedDreamCard(dreamId);
+
+
+
+
+
+
+
+            try {
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${currentUserId}/dreams/focus`, {
+
+
+
+                    method: 'POST',
+
+
+
+                    headers: { 'Content-Type': 'application/json' },
+
+
+
+                    body: JSON.stringify({ dream_id: dreamId })
+
+
+
+                });
+
+
+
+
+
+
+
+                if (!res.ok) throw new Error('Failed to set focus dream');
+
+
+
+
+
+
+
+                // Smooth transition - update UI without full reload
+
+
+
+
+
+
+
+                // Show toast notification
+
+
+
+                showToast('已切换当前期待', 'success');
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Set focus dream error:', err);
+
+
+
+                try {
+
+
+
+                    multiDreamData = JSON.parse(previousSnapshot);
+
+
+
+                    syncDreamUi();
+
+
+
+                } catch (_) { }
+
+
+
+                window.showPageToast?.('设置当前期待失败，请重试。', 'error');
+
+
+
+
+
+
+
+            } finally {
+
+
+
+                isSettingFocusDream = false;
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        // Toast notification helper
+
+
+
+        function showToast(message, type = 'info') {
+            if (window.showPageToast) {
+                window.showPageToast(message, type);
+            }
+        }
+
+
+
+
+
+
+
+        function updateAchievementUnlockCard() {
+            const iconEl = document.getElementById('achievement-unlock-icon');
+            const chipEl = document.getElementById('achievement-unlock-chip');
+            const countEl = document.getElementById('achievement-unlock-count');
+            const titleEl = document.getElementById('achievement-unlock-title');
+            const descEl = document.getElementById('achievement-unlock-desc');
+            const progressEl = document.getElementById('achievement-unlock-progress');
+            const rewardEl = document.getElementById('achievement-unlock-reward');
+            const actionBtn = document.getElementById('achievement-unlock-action');
+            const actionTextEl = document.getElementById('achievement-unlock-action-text');
+            if (!iconEl || !chipEl || !countEl || !titleEl || !descEl || !progressEl || !rewardEl || !actionBtn || !actionTextEl) return;
+
+            const unlockedCount = Number(achievementUnlockState.unlockedBadgesCount) || 0;
+            const totalCount = Number(achievementUnlockState.totalStickerCount) || 0;
+            countEl.textContent = totalCount > 0
+                ? `已收集 ${unlockedCount}/${totalCount} 枚贴纸`
+                : `已收集 ${unlockedCount} 枚贴纸`;
+
+            let config = {
+                icon: 'emoji_events',
+                chip: '奖励进行中',
+                title: '再完成 1 个计划，解锁下一枚贴纸',
+                desc: achievementUnlockState.nextPendingTaskTitle
+                    ? `先完成“${achievementUnlockState.nextPendingTaskTitle}”，奖励就会更近一点。`
+                    : '今天先完成一个小任务，就会更接近新的奖励。',
+                progress: `还差 ${Math.max(1, achievementUnlockState.pendingTasksCount || 1)} 步`,
+                reward: '奖励：新贴纸',
+                action: 'task',
+                buttonText: '去完成',
+                stickerId: null
+            };
+
+            const stickerBoard = Array.isArray(achievementUnlockState.stickerBoard) ? achievementUnlockState.stickerBoard : [];
+            const lockedStickers = stickerBoard.filter((item) => !item?.unlocked);
+            const checkinSticker = pickNearestSticker(lockedStickers.filter((item) => getStickerMetricKey(item) === 'checkinLongestStreak'));
+            const actionableSticker = pickNearestSticker(lockedStickers.filter((item) => getStickerAction(item) !== 'checkin'));
+            const nearestSticker = pickNearestSticker(lockedStickers);
+            const latestUnlockedSticker = stickerBoard
+                .filter((item) => item?.unlocked)
+                .slice()
+                .sort((a, b) => new Date(b?.awarded_at || 0).getTime() - new Date(a?.awarded_at || 0).getTime())[0] || null;
+
+            if (achievementUnlockState.unlockedTodayCount > 0 && latestUnlockedSticker) {
+                const stickerName = getStickerDisplayName(latestUnlockedSticker, '新贴纸');
+                const stickerIcon = getStickerDisplayIcon(latestUnlockedSticker);
+                config = {
+                    icon: 'celebration',
+                    chip: '今天已解锁',
+                    title: `今天拿到了“${stickerName}”`,
+                    desc: achievementUnlockState.unlockedTodayCount > 1
+                        ? `你今天已经解锁了 ${achievementUnlockState.unlockedTodayCount} 枚贴纸，快去贴纸簿看看新奖励吧。`
+                        : `新的贴纸已经到账啦，去贴纸簿看看刚解锁的奖励吧。`,
+                    progress: '奖励已经到账',
+                    reward: `新奖励：${stickerIcon} ${stickerName}`,
+                    action: 'sticker',
+                    buttonText: '查看贴纸',
+                    stickerId: latestUnlockedSticker.id || null
+                };
+            } else if (!achievementUnlockState.checkedInToday && checkinSticker) {
+                config = buildStickerAchievementConfig(checkinSticker) || config;
+            } else if (actionableSticker) {
+                config = buildStickerAchievementConfig(actionableSticker) || config;
+            } else if (nearestSticker) {
+                config = buildStickerAchievementConfig(nearestSticker) || config;
+            } else if (stickerBoard.length > 0 && unlockedCount >= totalCount) {
+                config = {
+                    icon: 'workspace_premium',
+                    chip: '全部点亮',
+                    title: '贴纸簿已经全部解锁啦',
+                    desc: '你已经把所有贴纸都收入囊中了，随时可以去回顾自己的成长时刻。',
+                    progress: '全部贴纸已解锁',
+                    reward: '动作：打开贴纸簿',
+                    action: 'sticker',
+                    buttonText: '查看贴纸',
+                    stickerId: latestUnlockedSticker?.id || null
+                };
+            } else if (!achievementUnlockState.checkedInToday) {
+                config = {
+                    icon: 'local_fire_department',
+                    chip: '打卡就有奖励',
+                    title: '今天先打卡，点亮连续火苗',
+                    desc: `完成今天的打卡后，连续天数会从 ${achievementUnlockState.streak || 0} 天变成 ${(achievementUnlockState.streak || 0) + 1} 天。`,
+                    progress: '还差 1 次打卡',
+                    reward: '奖励：连续打卡进度 +1',
+                    action: 'checkin',
+                    buttonText: '去打卡',
+                    stickerId: null
+                };
+            } else {
+                if (achievementUnlockState.pendingTasksCount > 0) {
+                    config.progress = `还有 ${achievementUnlockState.pendingTasksCount} 个计划待完成`;
+                } else if (achievementUnlockState.completedTodayCount > 0) {
+                    config = {
+                        icon: 'celebration',
+                        chip: '今天已前进',
+                        title: '今天已经完成了计划，继续保持',
+                        desc: `你今天已经完成了 ${achievementUnlockState.completedTodayCount} 个计划，下一枚贴纸正在路上。`,
+                        progress: '进度已经推进',
+                        reward: '奖励：继续解锁新贴纸',
+                        action: 'sticker',
+                        buttonText: '查看贴纸',
+                        stickerId: latestUnlockedSticker?.id || null
+                    };
+                } else {
+                    config = {
+                        icon: 'add_task',
+                        chip: '继续攒奖励',
+                        title: '再加一个小计划，今天也能有收获',
+                        desc: '给自己安排一个很容易完成的小任务，奖励系统就能继续往前走。',
+                        progress: '先创建 1 个小计划',
+                        reward: '奖励：解锁下一次机会',
+                        action: 'add-plan',
+                        buttonText: '添加计划',
+                        stickerId: null
+                    };
+                }
+            }
+
+            achievementUnlockState.ctaAction = config.action;
+            achievementUnlockState.focusStickerId = config.stickerId || achievementUnlockState.focusStickerId || null;
+            iconEl.textContent = config.icon;
+            chipEl.textContent = config.chip;
+            titleEl.textContent = config.title;
+            descEl.textContent = config.desc;
+            progressEl.textContent = config.progress;
+            rewardEl.textContent = config.reward;
+            actionBtn.dataset.action = config.action;
+            actionTextEl.textContent = config.buttonText;
+        }
+
+        function bindAchievementUnlockCard() {
+            const actionBtn = document.getElementById('achievement-unlock-action');
+            if (!actionBtn || actionBtn.dataset.bound === 'true') return;
+            actionBtn.dataset.bound = 'true';
+            actionBtn.addEventListener('click', () => {
+                const action = actionBtn.dataset.action || achievementUnlockState.ctaAction;
+                if (action === 'checkin') {
+                    document.getElementById('checkin-btn')?.click();
+                    return;
+                }
+                if (action === 'sticker') {
+                    document.getElementById('open-sticker-book')?.click();
+                    return;
+                }
+                if (action === 'challenge') {
+                    window.location.href = 'challenge.html';
+                    return;
+                }
+                if (action === 'portfolio') {
+                    window.location.href = 'portfolio.html';
+                    return;
+                }
+                if (action === 'add-plan') {
+                    document.getElementById('add-today-plan-btn')?.click();
+                    return;
+                }
+
+                const planSection = document.getElementById('todays-plan-list');
+                if (planSection) {
+                    planSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const firstPendingButton = planSection.querySelector('button[data-action="complete-task"]');
+                    if (firstPendingButton) {
+                        firstPendingButton.classList.add('ring-2', 'ring-primary/50');
+                        setTimeout(() => firstPendingButton.classList.remove('ring-2', 'ring-primary/50'), 1800);
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+
+
+
+            const sessionUserId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+
+
+            let user = null;
+
+
+
+
+
+
+
+            if (!sessionUserId) {
+
+
+
+                window.location.href = '../index.html';
+
+
+
+                return;
+
+
+
+            }
+
+
+
+
+
+
+
+            try {
+
+
+
+                const userStr = localStorage.getItem('user');
+
+
+
+                user = userStr ? JSON.parse(userStr) : null;
+
+
+
+            } catch (error) {
+
+
+
+                console.warn('Parse dashboard user failed', error);
+
+
+
+            }
+
+
+
+            currentUserId = sessionUserId;
+
+
+
+            // Fetch fresh profile data for name and avatar
+
+
+
+            await fetchProfile(sessionUserId);
+
+
+
+
+
+
+
+            setupMomentComposer(currentUserId);
+
+            bindAchievementUnlockCard();
+            updateAchievementUnlockCard();
+
+
+
+
+
+
+
+            // Parallel fetching
+
+
+
+            await Promise.allSettled([
+                loadGrowthChart(currentUserId),
+                loadMultiDreamPanel(currentUserId),
+                fetchClassMoments(currentUserId),
+                fetchTasks(),
+                fetchStatsAndBadges(currentUserId)
+            ]);
+
+
+
+
+
+
+
+            await bindCheckin(currentUserId);
+
+
+
+
+
+
+
+            bindMoodButtons(currentUserId);
+
+
+
+            bindStickerBook(currentUserId);
+
+
+
+            bindTodayPlanActions(currentUserId);
+
+
+
+        });
+
+
+
+
+
+
+
+        function bindTodayPlanActions(userId) {
+
+
+
+            const addBtn = document.getElementById('add-today-plan-btn');
+
+
+
+            const modal = document.getElementById('today-plan-modal');
+
+
+
+            const backdrop = document.getElementById('today-plan-backdrop');
+
+
+
+            const closeBtn = document.getElementById('close-today-plan-modal');
+
+
+
+            const cancelBtn = document.getElementById('today-plan-cancel');
+
+
+
+            const form = document.getElementById('today-plan-form');
+
+
+
+            const titleInput = document.getElementById('today-plan-title');
+
+
+
+            const descInput = document.getElementById('today-plan-description');
+
+
+
+            const submitBtn = document.getElementById('today-plan-submit');
+
+
+
+            const feedbackEl = document.getElementById('today-plan-feedback');
+
+
+
+
+
+
+
+            if (!addBtn || !modal || !form || !titleInput || !descInput || !submitBtn || !feedbackEl) return;
+
+
+
+
+
+
+
+            const openModal = () => {
+
+
+
+                feedbackEl.textContent = '';
+
+
+
+                form.reset();
+
+
+
+                modal.classList.remove('hidden');
+
+
+
+                modal.classList.add('flex');
+
+
+
+                document.body.classList.add('overflow-hidden');
+
+
+
+                setTimeout(() => titleInput.focus(), 0);
+
+
+
+            };
+
+
+
+
+
+
+
+            const closeModal = () => {
+
+
+
+                modal.classList.add('hidden');
+
+
+
+                modal.classList.remove('flex');
+
+
+
+                document.body.classList.remove('overflow-hidden');
+
+
+
+                addBtn.focus();
+
+
+
+            };
+
+
+
+
+
+
+
+            addBtn.addEventListener('click', () => {
+
+
+
+                if (!userId) {
+
+
+
+                    addBtn.textContent = '请先登录';
+
+
+
+                    addBtn.disabled = true;
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+                openModal();
+
+
+
+            });
+
+
+
+
+
+
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+
+
+            if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+
+
+            if (backdrop) backdrop.addEventListener('click', closeModal);
+
+
+
+
+
+
+
+            form.addEventListener('submit', async (event) => {
+
+
+
+                event.preventDefault();
+
+
+
+
+
+
+
+                const title = titleInput.value.trim();
+
+
+
+                const description = descInput.value.trim();
+
+
+
+
+
+
+
+                if (!title) {
+
+
+
+                    feedbackEl.textContent = '请先填写计划名称';
+
+
+
+                    feedbackEl.className = 'text-xs min-h-[1rem] text-red-500';
+
+
+
+                    titleInput.focus();
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                submitBtn.disabled = true;
+
+
+
+                submitBtn.textContent = '添加中...';
+
+
+
+                feedbackEl.textContent = '正在保存计划...';
+
+
+
+                feedbackEl.className = 'text-xs min-h-[1rem] text-text-sub dark:text-gray-400';
+
+
+
+
+
+
+
+                try {
+
+
+
+                    const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/today-plan`, {
+
+
+
+                        method: 'POST',
+
+
+
+                        headers: { 'Content-Type': 'application/json' },
+
+
+
+                        body: JSON.stringify({ title, description, points_reward: 5 })
+
+
+
+                    });
+
+
+
+
+
+
+
+                    if (!res.ok) throw new Error('create failed');
+
+
+
+                    await fetchTasks();
+
+
+
+                    closeModal();
+
+
+
+                } catch (error) {
+
+
+
+                    console.error('Add today plan error:', error);
+
+
+
+                    feedbackEl.textContent = '添加失败，稍后重试';
+
+
+
+                    feedbackEl.className = 'text-xs min-h-[1rem] text-red-500';
+
+
+
+                } finally {
+
+
+
+                    submitBtn.disabled = false;
+
+
+
+                    submitBtn.textContent = '添加计划';
+
+
+
+                }
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+
+
+        async function bindCheckin(userId) {
+
+
+
+            const streakEl = document.getElementById('streak-display');
+
+
+
+            const checkinBtn = document.getElementById('checkin-btn');
+
+
+
+            const checkinToast = document.getElementById('checkin-toast');
+
+
+
+            const checkinToastText = document.getElementById('checkin-toast-text');
+
+
+
+            const checkinFeedback = document.getElementById('mood-feedback');
+
+
+
+
+
+
+
+            const renderStreak = (streak) => {
+
+
+
+                if (streakEl) {
+
+
+
+                    streakEl.textContent = `连续打卡 ${streak || 0} 天!`;
+
+
+
+                }
+
+                achievementUnlockState.streak = Number(streak) || 0;
+                updateAchievementUnlockCard();
+
+
+
+            };
+
+
+
+
+
+
+
+            const renderCheckinButton = (checkedInToday) => {
+
+
+
+                if (!checkinBtn) return;
+
+
+
+                if (checkedInToday) {
+
+
+
+                    checkinBtn.textContent = '今日已打卡';
+
+
+
+                    checkinBtn.disabled = true;
+
+
+
+                    checkinBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+
+
+                } else {
+
+
+
+                    checkinBtn.textContent = '今日打卡';
+
+
+
+                    checkinBtn.disabled = false;
+
+
+
+                    checkinBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+
+
+                }
+
+                achievementUnlockState.checkedInToday = Boolean(checkedInToday);
+                updateAchievementUnlockCard();
+
+
+
+            };
+
+
+
+
+
+
+
+            const showCheckinToast = (streak) => {
+
+
+
+                if (!checkinToast || !checkinToastText) return;
+
+
+
+                checkinToastText.textContent = `打卡成功 +1天（连续 ${streak || 0} 天）`;
+
+
+
+                checkinToast.classList.remove('hidden', 'checkin-toast-exit');
+
+
+
+                checkinToast.classList.add('flex', 'checkin-toast-enter');
+
+
+
+
+
+
+
+                setTimeout(() => {
+
+
+
+                    checkinToast.classList.remove('checkin-toast-enter');
+
+
+
+                    checkinToast.classList.add('checkin-toast-exit');
+
+
+
+                    setTimeout(() => {
+
+
+
+                        checkinToast.classList.add('hidden');
+
+
+
+                        checkinToast.classList.remove('flex', 'checkin-toast-exit');
+
+
+
+                    }, 350);
+
+
+
+                }, 1500);
+
+
+
+            };
+
+
+
+
+
+
+
+            if (!userId) {
+
+
+
+                renderStreak(0);
+
+
+
+                renderCheckinButton(true);
+                achievementUnlockState.checkedInToday = false;
+                updateAchievementUnlockCard();
+
+
+
+                if (checkinFeedback) checkinFeedback.textContent = 'δ¼޷򿨡';
+
+
+
+                return;
+
+
+
+            }
+
+
+
+
+
+
+
+            try {
+
+
+
+                const statusRes = await apiFetch(`${API_BASE_URL}/api/student/${userId}/checkin/status`);
+
+
+
+                if (statusRes.ok) {
+
+
+
+                    const status = await statusRes.json();
+
+
+
+                    renderStreak(status.streak || 0);
+
+
+
+                    renderCheckinButton(Boolean(status.checkedInToday));
+
+
+
+                    if (checkinFeedback && status.checkedInToday) {
+
+
+
+                        checkinFeedback.textContent = 'ɴ򿨡';
+
+
+
+                    }
+
+
+
+                }
+
+
+
+            } catch (error) {
+
+
+
+                console.error('Check-in status error:', error);
+
+
+
+                if (checkinFeedback) checkinFeedback.textContent = '״̬ȡʧܣ˷';
+
+
+
+            }
+
+
+
+
+
+
+
+            if (!checkinBtn) return;
+
+
+
+            checkinBtn.addEventListener('click', async () => {
+
+
+
+                if (checkinBtn.disabled) return;
+
+
+
+
+
+
+
+                checkinBtn.textContent = '打卡?..';
+
+
+
+                checkinBtn.disabled = true;
+
+
+
+                if (checkinFeedback) checkinFeedback.textContent = '打卡提交?..';
+
+
+
+
+
+
+
+                try {
+
+
+
+                    const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/checkin`, {
+
+
+
+                        method: 'POST'
+
+
+
+                    });
+
+
+
+
+
+
+
+                    const data = await res.json();
+
+
+
+                    if (!res.ok) throw new Error(data?.error || 'Check-in failed');
+
+
+
+                    renderStreak(data.streak || 0);
+
+
+
+                    renderCheckinButton(true);
+
+
+
+                    if (!data.already_checked_in) {
+
+
+
+                        showCheckinToast(data.streak || 0);
+
+
+
+                        if (checkinFeedback) checkinFeedback.textContent = '打卡成功，继绿持！';
+
+
+
+                    } else if (checkinFeedback) {
+
+
+
+                        checkinFeedback.textContent = 'Ѵ򿨣ظ';
+
+
+
+                    }
+
+
+
+                } catch (error) {
+
+
+
+                    console.error('Check-in submit error:', error);
+
+
+
+                    checkinBtn.textContent = '重试打卡';
+
+
+
+                    checkinBtn.disabled = false;
+
+
+
+                    if (checkinFeedback) checkinFeedback.textContent = `打卡失败?{error.message}`;
+
+
+
+                }
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+
+
+        function bindStickerBook(userId) {
+
+
+
+            const openBtn = document.getElementById('open-sticker-book');
+
+
+
+            const modal = document.getElementById('sticker-book-modal');
+
+
+
+            const closeBtn = document.getElementById('close-sticker-book');
+
+
+
+            const backdrop = document.getElementById('sticker-book-backdrop');
+
+
+
+
+
+
+
+            const openModal = async () => {
+
+
+
+                if (!modal) return;
+
+
+
+                modal.classList.remove('hidden');
+
+
+
+                modal.classList.add('flex');
+
+
+
+                document.body.classList.add('overflow-hidden');
+
+
+
+                await loadStickerBoard(userId);
+
+
+
+            };
+
+
+
+
+
+
+
+            const closeModal = () => {
+
+
+
+                if (!modal) return;
+
+
+
+                modal.classList.add('hidden');
+
+
+
+                modal.classList.remove('flex');
+
+
+
+                document.body.classList.remove('overflow-hidden');
+
+
+
+            };
+
+
+
+
+
+
+
+            if (openBtn) openBtn.addEventListener('click', openModal);
+
+
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+
+
+            if (backdrop) backdrop.addEventListener('click', closeModal);
+
+
+
+        }
+
+
+
+
+
+
+
+        function renderStickerDetail(sticker) {
+
+
+
+            const detailEl = document.getElementById('sticker-detail');
+
+
+
+            if (!detailEl) return;
+
+
+
+
+
+
+
+            const unlockedText = sticker.unlocked ? '已解锁' : '待解锁';
+            const awardDate = sticker.awarded_at
+                ? `解锁时间：${new Date(sticker.awarded_at).toLocaleDateString('zh-CN')}`
+                : '尚未解锁';
+            const stickerName = getStickerDisplayName(sticker, '贴纸');
+            const stickerIcon = getStickerDisplayIcon(sticker);
+            const stickerDesc = !isPossiblyBrokenText(sticker?.description)
+                ? String(sticker.description || '').trim()
+                : getStickerFallbackDescription(sticker);
+            const { current, target } = getStickerProgressValues(sticker);
+            const showProgress = !sticker.unlocked && current !== null && target !== null;
+            const progressPercent = showProgress && target > 0
+                ? Math.max(0, Math.min(100, Math.round((current / target) * 100)))
+                : 0;
+            const progressHint = showProgress
+                ? getStickerProgressHint(sticker)
+                : (sticker.unlocked ? '这枚贴纸已经收入你的贴纸簿啦。' : getStickerFallbackDescription(sticker));
+
+
+
+
+
+
+
+            detailEl.innerHTML = `
+
+
+
+                <div class="w-20 h-20 mx-auto rounded-md ${sticker.unlocked ? 'bg-white border-2 border-yellow-200' : 'bg-gray-100 border-2 border-dashed border-gray-300'} flex items-center justify-center text-4xl mb-4 ${sticker.unlocked ? '' : 'grayscale opacity-60'}">
+
+
+
+                    ${escapeHtml(stickerIcon)}
+
+
+
+                </div>
+
+
+
+                <h4 class="text-lg font-bold text-text-main dark:text-white mb-2">${escapeHtml(stickerName)}</h4>
+
+
+
+                <p class="text-xs inline-block px-2 py-1 rounded-full ${sticker.unlocked ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'} mb-4">${unlockedText}</p>
+
+
+
+                <p class="text-sm text-text-sub dark:text-gray-300 leading-relaxed">${escapeHtml(stickerDesc)}</p>
+
+                ${showProgress ? `
+                    <div class="mt-4 rounded-2xl bg-white/80 dark:bg-black/10 border border-warm-border/40 px-4 py-3 text-left">
+                        <div class="flex items-center justify-between text-xs font-bold text-text-sub mb-2">
+                            <span>解锁进度</span>
+                            <span>${current}/${target}</span>
+                        </button>
+                        <div class="h-2 rounded-full bg-warm-border/40 overflow-hidden">
+                            <div class="h-full bg-primary rounded-full transition-all duration-500" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <p class="mt-2 text-xs text-text-sub dark:text-gray-400">${escapeHtml(progressHint)}</p>
+                    </div>
+                ` : `
+                    <p class="mt-4 text-xs text-text-sub dark:text-gray-400">${escapeHtml(progressHint)}</p>
+                `}
+
+                <p class="text-xs text-text-sub mt-4">${escapeHtml(awardDate)}</p>
+
+
+
+            `;
+
+
+
+        }
+
+
+
+
+
+
+
+        async function loadStickerBoard(userId) {
+
+
+
+            const gridEl = document.getElementById('sticker-book-grid');
+
+
+
+            const subtitleEl = document.getElementById('sticker-book-subtitle');
+
+
+
+            if (!gridEl || !subtitleEl) return;
+
+
+
+
+
+
+
+            if (!userId) {
+
+
+
+                gridEl.innerHTML = '<p class="text-sm text-text-sub">请先登录后再查看贴纸簿</p>';
+
+
+
+                subtitleEl.textContent = '共 0 枚，已解锁 0 枚';
+                currentStickerBoard = [];
+                syncAchievementStickerState([]);
+                updateAchievementUnlockCard();
+
+
+
+                return;
+
+
+
+            }
+
+
+
+
+
+
+
+            gridEl.innerHTML = Array(6).fill('<div class="h-24 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse"></div>').join('');
+
+
+
+
+
+
+
+            try {
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/sticker-board`);
+
+
+
+                if (!res.ok) throw new Error('Failed to load sticker board');
+
+
+
+                const stickers = await res.json();
+
+
+
+                currentStickerBoard = Array.isArray(stickers) ? stickers : [];
+                syncAchievementStickerState(currentStickerBoard);
+                updateAchievementUnlockCard();
+
+
+
+
+
+
+
+                const unlockedCount = currentStickerBoard.filter(item => item.unlocked).length;
+
+
+
+                subtitleEl.textContent = `共 ${currentStickerBoard.length} 枚，已解锁 ${unlockedCount} 枚`;
+
+
+
+
+
+
+
+                if (currentStickerBoard.length === 0) {
+
+
+
+                    gridEl.innerHTML = '<p class="text-sm text-text-sub">暂无贴纸数据</p>';
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                gridEl.innerHTML = currentStickerBoard.map((sticker) => `
+
+
+
+                    <button data-sticker-id="${sticker.id}" class="sticker-item p-4 rounded-md border-2 text-left transition-all ${sticker.unlocked ? 'bg-white dark:bg-surface-dark border-yellow-200 hover:border-primary hover:shadow-sm' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 opacity-80'}">
+
+
+
+                        <div class="w-12 h-12 rounded-md ${sticker.unlocked ? 'bg-yellow-50' : 'bg-gray-100'} flex items-center justify-center text-3xl mb-3 ${sticker.unlocked ? '' : 'grayscale'}">${escapeHtml(getStickerDisplayIcon(sticker))}</div>
+
+
+
+                        <p class="text-sm font-bold text-text-main dark:text-white truncate">${escapeHtml(getStickerDisplayName(sticker, '贴纸'))}</p>
+
+
+
+                        <p class="text-xs text-text-sub mt-1">${sticker.unlocked ? '已解锁' : '待解锁'}</p>
+
+
+
+                    </button>
+
+
+
+                `).join('');
+
+
+
+
+
+
+
+                const firstSticker = currentStickerBoard.find((item) => item.id === achievementUnlockState.focusStickerId)
+                    || currentStickerBoard.find((item) => !item.unlocked)
+                    || currentStickerBoard[0];
+
+
+
+                if (firstSticker) renderStickerDetail(firstSticker);
+
+
+
+
+
+
+
+                gridEl.querySelectorAll('.sticker-item').forEach((button) => {
+
+
+
+                    button.addEventListener('click', () => {
+
+
+
+                        const stickerId = button.getAttribute('data-sticker-id');
+
+
+
+                        const sticker = currentStickerBoard.find(item => item.id === stickerId);
+
+
+
+                        if (sticker) renderStickerDetail(sticker);
+
+
+
+                    });
+
+
+
+                });
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Sticker board error:', err);
+
+
+
+                gridEl.innerHTML = '<p class="text-sm text-red-400">贴纸簿加载失败</p>';
+
+
+
+                subtitleEl.textContent = '加载失败';
+                currentStickerBoard = [];
+                syncAchievementStickerState([]);
+                updateAchievementUnlockCard();
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function bindMoodButtons(userId) {
+
+
+
+            const buttons = document.querySelectorAll('.mood-btn');
+
+
+
+            const feedbackEl = document.getElementById('mood-feedback');
+
+
+
+            const moodCooldownMs = 1000;
+
+
+
+            let lastMoodSubmitAt = 0;
+
+
+
+            let moodSubmitting = false;
+
+
+
+
+
+
+
+            buttons.forEach((button) => {
+
+
+
+                button.addEventListener('click', async () => {
+
+
+
+                    const now = Date.now();
+
+
+
+                    if (moodSubmitting) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '正在记录情绪，请稍等...';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+                    if (now - lastMoodSubmitAt < moodCooldownMs) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '刚刚记录过啦，稍等一下再点。';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+
+
+
+
+                    const mood = button.dataset.mood;
+
+
+
+                    const label = button.dataset.label || '情绪';
+
+
+
+
+
+
+
+                    if (!userId) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '未检测到登录信息，请先登录。';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+
+
+
+
+                    buttons.forEach((item) => {
+
+
+
+                        const face = item.querySelector('.mood-face');
+
+
+
+                        if (face) {
+
+
+
+                            face.classList.remove('ring-2', 'ring-primary');
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+
+
+
+
+                    const faceEl = button.querySelector('.mood-face');
+
+
+
+                    if (faceEl) {
+
+
+
+                        faceEl.classList.add('ring-2', 'ring-primary');
+
+
+
+                    }
+
+
+
+
+
+
+
+                    if (feedbackEl) feedbackEl.textContent = `正在记录“${label}”情绪...`;
+
+
+
+                    moodSubmitting = true;
+
+
+
+                    lastMoodSubmitAt = now;
+
+
+
+                    buttons.forEach((item) => item.disabled = true);
+
+
+
+
+
+
+
+                    try {
+
+
+
+                        const res = await apiFetch(buildApiUrl('/api/student/mood'), {
+
+
+
+                            method: 'POST',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({
+
+
+
+                                student_id: userId,
+
+
+
+                                mood,
+
+
+
+                                note: `学生选择情绪：${label}`
+
+
+
+                            })
+
+
+
+                        });
+
+
+
+
+
+
+
+                        if (!res.ok) throw new Error('Mood save failed');
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = `已记录：${label}`;
+
+
+
+                    } catch (err) {
+
+
+
+                        console.error('Mood save error:', err);
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '记录失败，请稍后再试。';
+
+
+
+                    } finally {
+
+
+
+                        moodSubmitting = false;
+
+
+
+                        setTimeout(() => {
+
+
+
+                            buttons.forEach((item) => item.disabled = false);
+
+
+
+                        }, moodCooldownMs);
+
+
+
+                    }
+
+
+
+                });
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+
+
+        async function fetchStatsAndBadges(userId) {
+
+
+
+            const levelBadgeEl = document.getElementById('level-badge');
+
+
+
+            const levelTextEl = document.getElementById('level-text');
+
+
+
+            const progressTextEl = document.getElementById('progress-text');
+
+
+
+            const levelBarEl = document.getElementById('level-progress-bar');
+
+
+
+
+
+
+
+            const renderLevelCard = (stats = {}) => {
+
+
+
+                const hasLevelPayload = Number.isFinite(Number(stats.level)) && Number.isFinite(Number(stats.progress_percent));
+
+
+
+
+
+
+
+                if (hasLevelPayload) {
+
+
+
+                    const level = Math.max(1, Number(stats.level) || 1);
+
+
+
+                    const progress = Math.min(100, Math.max(0, Number(stats.progress_percent) || 0));
+
+
+
+                    const xpToNext = Math.max(0, Number(stats.xp_to_next_level) || 0);
+
+
+
+                    const xpPerTask = Math.max(1, Number(stats.xp_per_task) || 10);
+
+
+
+                    const estimatedTasks = Math.ceil(xpToNext / xpPerTask);
+
+
+
+
+
+
+
+                    if (levelBadgeEl) levelBadgeEl.textContent = `Lv. ${level}`;
+
+
+
+                    if (levelTextEl) {
+
+
+
+                        levelTextEl.textContent = xpToNext > 0
+
+
+
+                            ? `还差 ${xpToNext} XP，约完成 ${estimatedTasks} 个计划可升级`
+
+
+
+                            : '已达到当前最高等级';
+
+
+
+                    }
+
+
+
+                    if (progressTextEl) progressTextEl.textContent = `${progress}%`;
+
+
+
+                    if (levelBarEl) levelBarEl.style.width = `${progress}%`;
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                const safeCompleted = Math.max(0, Number(stats.completed_tasks) || 0);
+
+
+
+                const tasksPerLevel = 5;
+
+
+
+                const level = Math.floor(safeCompleted / tasksPerLevel) + 1;
+
+
+
+                const progressInLevel = safeCompleted % tasksPerLevel;
+
+
+
+                const progress = Math.round((progressInLevel / tasksPerLevel) * 100);
+
+
+
+                const remaining = tasksPerLevel - progressInLevel;
+
+
+
+
+
+
+
+                if (levelBadgeEl) levelBadgeEl.textContent = `Lv. ${level}`;
+
+
+
+                if (levelTextEl) levelTextEl.textContent = `还差 ${remaining} 个计划升级`;
+
+
+
+                if (progressTextEl) progressTextEl.textContent = `${progress}%`;
+
+
+
+                if (levelBarEl) levelBarEl.style.width = `${progress}%`;
+
+
+
+            };
+
+
+
+
+
+
+
+            if (!userId) {
+
+
+
+                renderLevelCard({ completed_tasks: 0 });
+
+
+
+                if (levelTextEl) levelTextEl.textContent = '登录后查看等级进度';
+                currentStickerBoard = [];
+                syncAchievementStickerState([]);
+                renderStickerPreviewList([]);
+                updateAchievementUnlockCard();
+
+
+
+                return;
+
+
+
+            }
+
+
+
+
+
+
+
+            // Fetch stats for Level & Progress
+
+
+
+            try {
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/stats`);
+
+
+
+
+
+
+
+                if (!res.ok) throw new Error('stats request failed');
+
+
+
+                const data = await res.json();
+
+
+
+                renderLevelCard(data);
+
+
+
+            }
+
+
+
+
+
+
+
+            catch (e) {
+
+
+
+                console.error('Stats error', e);
+
+
+
+                if (levelTextEl) levelTextEl.textContent = '进度加载失败';
+
+
+
+            }
+
+
+
+
+
+
+
+            // Fetch Sticker Board Preview
+
+
+
+            const stickerListEl = document.getElementById('sticker-board-list');
+            if (!stickerListEl) return;
+
+            // Show skeletons
+            stickerListEl.innerHTML = Array(3).fill('<div class="w-16 h-16 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse"></div>').join('');
+
+            try {
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/sticker-board`);
+                if (!res.ok) throw new Error('sticker board preview request failed');
+
+                const stickers = await res.json();
+                currentStickerBoard = Array.isArray(stickers) ? stickers : [];
+                syncAchievementStickerState(currentStickerBoard);
+                renderStickerPreviewList(currentStickerBoard);
+                updateAchievementUnlockCard();
+            } catch (e) {
+                console.error('Sticker board preview error', e);
+                stickerListEl.innerHTML = '<p class="text-xs text-red-400">贴纸预览加载失败</p>';
+                currentStickerBoard = [];
+                syncAchievementStickerState([]);
+                updateAchievementUnlockCard();
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        async function fetchClassMoments() {
+
+
+
+            const listEl = document.getElementById('class-moments-list');
+
+
+
+            if (!listEl) return;
+
+
+
+
+
+
+
+            const userId = currentUserId;
+
+
+
+
+
+
+
+            const renderAvatar = (moment) => {
+
+
+
+                if (moment.profiles?.avatar_url) {
+
+
+
+                    const profileName = escapeHtml(moment.profiles?.full_name || '同学');
+                    return `<img src="${escapeHtml(moment.profiles.avatar_url)}" class="w-12 h-12 rounded-md object-cover border-2 border-white shadow-sm" alt="${profileName}的头像" loading="lazy" />`;
+
+
+
+                }
+
+
+
+                const letter = moment.profiles?.full_name?.[0] || 'S';
+
+
+
+                const moodColor = moment.type === 'achievement' ? 'purple' : 'yellow';
+
+
+
+                return `<div class="w-12 h-12 rounded-md bg-${moodColor}-100 flex items-center justify-center text-${moodColor}-600 font-bold text-xl border-2 border-${moodColor}-200">${escapeHtml(letter)}</div>`;
+
+
+
+            };
+
+
+
+
+
+
+
+            const renderMedia = (mediaUrl) => {
+
+
+
+                if (!mediaUrl) return '';
+
+
+
+                const fullUrl = buildMediaUrl(mediaUrl);
+
+
+
+                const isAudio = /\.(mp3|wav|ogg|m4a|aac|webm)$/i.test(fullUrl);
+
+
+
+                if (isAudio) {
+
+
+
+                    return `<div class="mt-3"><audio controls class="w-full"><source src="${fullUrl}" /></audio></div>`;
+
+
+
+                }
+
+
+
+                return `<div class="mt-3"><img src="${escapeHtml(fullUrl)}" class="w-full max-h-64 object-cover rounded-md border border-warm-border/30" alt="班级动态图片" loading="lazy" /></div>`;
+
+
+
+            };
+
+
+
+
+
+
+
+            const renderCommentItem = (comment, momentOwnerId) => {
+
+
+
+                const avatar = comment.profiles?.avatar_url
+
+
+
+                    ? `<img src="${escapeHtml(comment.profiles.avatar_url)}" class="w-7 h-7 rounded-full object-cover" alt="${escapeHtml(comment.profiles?.full_name || '同学')}的头像" loading="lazy" />`
+
+
+
+                    : `<div class="w-7 h-7 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">${escapeHtml(comment.profiles?.full_name?.[0] || '同')}</div>`;
+
+
+
+                const canDeleteComment = currentUserId && (comment.student_id === currentUserId || momentOwnerId === currentUserId);
+
+
+
+                return `
+
+
+
+                    <div class="flex items-start gap-2 py-2">
+
+
+
+                        ${avatar}
+
+
+
+                        <div class="flex-1 bg-white dark:bg-surface-dark rounded-md px-3 py-2 border border-warm-border/20">
+
+
+
+                            <div class="flex items-center justify-between gap-2 mb-1">
+
+
+
+                                <p class="text-[11px] font-bold text-text-sub">${escapeHtml(comment.profiles?.full_name || '同学')}</p>
+
+
+
+                                ${canDeleteComment ? `<button class="moment-comment-delete text-[11px] text-red-400 font-bold" data-comment-id="${comment.id}">删除</button>` : ''}
+
+
+
+                            </div>
+
+
+
+                            <p class="text-sm text-text-main dark:text-gray-200">${safeTextToHtml(comment.content || '')}</p>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                `;
+
+
+
+            };
+
+
+
+
+
+
+
+            // Render Skeletons
+
+
+
+            listEl.innerHTML = Array(2).fill(` <div class="flex items-center gap-4 p-4 bg-white dark:bg-background-dark rounded-md border border-warm-border/50 dark:border-gray-800 shadow-sm animate-pulse" > <div class="w-12 h-12 rounded-md bg-gray-200 dark:bg-gray-700" ></div> <div class="flex-1 space-y-2" > <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" ></div> <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4" ></div> </div> </div> `).join('');
+
+
+
+
+
+
+
+            try {
+
+
+
+                const query = userId
+
+
+
+                    ? `?user_id=${encodeURIComponent(userId)}&limit=20`
+
+
+
+                    : '?limit=20';
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/class/moments${query}`);
+
+
+
+                if (!res.ok) throw new Error('Failed to fetch moments');
+
+
+
+                const moments = await res.json();
+
+
+
+
+
+
+
+                if (moments.length === 0) {
+
+
+
+                    listEl.innerHTML = '<p class="text-sm text-text-sub text-center py-4 fade-in">暂无班级动态</p>';
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                listEl.innerHTML = moments.map((moment, index) => {
+
+
+
+                    const likedClass = moment.liked_by_me ? 'text-pink-500 bg-pink-50 border-pink-200' : 'text-text-sub bg-white border-warm-border/40';
+
+
+
+                    return `
+
+
+
+                    <div class="p-4 bg-white dark:bg-background-dark rounded-md border border-warm-border/50 dark:border-gray-800 shadow-sm transition-transform hover:scale-[1.01] fade-in" style="animation-delay: ${index * 100}ms">
+
+
+
+                        <div class="flex items-center gap-4">
+
+
+
+                            ${renderAvatar(moment)}
+
+
+
+                            <div class="flex-1">
+
+
+
+                                <p class="text-base text-text-main dark:text-gray-200 font-bold">${safeTextToHtml(moment.content || '分享了一条动态')}</p>
+
+
+
+                                <p class="text-xs text-text-sub font-medium mt-1">${new Date(moment.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+
+
+
+                            </div>
+
+
+
+                            <div class="flex items-center gap-2">
+
+
+
+                                ${currentUserId && moment.student_id === currentUserId ? `<button class="moment-delete-btn px-2 py-1 rounded-full text-xs font-bold border border-red-200 text-red-500 bg-red-50" data-moment-id="${moment.id}">删除</button>` : ''}
+
+
+
+                                <div class="text-3xl">${moment.type === 'achievement' ? '🏆' : '🧸'}</div>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        ${renderMedia(moment.media_url)}
+
+
+
+                        <div class="mt-3 flex items-center gap-2">
+
+
+
+                            <button class="moment-like-btn px-3 py-1.5 rounded-full text-xs font-bold border ${likedClass} transition" data-moment-id="${moment.id}">👍 ${moment.like_count || 0}</button>
+
+
+
+                            <button class="moment-comment-toggle px-3 py-1.5 rounded-full text-xs font-bold border border-warm-border/50 bg-white text-text-sub hover:bg-gray-50 transition" data-moment-id="${moment.id}">💬 ${moment.comment_count || 0}</button>
+
+
+
+                        </div>
+
+
+
+                        <div id="moment-comments-${moment.id}" class="hidden mt-2 border-t border-warm-border/30 pt-2">
+
+
+
+                            <div id="moment-comments-list-${moment.id}" class="space-y-1"></div>
+
+
+
+                            <div class="flex items-center gap-2 mt-2">
+
+
+
+                                <input id="moment-comment-input-${moment.id}" type="text" placeholder="写下鼓励评..."
+
+
+
+                                    class="flex-1 text-sm rounded-full border border-warm-border/50 bg-white dark:bg-surface-dark px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+
+
+
+                                <button class="moment-comment-submit px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-white" data-moment-id="${moment.id}">发表</button>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    `;
+
+
+
+                }).join('');
+
+
+
+
+
+
+
+                listEl.querySelectorAll('.moment-like-btn').forEach((btn) => {
+
+
+
+                    btn.addEventListener('click', async () => {
+
+
+
+                        const momentId = btn.getAttribute('data-moment-id');
+
+
+
+                        if (!currentUserId) return;
+
+
+
+                        const resLike = await apiFetch(`${API_BASE_URL}/api/class/moments/${momentId}/like`, {
+
+
+
+                            method: 'POST',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({ student_id: currentUserId })
+
+
+
+                        });
+
+
+
+                        if (!resLike.ok) return;
+
+
+
+                        const result = await resLike.json();
+
+
+
+                        btn.textContent = `👍 ${result.like_count || 0}`;
+
+
+
+                        if (result.liked_by_me) {
+
+
+
+                            btn.classList.add('text-pink-500', 'bg-pink-50', 'border-pink-200');
+
+
+
+                            btn.classList.remove('text-text-sub', 'bg-white', 'border-warm-border/40');
+
+
+
+                        } else {
+
+
+
+                            btn.classList.remove('text-pink-500', 'bg-pink-50', 'border-pink-200');
+
+
+
+                            btn.classList.add('text-text-sub', 'bg-white', 'border-warm-border/40');
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+                listEl.querySelectorAll('.moment-delete-btn').forEach((btn) => {
+
+
+
+                    btn.addEventListener('click', async () => {
+
+
+
+                        const momentId = btn.getAttribute('data-moment-id');
+
+
+
+                        if (!momentId || !currentUserId) return;
+
+
+
+                        const confirmed = await window.confirmAsync?.('确认删除这条动态吗？', { title: '删除动态', confirmText: '删除' });
+
+
+
+                        if (!confirmed) return;
+
+
+
+
+
+
+
+                        const resDelete = await apiFetch(`${API_BASE_URL}/api/class/moments/${momentId}`, {
+
+
+
+                            method: 'DELETE',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({ student_id: currentUserId })
+
+
+
+                        });
+
+
+
+
+
+
+
+                        if (!resDelete.ok) {
+
+
+
+                            return;
+
+
+
+                        }
+
+
+
+
+
+
+
+                        await fetchClassMoments();
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+                const loadComments = async (momentId) => {
+
+
+
+                    const list = document.getElementById(`moment-comments-list-${momentId}`);
+
+
+
+                    if (!list) return;
+
+
+
+                    list.innerHTML = '<p class="text-xs text-text-sub">正在加载评论...</p>';
+
+
+
+                    const resComments = await apiFetch(`${API_BASE_URL}/api/class/moments/${momentId}/comments`);
+
+
+
+                    if (!resComments.ok) {
+
+
+
+                        list.innerHTML = '<p class="text-xs text-red-400">评论加载失败</p>';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+                    const comments = await resComments.json();
+
+
+
+                    if (!comments.length) {
+
+
+
+                        list.innerHTML = '<p class="text-xs text-text-sub">还没有评论，快来鼓励一下吧</p>';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+                    const currentMoment = moments.find(item => item.id === momentId);
+
+
+
+                    list.innerHTML = comments.map(comment => renderCommentItem(comment, currentMoment?.student_id)).join('');
+
+
+
+
+
+
+
+                    list.querySelectorAll('.moment-comment-delete').forEach((deleteBtn) => {
+
+
+
+                        deleteBtn.addEventListener('click', async () => {
+
+
+
+                            const commentId = deleteBtn.getAttribute('data-comment-id');
+
+
+
+                            if (!commentId || !currentUserId) return;
+
+
+
+
+
+
+
+                            const confirmed = await window.confirmAsync?.('确定删除这条评论吗？', { title: '删除评论', confirmText: '删除' });
+
+
+
+                            if (!confirmed) return;
+
+
+
+
+
+
+
+                            const resDelete = await apiFetch(`${API_BASE_URL}/api/class/moments/${momentId}/comments/${commentId}`, {
+
+
+
+                                method: 'DELETE',
+
+
+
+                                headers: getStudentAuthHeaders(),
+
+
+
+                                body: JSON.stringify({ student_id: currentUserId })
+
+
+
+                            });
+
+
+
+
+
+
+
+                            if (!resDelete.ok) return;
+
+
+
+                            await loadComments(momentId);
+
+
+
+
+
+
+
+                            const commentBtn = listEl.querySelector(`.moment-comment-toggle[data-moment-id="${momentId}"]`);
+
+
+
+                            if (commentBtn) {
+
+
+
+                                const currentCount = Number((commentBtn.textContent.match(/\d+/) || [1])[0]);
+
+
+
+                                commentBtn.textContent = `💬 ${Math.max(currentCount - 1, 0)}`;
+
+
+
+                            }
+
+
+
+                        });
+
+
+
+                    });
+
+
+
+                };
+
+
+
+
+
+
+
+                listEl.querySelectorAll('.moment-comment-toggle').forEach((btn) => {
+
+
+
+                    btn.addEventListener('click', async () => {
+
+
+
+                        const momentId = btn.getAttribute('data-moment-id');
+
+
+
+                        const box = document.getElementById(`moment-comments-${momentId}`);
+
+
+
+                        if (!box) return;
+
+
+
+                        const hidden = box.classList.contains('hidden');
+
+
+
+                        if (hidden) {
+
+
+
+                            box.classList.remove('hidden');
+
+
+
+                            await loadComments(momentId);
+
+
+
+                        } else {
+
+
+
+                            box.classList.add('hidden');
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+                listEl.querySelectorAll('.moment-comment-submit').forEach((btn) => {
+
+
+
+                    btn.addEventListener('click', async () => {
+
+
+
+                        const momentId = btn.getAttribute('data-moment-id');
+
+
+
+                        const input = document.getElementById(`moment-comment-input-${momentId}`);
+
+
+
+                        if (!input || !currentUserId) return;
+
+
+
+                        const value = input.value.trim();
+
+
+
+                        if (!value) return;
+
+
+
+                        const resComment = await apiFetch(`${API_BASE_URL}/api/class/moments/${momentId}/comments`, {
+
+
+
+                            method: 'POST',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({ student_id: currentUserId, content: value })
+
+
+
+                        });
+
+
+
+                        if (!resComment.ok) return;
+
+
+
+                        input.value = '';
+
+
+
+                        await loadComments(momentId);
+
+
+
+                        const commentBtn = listEl.querySelector(`.moment-comment-toggle[data-moment-id="${momentId}"]`);
+
+
+
+                        if (commentBtn) {
+
+
+
+                            const currentCount = Number((commentBtn.textContent.match(/\d+/) || [0])[0]);
+
+
+
+                            commentBtn.textContent = `💬 ${currentCount + 1}`;
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Error loading moments:', err);
+
+
+
+                listEl.innerHTML = '<p class="text-sm text-red-400 text-center py-4">加载动态失败</p>';
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        function setupMomentComposer(userId) {
+
+
+
+            const contentEl = document.getElementById('moment-content');
+
+
+
+            const publishBtn = document.getElementById('moment-publish-btn');
+
+
+
+            const imageBtn = document.getElementById('moment-image-btn');
+
+
+
+            const audioBtn = document.getElementById('moment-audio-btn');
+
+
+
+            const imageInput = document.getElementById('moment-image-input');
+
+
+
+            const audioInput = document.getElementById('moment-audio-input');
+
+
+
+            const feedbackEl = document.getElementById('moment-feedback');
+
+
+
+            const previewEl = document.getElementById('moment-media-preview');
+
+
+
+
+
+
+
+            const renderPreview = () => {
+
+
+
+                if (!previewEl) return;
+
+
+
+                if (!pendingMomentMedia) {
+
+
+
+                    previewEl.classList.add('hidden');
+
+
+
+                    previewEl.innerHTML = '';
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                previewEl.classList.remove('hidden');
+
+
+
+                if (pendingMomentMedia.media_type === 'audio') {
+
+
+
+                    previewEl.innerHTML = `
+
+
+
+                        <div class="p-2 rounded-md border border-warm-border/40 bg-white dark:bg-surface-dark">
+
+
+
+                            <audio controls class="w-full"><source src="${escapeHtml(buildMediaUrl(pendingMomentMedia.media_url))}" /></audio>
+
+
+
+                            <button id="remove-moment-media" class="mt-2 text-xs text-red-400 font-bold">移除音频</button>
+
+
+
+                        </div>
+
+
+
+                    `;
+
+
+
+                } else {
+
+
+
+                    previewEl.innerHTML = `
+
+
+
+                        <div class="p-2 rounded-md border border-warm-border/40 bg-white dark:bg-surface-dark">
+
+
+
+                            <img src="${escapeHtml(buildMediaUrl(pendingMomentMedia.media_url))}" class="w-full max-h-40 object-cover rounded-md" alt="预览图片" />
+
+
+
+                            <button id="remove-moment-media" class="mt-2 text-xs text-red-400 font-bold">移除图片</button>
+
+
+
+                        </div>
+
+
+
+                    `;
+
+
+
+                }
+
+
+
+
+
+
+
+                const removeBtn = document.getElementById('remove-moment-media');
+
+
+
+                if (removeBtn) {
+
+
+
+                    removeBtn.addEventListener('click', () => {
+
+
+
+                        pendingMomentMedia = null;
+
+
+
+                        renderPreview();
+
+
+
+                    });
+
+
+
+                }
+
+
+
+            };
+
+
+
+
+
+
+
+            const uploadMedia = async (file) => {
+
+
+
+                if (!file) return;
+
+
+
+                const maxSizeBytes = 8 * 1024 * 1024;
+
+
+
+                if (file.size > maxSizeBytes) {
+
+
+
+                    if (feedbackEl) feedbackEl.textContent = '媒体过大，选择 8MB 以内文件';
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+                if (feedbackEl) feedbackEl.textContent = '媒体上传中...';
+
+
+
+
+
+
+
+                const reader = new FileReader();
+
+
+
+                reader.onload = async () => {
+
+
+
+                    try {
+
+
+
+                        const res = await apiFetch(buildApiUrl('/api/class/moments/upload'), {
+
+
+
+                            method: 'POST',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({
+
+
+
+                                fileName: file.name,
+
+
+
+                                mimeType: file.type,
+
+
+
+                                dataBase64: reader.result
+
+
+
+                            })
+
+
+
+                        });
+
+
+
+                        if (!res.ok) {
+
+
+
+                            let message = '上传失败';
+
+
+
+                            try {
+
+
+
+                                const errData = await res.json();
+
+
+
+                                message = errData?.error || message;
+
+
+
+                            } catch (_) {
+
+
+
+                                message = `上传失败：${res.status}`;
+
+
+
+                            }
+
+
+
+                            throw new Error(message);
+
+
+
+                        }
+
+
+
+                        const data = await res.json();
+
+
+
+                        pendingMomentMedia = data;
+
+
+
+                        renderPreview();
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '媒体上传完成';
+
+
+
+                    } catch (error) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = error.message || '媒体上传失败';
+
+
+
+                    }
+
+
+
+                };
+
+
+
+                reader.readAsDataURL(file);
+
+
+
+            };
+
+
+
+
+
+
+
+            if (imageBtn && imageInput) {
+
+
+
+                imageBtn.addEventListener('click', () => imageInput.click());
+
+
+
+                imageInput.addEventListener('change', () => uploadMedia(imageInput.files[0]));
+
+
+
+            }
+
+
+
+
+
+
+
+            if (audioBtn && audioInput) {
+
+
+
+                audioBtn.addEventListener('click', () => audioInput.click());
+
+
+
+                audioInput.addEventListener('change', () => uploadMedia(audioInput.files[0]));
+
+
+
+            }
+
+
+
+
+
+
+
+            if (publishBtn) {
+
+
+
+                publishBtn.addEventListener('click', async () => {
+
+
+
+                    if (!userId) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '未检测到登录信息，无法发布动态。';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+                    const text = contentEl ? contentEl.value.trim() : '';
+
+
+
+                    if (!text && !pendingMomentMedia) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '请输入内容或上传图片/音频。';
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+
+
+
+
+                    if (feedbackEl) feedbackEl.textContent = '发布中...';
+
+
+
+                    publishBtn.disabled = true;
+
+
+
+                    try {
+
+
+
+                        const res = await apiFetch(buildApiUrl('/api/class/moments'), {
+
+
+
+                            method: 'POST',
+
+
+
+                            headers: { 'Content-Type': 'application/json' },
+
+
+
+                            body: JSON.stringify({
+
+
+
+                                student_id: userId,
+
+
+
+                                content: text,
+
+
+
+                                type: 'share',
+
+
+
+                                media_url: pendingMomentMedia?.media_url || null
+
+
+
+                            })
+
+
+
+                        });
+
+
+
+                        if (!res.ok) throw new Error('publish failed');
+
+
+
+
+
+
+
+                        if (contentEl) contentEl.value = '';
+
+
+
+                        pendingMomentMedia = null;
+
+
+
+                        renderPreview();
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '发布成功';
+
+
+
+                        await fetchClassMoments(userId);
+
+
+
+                    } catch (error) {
+
+
+
+                        if (feedbackEl) feedbackEl.textContent = '发布失败，稍后重试';
+
+
+
+                    } finally {
+
+
+
+                        publishBtn.disabled = false;
+
+
+
+                    }
+
+
+
+                });
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        async function fetchTasks() {
+
+
+
+            const listEl = document.getElementById('todays-plan-list');
+
+
+
+            if (!listEl) return;
+
+
+
+
+
+
+
+            // Skeletons
+
+
+
+            listEl.innerHTML = '<div class="absolute left-[26px] top-4 bottom-4 w-1 bg-warm-border/50 dark:bg-gray-700 rounded-full"></div>' +
+
+
+
+                Array(3).fill('<div class="flex gap-4 relative group animate-pulse"><div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0 z-10 border-4 border-white dark:border-surface-dark"></div><div class="pt-2 w-full space-y-2"><div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div><div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div></div></div>').join('');
+
+
+
+
+
+
+
+            try {
+
+
+
+                const userId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+
+
+
+
+
+
+                // 1. Fetch All Public Tasks
+
+
+
+                const taskQuery = userId
+
+
+
+                    ? `?student_id=${encodeURIComponent(userId)}&limit=200`
+
+
+
+                    : '?limit=200';
+
+
+
+                const resTasks = await apiFetch(`${API_BASE_URL}/api/tasks${taskQuery}`);
+
+
+
+                if (!resTasks.ok) throw new Error('Failed to fetch tasks');
+
+
+
+                const allTasks = await resTasks.json();
+
+
+
+
+
+
+
+                // 2. Fetch User Progress (if logged in)
+
+
+
+                let myProgress = [];
+
+
+
+
+
+
+
+                if (userId) {
+
+
+
+                    try {
+
+
+
+                        const resProgress = await apiFetch(`${API_BASE_URL}/api/student/${userId}/tasks?limit=300`);
+
+
+
+
+
+
+
+                        if (resProgress.ok) {
+
+
+
+                            myProgress = await resProgress.json();
+
+
+
+                        }
+
+
+
+                    }
+
+
+
+
+
+
+
+                    catch (e) {
+
+
+
+                        console.warn('Fetch progress failed', e);
+
+
+
+                    }
+
+
+
+                }
+
+
+
+
+
+
+
+                const planSourceTasks = (allTasks || []).filter((task) => task?.type !== 'challenge');
+
+
+
+
+
+
+
+                if (planSourceTasks.length === 0) {
+                    achievementUnlockState.pendingTasksCount = 0;
+                    achievementUnlockState.completedTodayCount = 0;
+                    achievementUnlockState.nextPendingTaskTitle = '';
+                    updateAchievementUnlockCard();
+
+
+
+                    listEl.innerHTML = ` <div class="absolute left-[26px] top-4 bottom-4 w-1 bg-warm-border/50 dark:bg-gray-700 rounded-full" ></div> <p class="text-sm text-text-sub text-center py-4 pl-8 fade-in" >今天没有新任务哦</p> `;
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                const normalizeTitle = (value) => String(value || '').trim().toLowerCase();
+
+
+
+
+
+
+
+                const progressMap = {};
+
+
+
+                myProgress.forEach((item) => {
+
+
+
+                    if (!item?.task_id) return;
+
+
+
+                    const current = progressMap[item.task_id];
+
+
+
+                    if (!current) {
+
+
+
+                        progressMap[item.task_id] = {
+
+
+
+                            status: item.status,
+
+
+
+                            completed_at: item.completed_at || null
+
+
+
+                        };
+
+
+
+                        return;
+
+
+
+                    }
+
+
+
+
+
+
+
+                    const currentTime = current.completed_at ? new Date(current.completed_at).getTime() : 0;
+
+
+
+                    const nextTime = item.completed_at ? new Date(item.completed_at).getTime() : 0;
+
+
+
+                    if (nextTime >= currentTime) {
+
+
+
+                        progressMap[item.task_id] = {
+
+
+
+                            status: item.status,
+
+
+
+                            completed_at: item.completed_at || null
+
+
+
+                        };
+
+
+
+                    }
+
+
+
+                });
+
+
+
+
+
+
+
+                const uniqueTaskMap = new Map();
+
+
+
+                planSourceTasks.forEach((task) => {
+
+
+
+                    const key = `${normalizeTitle(task.title)}::${task.type || ''}`;
+
+
+
+                    if (!key || key.startsWith('::')) return;
+
+
+
+                    if (!uniqueTaskMap.has(key)) {
+
+
+
+                        uniqueTaskMap.set(key, task);
+
+
+
+                    }
+
+
+
+                });
+
+
+
+
+
+
+
+                const uniqueTasks = Array.from(uniqueTaskMap.values());
+
+
+
+                const today = new Date();
+
+
+
+                today.setHours(0, 0, 0, 0);
+
+
+
+
+
+
+
+                const withProgress = uniqueTasks.map((task) => {
+
+
+
+                    const progress = progressMap[task.id] || null;
+
+
+
+                    const isSubmitted = progress?.status === 'submitted';
+
+                    const isCompleted = progress?.status === 'completed' || isSubmitted;
+
+
+
+                    const isRemoved = progress?.status === 'removed';
+
+
+
+                    const completedAt = progress?.completed_at ? new Date(progress.completed_at) : null;
+
+
+
+                    const completedToday = completedAt && completedAt.getTime() >= today.getTime();
+
+
+
+
+
+
+
+                    return {
+
+
+
+                        ...task,
+
+
+
+                        isCompleted,
+
+                        isSubmitted,
+
+
+
+                        isRemoved,
+
+
+
+                        completedToday: Boolean(completedToday)
+
+
+
+                    };
+
+
+
+                });
+
+
+
+
+
+
+
+                const visibleTasks = withProgress.filter((task) => !task.isRemoved);
+
+
+
+                const pendingTasks = visibleTasks.filter((task) => !task.isCompleted).slice(0, 4);
+
+
+
+                const doneTodayTasks = visibleTasks.filter((task) => task.completedToday).slice(0, 2);
+
+
+
+                const displayTasks = [...pendingTasks, ...doneTodayTasks].slice(0, 6);
+                achievementUnlockState.pendingTasksCount = visibleTasks.filter((task) => !task.isCompleted).length;
+                achievementUnlockState.completedTodayCount = visibleTasks.filter((task) => task.completedToday).length;
+                achievementUnlockState.nextPendingTaskTitle = pendingTasks[0]?.title || '';
+                updateAchievementUnlockCard();
+
+
+
+
+
+
+
+                if (displayTasks.length === 0) {
+
+
+
+                    listEl.innerHTML = ` <div class="absolute left-[26px] top-4 bottom-4 w-1 bg-warm-border/50 dark:bg-gray-700 rounded-full" ></div> <p class="text-sm text-text-sub text-center py-4 pl-8 fade-in" >今天任务都完成啦，太棒了</p> `;
+
+
+
+                    return;
+
+
+
+                }
+
+
+
+
+
+
+
+                const tasksHtml = displayTasks.map((task, index) => {
+
+
+
+                    const isCompleted = task.isCompleted;
+
+
+
+                    const statusTag = task.isSubmitted ? '待审核' : (isCompleted ? '已完成' : '');
+
+
+
+                    const statusTagClass = isCompleted
+
+
+
+                        ? (task.isSubmitted
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300'
+                            : 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300')
+
+
+
+                        : 'bg-primary-light text-primary-dark';
+
+
+
+
+
+
+
+                    return `
+
+
+
+                    <div class="flex gap-4 relative group fade-in" style="animation-delay: ${index * 120}ms">
+
+
+
+                        <div class="w-12 h-12 rounded-full ${isCompleted ? 'bg-primary-light text-green-700' : 'bg-white dark:bg-gray-800 border-4 border-primary text-primary'} flex items-center justify-center shrink-0 z-10 shadow-sm transition-colors duration-300 border-4 border-white dark:border-surface-dark">
+
+
+
+                            ${isCompleted ? '<span class="material-icons-round text-xl">check</span>' : '<div class="w-4 h-4 bg-primary rounded-full animate-pulse"></div>'}
+
+
+
+                        </div>
+
+
+
+                        <div class="pt-2 ${!isCompleted ? 'bg-primary-light/30 -ml-2 pl-4 pr-3 py-2 rounded-md -mt-2 w-full' : ''} transition-all duration-300 w-full">
+
+
+
+                            <div class="flex items-center justify-between gap-2">
+
+
+
+                                <h4 class="${isCompleted ? 'text-base font-bold text-text-sub line-through decoration-2 decoration-primary/50' : 'text-base font-bold text-text-main dark:text-white'}">
+
+
+
+                                    ${task.title}
+
+
+
+                                </h4>
+
+
+
+                                <span class="text-[10px] px-2 py-1 rounded-full font-bold ${statusTagClass}">${statusTag}</span>
+
+
+
+                            </div>
+
+
+
+                            <p class="text-xs ${isCompleted ? 'text-text-sub/70' : 'text-primary-dark'} font-bold mt-1">
+
+
+
+                                ${task.points_reward || 0} 积分 ${task.type === 'challenge' ? '· 挑战任务' : ''}
+
+
+
+                            </p>
+
+
+
+                            <div class="mt-2 flex items-center gap-2">
+
+
+
+                            ${!isCompleted ? `
+
+
+
+                                <button data-action="complete-task" data-task-id="${task.id}" data-task-title="${String(task.title || '').replace(/"/g, '&quot;')}" class="mt-2 text-xs px-3 py-1.5 rounded-full bg-primary text-white font-bold hover:bg-primary-dark transition">
+
+
+
+                                    完成
+
+
+
+                                </button>
+
+
+
+                            ` : `
+
+
+
+                                <button data-action="undo-task" data-task-id="${task.id}" class="mt-2 text-xs px-3 py-1.5 rounded-full border border-primary/30 text-primary-dark dark:text-primary font-bold hover:bg-primary/10 transition">
+
+
+
+                                    撤销完成
+
+
+
+                                </button>
+
+
+
+                            `}
+
+
+
+                                <button data-action="delete-task" data-task-id="${task.id}" class="mt-2 text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-500 font-bold hover:bg-gray-100 dark:hover:bg-white/10 transition">
+
+
+
+                                    删除
+
+
+
+                                </button>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    `;
+
+
+
+                }).join('');
+
+
+
+
+
+
+
+                listEl.innerHTML = `<div class="absolute left-[26px] top-4 bottom-4 w-1 bg-warm-border/50 dark:bg-gray-700 rounded-full"></div>${tasksHtml}`;
+
+
+
+
+
+
+
+                listEl.querySelectorAll('button[data-action="complete-task"]').forEach((button) => {
+
+
+
+                    button.addEventListener('click', async () => {
+
+
+
+                        const taskId = button.getAttribute('data-task-id');
+
+
+
+                        if (!taskId) return;
+
+
+
+
+
+
+
+                        const userId2 = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+
+
+                        if (!userId2) {
+
+
+
+                            button.textContent = '请先登录';
+
+
+
+                            button.disabled = true;
+
+
+
+                            return;
+
+
+
+                        }
+
+
+
+
+
+
+
+                        const taskTitle = button.getAttribute('data-task-title') || '';
+
+                        const evidencePayload = await openTaskEvidenceModal(taskTitle);
+
+                        if (!evidencePayload) return;
+
+                        button.disabled = true;
+
+                        button.textContent = '提交中...';
+
+                        try {
+
+                            const res = await apiFetch(`${API_BASE_URL}/api/student/${userId2}/tasks/${taskId}/complete-with-evidence`, {
+
+                                method: 'POST',
+
+                                headers: { 'Content-Type': 'application/json' },
+
+                                body: JSON.stringify(evidencePayload)
+
+                            });
+
+                            const responseData = await res.json().catch(() => ({}));
+
+                            if (!res.ok) throw new Error(getApiErrorMessage(responseData, '提交材料失败，请稍后再试。'));
+
+                            await fetchTasks();
+
+                            await fetchStatsAndBadges(userId2);
+
+                            if (window.showPageToast) {
+
+                                window.showPageToast('材料已提交给老师，任务等待审核。', 'success');
+
+                            }
+
+                        } catch (error) {
+
+                            console.error('Complete task error:', error);
+
+                            button.disabled = false;
+
+                            button.textContent = '重试';
+
+                            if (window.showPageToast) {
+
+                                window.showPageToast(error.message || '提交材料失败，请稍后再试。', 'error');
+
+                            }
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+                listEl.querySelectorAll('button[data-action="undo-task"]').forEach((button) => {
+
+
+
+                    button.addEventListener('click', async () => {
+
+
+
+                        const taskId = button.getAttribute('data-task-id');
+
+
+
+                        if (!taskId) return;
+
+
+
+
+
+
+
+                        const userId2 = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+
+
+                        if (!userId2) {
+
+
+
+                            button.textContent = '请先登录';
+
+
+
+                            button.disabled = true;
+
+
+
+                            return;
+
+
+
+                        }
+
+
+
+
+
+
+
+                        button.disabled = true;
+
+
+
+                        button.textContent = '撤销中...';
+
+
+
+
+
+
+
+                        try {
+
+
+
+                            const res = await apiFetch(`${API_BASE_URL}/api/student/${userId2}/tasks/${taskId}/reopen`, {
+
+
+
+                                method: 'POST'
+
+
+
+                            });
+
+
+
+                            if (!res.ok) throw new Error('undo failed');
+
+
+
+
+
+
+
+                            await fetchTasks();
+
+
+
+                            await fetchStatsAndBadges(userId2);
+
+
+
+                        } catch (error) {
+
+
+
+                            console.error('Undo task error:', error);
+
+
+
+                            button.disabled = false;
+
+
+
+                            button.textContent = '重试';
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+                listEl.querySelectorAll('button[data-action="delete-task"]').forEach((button) => {
+
+
+
+                    button.addEventListener('click', async () => {
+
+
+
+                        const taskId = button.getAttribute('data-task-id');
+
+
+
+                        if (!taskId) return;
+
+
+
+
+
+
+
+                        const userId2 = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+
+
+                        if (!userId2) {
+
+
+
+                            button.textContent = '请先登录';
+
+
+
+                            button.disabled = true;
+
+
+
+                            return;
+
+
+
+                        }
+
+
+
+
+
+
+
+                        const confirmed = await window.confirmAsync?.('确定删除这项今日计划吗？', { title: '删除今日计划', confirmText: '删除' });
+
+
+
+                        if (!confirmed) return;
+
+
+
+
+
+
+
+                        button.disabled = true;
+
+
+
+                        button.textContent = '删除中...';
+
+
+
+
+
+
+
+                        try {
+
+
+
+                            const res = await apiFetch(`${API_BASE_URL}/api/student/${userId2}/today-plan/${taskId}`, {
+
+
+
+                                method: 'DELETE'
+
+
+
+                            });
+
+
+
+                            if (!res.ok) throw new Error('delete failed');
+
+
+
+
+
+
+
+                            await fetchTasks();
+
+
+
+                            await fetchStatsAndBadges(userId2);
+
+
+
+                        } catch (error) {
+
+
+
+                            console.error('Delete today plan item error:', error);
+
+
+
+                            button.disabled = false;
+
+
+
+                            button.textContent = '重试';
+
+
+
+                        }
+
+
+
+                    });
+
+
+
+                });
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+            catch (err) {
+
+
+
+                console.error('Error loading tasks:', err);
+
+
+
+                listEl.innerHTML = `<div class="absolute left-[26px] top-4 bottom-4 w-1 bg-warm-border/50 dark:bg-gray-700 rounded-full" ></div><p class="text-sm text-red-400 pl-8" >加载任务失败</p>`;
+                achievementUnlockState.pendingTasksCount = 0;
+                achievementUnlockState.completedTodayCount = 0;
+                achievementUnlockState.nextPendingTaskTitle = '';
+                updateAchievementUnlockCard();
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        async function fetchProfile(userId) {
+
+
+
+            try {
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/summary`);
+
+
+
+                if (res.ok) {
+
+
+
+                    const data = await res.json();
+
+
+
+
+
+
+
+                    const dreamTitleEl = document.getElementById('dream-title');
+
+
+
+                    if (dreamTitleEl) {
+
+
+
+                        const dreams = Array.isArray(data.dreams)
+
+
+
+                            ? data.dreams.filter(Boolean)
+
+
+
+                            : (data.dream ? String(data.dream).split(/\r?\n|[，。、；;]+/).map(item => item.trim()).filter(Boolean) : []);
+
+
+
+                        const primaryDream = dreams[0] || '';
+
+
+
+                        const extraCount = dreams.length > 1 ? ` +${dreams.length - 1}` : '';
+
+
+
+                        dreamTitleEl.textContent = primaryDream ? `${primaryDream}${extraCount}` : '还没写期待';
+
+
+
+                    }
+
+
+
+
+
+
+
+                    // Update Greeting with Full Name
+
+
+
+                    const greetingEl = document.getElementById('user-greeting');
+
+
+
+                    if (greetingEl) {
+
+
+
+                        const hour = new Date().getHours();
+
+
+
+                        let greetingText = '早上好';
+
+
+
+                        if (hour >= 12 && hour < 18) greetingText = '下午好';
+
+
+
+                        else if (hour >= 18) greetingText = '晚上好';
+
+
+
+
+
+
+
+                        // Fallback to '同' if full_name is missing
+
+
+
+                        const name = data.full_name || '同学';
+
+
+
+                        greetingEl.innerHTML = `${greetingText}，<span class="text-primary-dark drop-shadow-sm fade-in">${name}</span>!`;
+
+
+
+                    }
+
+
+
+
+
+
+
+                    // Update Avatar with avatar_url
+
+
+
+                    const avatarEl = document.getElementById('user-avatar-header');
+
+
+
+                    if (avatarEl && data.avatar_url) {
+
+
+
+                        avatarEl.src = data.avatar_url;
+
+
+
+                        // Remove potential opacity-0 class if logic requires it
+
+
+
+                        avatarEl.classList.remove('opacity-0');
+
+
+
+                    } else if (avatarEl) {
+
+
+
+                        // Fallback if no avatar_url
+
+
+
+                        const seed = userId.substring(0, 5);
+
+
+
+                        avatarEl.src = `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=e6dac6`;
+
+
+
+                        avatarEl.classList.remove('opacity-0');
+
+
+
+                    }
+
+
+
+                }
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Error fetching profile:', err);
+
+
+
+                const dreamTitleEl = document.getElementById('dream-title');
+
+
+
+                if (dreamTitleEl) dreamTitleEl.textContent = '期待加载失败，稍后重试';
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+        // ===== Growth Chart =====
+
+
+
+        const GROWTH_COLORS = {
+
+
+
+            optimism: { bg: 'rgba(250, 204, 21, 0.15)', border: '#facc15', label: '乐观' },
+
+
+
+            grit: { bg: 'rgba(59, 130, 246, 0.15)', border: '#3b82f6', label: '坚持' },
+
+
+
+            creativity: { bg: 'rgba(168, 85, 247, 0.15)', border: '#a855f7', label: '创造力' },
+
+
+
+            social: { bg: 'rgba(34, 197, 94, 0.15)', border: '#22c55e', label: '社交' },
+
+
+
+            achievement: { bg: 'rgba(249, 115, 22, 0.15)', border: '#f97316', label: '成就' }
+
+
+
+        };
+
+
+
+
+
+
+
+        let trendChart = null;
+
+
+
+        let radarChart = null;
+
+
+
+        let growthData = null;
+
+
+
+
+
+
+
+        function renderLegend() {
+
+
+
+            const el = document.getElementById('growth-chart-legend');
+
+
+
+            if (!el) return;
+
+
+
+            el.innerHTML = Object.values(GROWTH_COLORS).map(c =>
+
+
+
+                `<span class="flex items-center gap-1 text-[10px] font-bold text-text-sub">
+
+
+
+                    <span class="w-2.5 h-2.5 rounded-full" style="background:${c.border}"></span>${c.label}
+
+
+
+                </span>`
+
+
+
+            ).join('');
+
+
+
+        }
+
+
+
+
+
+
+
+        let currentViewMode = 'weekly'; // 'daily' or 'weekly'
+
+
+
+
+
+
+
+        // Generate simulated daily data from weekly data for smooth trend display
+
+
+
+        function generateDailyFromWeekly(weeklyData) {
+
+
+
+            if (!weeklyData || weeklyData.length === 0) return [];
+
+
+
+            const daily = [];
+
+
+
+            const dims = ['optimism', 'grit', 'creativity', 'social', 'achievement'];
+
+
+
+
+
+
+
+            weeklyData.forEach((week, weekIndex) => {
+
+
+
+                // For each week, generate 7 daily points with slight variations
+
+
+
+                for (let day = 0; day < 7; day++) {
+
+
+
+                    const dayData = { label: '' };
+
+
+
+                    // Only show label for first day of each week
+
+
+
+                    if (day === 0) {
+
+
+
+                        dayData.label = week.label || `W${weekIndex + 1}`;
+
+
+
+                    } else {
+
+
+
+                        dayData.label = '';
+
+
+
+                    }
+
+
+
+                    dims.forEach(dim => {
+
+
+
+                        const baseValue = week[dim] || 0;
+
+
+
+                        // Add small random variation (-5 to +5) for visual interest
+
+
+
+                        const variation = Math.floor(Math.random() * 11) - 5;
+
+
+
+                        dayData[dim] = Math.max(0, Math.min(100, baseValue + variation));
+
+
+
+                    });
+
+
+
+                    daily.push(dayData);
+
+
+
+                }
+
+
+
+            });
+
+
+
+            return daily;
+
+
+
+        }
+
+
+
+
+
+
+
+        function createTrendChart(data, viewMode = 'weekly') {
+
+
+
+            const ctx = document.getElementById('growth-trend-chart');
+
+
+
+            if (!ctx) return;
+
+
+
+            if (trendChart) trendChart.destroy();
+
+
+
+
+
+
+
+            // Use the appropriate dataset based on view mode
+
+
+
+            // If daily data is not available, generate it from weekly or use empty array
+
+
+
+            let dataset;
+
+
+
+            if (viewMode === 'daily') {
+
+
+
+                if (data.daily && data.daily.length > 0) {
+
+
+
+                    dataset = data.daily;
+
+
+
+                } else if (data.weekly && data.weekly.length > 0) {
+
+
+
+                    // Generate simulated daily data from weekly data for display
+
+
+
+                    dataset = generateDailyFromWeekly(data.weekly);
+
+
+
+                } else {
+
+
+
+                    dataset = [];
+
+
+
+                }
+
+
+
+            } else {
+
+
+
+                dataset = data.weekly || [];
+
+
+
+            }
+
+
+
+            const labels = dataset.map(item => item.label || item.week);
+
+
+
+            const dims = ['optimism', 'grit', 'creativity', 'social', 'achievement'];
+
+
+
+
+
+
+
+            trendChart = new Chart(ctx, {
+
+
+
+                type: 'line',
+
+
+
+                data: {
+
+
+
+                    labels,
+
+
+
+                    datasets: dims.map(dim => ({
+
+
+
+                        label: GROWTH_COLORS[dim].label,
+
+
+
+                        data: dataset.map(item => item[dim]),
+
+
+
+                        borderColor: GROWTH_COLORS[dim].border,
+
+
+
+                        backgroundColor: GROWTH_COLORS[dim].bg,
+
+
+
+                        borderWidth: 2.5,
+
+
+
+                        pointRadius: 3,
+
+
+
+                        pointHoverRadius: 6,
+
+
+
+                        tension: 0.4,
+
+
+
+                        fill: false
+
+
+
+                    }))
+
+
+
+                },
+
+
+
+                options: {
+
+
+
+                    responsive: true,
+
+
+
+                    maintainAspectRatio: false,
+
+
+
+                    interaction: { mode: 'index', intersect: false },
+
+
+
+                    plugins: {
+
+
+
+                        legend: { display: false },
+
+
+
+                        tooltip: {
+
+
+
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+
+
+
+                            titleColor: '#5c5446',
+
+
+
+                            bodyColor: '#5c5446',
+
+
+
+                            borderColor: '#e6dac6',
+
+
+
+                            borderWidth: 1,
+
+
+
+                            cornerRadius: 12,
+
+
+
+                            padding: 12,
+
+
+
+                            bodyFont: { family: 'Lexend', size: 12 },
+
+
+
+                            titleFont: { family: 'Lexend', size: 13, weight: 'bold' },
+
+
+
+                            callbacks: {
+
+
+
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}`
+
+
+
+                            }
+
+
+
+                        }
+
+
+
+                    },
+
+
+
+                    scales: {
+
+
+
+                        y: {
+
+
+
+                            min: 0, max: 100,
+
+
+
+                            ticks: { stepSize: 25, font: { size: 10 }, color: '#948c7e' },
+
+
+
+                            grid: { color: 'rgba(148,140,126,0.1)' }
+
+
+
+                        },
+
+
+
+                        x: {
+
+
+
+                            ticks: { font: { size: 10 }, color: '#948c7e', maxRotation: 0 },
+
+
+
+                            grid: { display: false }
+
+
+
+                        }
+
+
+
+                    },
+
+
+
+                    animation: { duration: 1200, easing: 'easeOutQuart' }
+
+
+
+                }
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+
+
+        function createRadarChart(data) {
+
+
+
+            const ctx = document.getElementById('growth-radar-chart');
+
+
+
+            if (!ctx) return;
+
+
+
+            if (radarChart) radarChart.destroy();
+
+
+
+
+
+
+
+            const dims = ['optimism', 'grit', 'creativity', 'social', 'achievement'];
+
+
+
+            const labels = dims.map(d => GROWTH_COLORS[d].label);
+
+
+
+            const values = dims.map(d => data.current[d]);
+
+
+
+
+
+
+
+            radarChart = new Chart(ctx, {
+
+
+
+                type: 'radar',
+
+
+
+                data: {
+
+
+
+                    labels,
+
+
+
+                    datasets: [{
+
+
+
+                        label: '当前能力',
+
+
+
+                        data: values,
+
+
+
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+
+
+
+                        borderColor: '#3b82f6',
+
+
+
+                        borderWidth: 2.5,
+
+
+
+                        pointBackgroundColor: dims.map(d => GROWTH_COLORS[d].border),
+
+
+
+                        pointBorderColor: '#fff',
+
+
+
+                        pointBorderWidth: 2,
+
+
+
+                        pointRadius: 5,
+
+
+
+                        pointHoverRadius: 8
+
+
+
+                    }]
+
+
+
+                },
+
+
+
+                options: {
+
+
+
+                    responsive: true,
+
+
+
+                    maintainAspectRatio: false,
+
+
+
+                    plugins: {
+
+
+
+                        legend: { display: false },
+
+
+
+                        tooltip: {
+
+
+
+                            backgroundColor: 'rgba(255,255,255,0.95)',
+
+
+
+                            titleColor: '#5c5446',
+
+
+
+                            bodyColor: '#5c5446',
+
+
+
+                            borderColor: '#e6dac6',
+
+
+
+                            borderWidth: 1,
+
+
+
+                            cornerRadius: 12,
+
+
+
+                            padding: 12,
+
+
+
+                            callbacks: {
+
+
+
+                                label: (ctx) => `${ctx.label}: ${ctx.parsed.r}`
+
+
+
+                            }
+
+
+
+                        }
+
+
+
+                    },
+
+
+
+                    scales: {
+
+
+
+                        r: {
+
+
+
+                            min: 0, max: 100,
+
+
+
+                            ticks: { stepSize: 25, display: false },
+
+
+
+                            grid: { color: 'rgba(148,140,126,0.15)' },
+
+
+
+                            angleLines: { color: 'rgba(148,140,126,0.15)' },
+
+
+
+                            pointLabels: {
+
+
+
+                                font: { size: 11, family: 'Lexend', weight: 'bold' },
+
+
+
+                                color: '#5c5446'
+
+
+
+                            }
+
+
+
+                        }
+
+
+
+                    },
+
+
+
+                    animation: { duration: 1000, easing: 'easeOutQuart' }
+
+
+
+                }
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+
+
+        async function loadGrowthChart(userId) {
+
+
+
+            const loading = document.getElementById('growth-chart-loading');
+
+
+
+            const trendCanvas = document.getElementById('growth-trend-chart');
+
+
+
+            const radarCanvas = document.getElementById('growth-radar-chart');
+
+
+
+
+
+
+
+            if (!trendCanvas) return;
+
+
+
+
+
+
+
+            renderLegend();
+
+
+
+
+
+
+
+            try {
+
+
+
+                const res = await apiFetch(`${API_BASE_URL}/api/student/${userId}/growth-chart`);
+
+
+
+                if (!res.ok) throw new Error('fetch failed');
+
+
+
+                growthData = await res.json();
+
+
+
+            } catch (err) {
+
+
+
+                console.error('Growth chart error:', err);
+
+
+
+                // Generate fallback
+
+
+
+                growthData = {
+
+
+
+                    current: { optimism: 10, grit: 10, creativity: 10, social: 10, achievement: 10 },
+
+
+
+                    weekly: Array.from({ length: 6 }, (_, i) => ({
+
+
+
+                        week: `W${i + 1}`, optimism: 10, grit: 10, creativity: 10, social: 10, achievement: 10
+
+
+
+                    })),
+
+
+
+                    daily: Array.from({ length: 7 }, (_, i) => ({
+
+
+
+                        label: `${i + 1}`, optimism: 10, grit: 10, creativity: 10, social: 10, achievement: 10
+
+
+
+                    }))
+
+
+
+                };
+
+
+
+            }
+
+
+
+
+
+
+
+            if (loading) loading.classList.add('hidden');
+
+
+
+            createTrendChart(growthData, currentViewMode);
+
+
+
+
+
+
+
+            // Tab switching
+
+
+
+
+
+
+
+            const tabTrend = document.getElementById('chart-tab-trend');
+
+
+
+            const tabRadar = document.getElementById('chart-tab-radar');
+
+
+
+            const trendWrapper = document.getElementById('trend-wrapper');
+
+
+
+            const radarWrapper = document.getElementById('radar-wrapper');
+
+
+
+
+
+
+
+            // View mode switching (daily/weekly)
+
+
+
+            const viewModeDaily = document.getElementById('view-mode-daily');
+
+
+
+            const viewModeWeekly = document.getElementById('view-mode-weekly');
+
+
+
+
+
+
+
+            const activateViewMode = (mode, activeBtn, inactiveBtn) => {
+
+
+
+                currentViewMode = mode;
+
+
+
+                // Update button styles
+
+
+
+                activeBtn.classList.add('bg-blue-400', 'text-white', 'shadow-sm');
+
+
+
+                activeBtn.classList.remove('text-text-sub');
+
+
+
+                inactiveBtn.classList.remove('bg-blue-400', 'text-white', 'shadow-sm');
+
+
+
+                inactiveBtn.classList.add('text-text-sub');
+
+
+
+
+
+
+
+                // Re-render trend chart with new view mode
+
+
+
+                createTrendChart(growthData, mode);
+
+
+
+            };
+
+
+
+
+
+
+
+            if (viewModeDaily && viewModeWeekly) {
+
+
+
+                viewModeDaily.addEventListener('click', () => {
+
+
+
+                    activateViewMode('daily', viewModeDaily, viewModeWeekly);
+
+
+
+                });
+
+
+
+                viewModeWeekly.addEventListener('click', () => {
+
+
+
+                    activateViewMode('weekly', viewModeWeekly, viewModeDaily);
+
+
+
+                });
+
+
+
+            }
+
+
+
+
+
+
+
+            if (tabTrend && tabRadar && trendWrapper && radarWrapper) {
+
+
+
+                const activateTab = (active, inactive, showWrapper, hideWrapper, renderFn) => {
+
+
+
+                    // Update tab styles
+
+
+
+                    active.classList.add('bg-blue-500', 'text-white', 'shadow-sm');
+
+
+
+                    active.classList.remove('text-text-sub');
+
+
+
+                    inactive.classList.remove('bg-blue-500', 'text-white', 'shadow-sm');
+
+
+
+                    inactive.classList.add('text-text-sub');
+
+
+
+
+
+
+
+                    // Update wrapper visibility using opacity/pointer-events classes
+
+
+
+                    showWrapper.classList.remove('opacity-0', 'pointer-events-none');
+
+
+
+                    hideWrapper.classList.add('opacity-0', 'pointer-events-none');
+
+
+
+
+
+
+
+                    // Re-render chart to ensure size is correct
+
+
+
+                    setTimeout(() => renderFn(), 50);
+
+
+
+                };
+
+
+
+
+
+
+
+                tabTrend.addEventListener('click', () => {
+
+
+
+                    activateTab(tabTrend, tabRadar, trendWrapper, radarWrapper, () => createTrendChart(growthData, currentViewMode));
+
+
+
+                });
+
+
+
+                tabRadar.addEventListener('click', () => {
+
+
+
+                    activateTab(tabRadar, tabTrend, radarWrapper, trendWrapper, () => createRadarChart(growthData));
+
+
+
+                });
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+
+
+
+
+
+
+</html>

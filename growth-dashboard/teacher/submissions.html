@@ -1,0 +1,855 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>作业审核 - 乐学成长平台</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6a23c",
+                        "primary-dark": "#d48806",
+                        "secondary": "#faecd8",
+                        "background-light": "#fdfbf7",
+                        "background-dark": "#2b2520",
+                        "surface-light": "#fffefc",
+                        "surface-dark": "#3a322b",
+                        "text-main-light": "#4a4238",
+                        "text-main-dark": "#f0e6d2",
+                        "text-sub-light": "#8c8174",
+                        "text-sub-dark": "#b0a69a"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(5px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(230, 162, 60, 0.08), transparent 30%),
+                linear-gradient(180deg, #fffcf6 0%, #f9f2e7 100%);
+        }
+
+        .teacher-shell {
+            background:
+                radial-gradient(circle at top left, rgba(250, 236, 216, 0.75), transparent 28%),
+                linear-gradient(180deg, #fffdf9 0%, #fbf6ed 100%);
+        }
+
+        .teacher-surface-warm {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(250, 243, 232, 0.98));
+        }
+
+        .teacher-surface-amber {
+            background: linear-gradient(135deg, #fffaf1 0%, #f9efe2 100%);
+        }
+
+        .teacher-surface-green {
+            background: linear-gradient(135deg, #f4faef 0%, #f9f3e8 100%);
+        }
+
+        .teacher-surface-rose {
+            background: linear-gradient(135deg, #fff5f4 0%, #fcebe8 100%);
+        }
+    </style>
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <link rel="stylesheet" href="../shared/typography-system.css" />
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="hidden md:flex flex-col w-64 teacher-shell dark:bg-surface-dark border-r border-[#eadfce] dark:border-[#4a4238] p-6 z-20">
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer"
+                data-teacher-nav="dashboard.html">
+                <div
+                    class="w-10 h-10 rounded-full bg-[linear-gradient(135deg,_#f3bb67_0%,_#df9a2a_100%)] flex items-center justify-center text-white font-bold text-xl shadow-[0_10px_20px_-12px_rgba(212,136,6,0.7)]">
+                    O</div>
+                <div class="min-w-0">
+                    <h1 class="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">OptiClass</h1>
+                    <p id="brand-context" class="text-xs text-text-sub-light dark:text-text-sub-dark truncate">教师工作台</p>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="dashboard.html"><span class="material-icons">dashboard</span>工作台</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="analytics.html"><span class="material-icons">bar_chart</span>数据分析</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="students.html"><span class="material-icons">groups</span>学生管理</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[linear-gradient(135deg,_#fff5e6_0%,_#f7ead6_100%)] dark:bg-primary/20 text-primary-dark dark:text-primary font-medium shadow-[0_8px_18px_-16px_rgba(212,136,6,0.45)]"
+                    href="submissions.html"><span class="material-icons">assignment_turned_in</span>作业审核</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="settings.html"><span class="material-icons">settings</span>班级设置</a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-[#efebe0] dark:border-[#4a4238]">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors cursor-pointer"
+                    data-teacher-nav="../index.html"><span class="material-icons">logout</span>退出登录</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7] dark:bg-[#2b2520]">
+            <header data-teacher-header="true"
+                class="sticky top-0 z-50 bg-[linear-gradient(180deg,_rgba(255,252,247,0.96)_0%,_rgba(251,246,237,0.96)_100%)] dark:bg-background-dark px-8 py-5 flex items-center justify-between border-b border-[#efebe0] dark:border-[#4a4238] backdrop-blur-sm">
+                <div>
+                    <h2 class="text-2xl font-bold">作业审核</h2>
+                    <p id="header-class-context" class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">正在加载班级信息...</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="batch-reject-btn"
+                        class="px-4 py-2 rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/80 dark:bg-[#2b2520] text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled>批量驳回</button>
+                    <button id="batch-verify-btn"
+                        class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_10px_20px_-16px_rgba(212,136,6,0.65)]"
+                        disabled>批量通过</button>
+                    <notification-bell></notification-bell>
+                    <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#efebe0] dark:border-[#4a4238] cursor-pointer"
+                        data-teacher-nav="settings.html?section=profile" title="维护个人信息">
+                        <img id="teacher-avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white dark:border-[#3a322b] shadow-sm" alt="教师头像" />
+                        <span id="teacher-name" class="text-sm font-medium text-text-main-light dark:text-text-main-dark max-w-[110px] truncate">老师</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 max-w-7xl mx-auto space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div
+                        class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-4 shadow-[0_12px_24px_-22px_rgba(212,136,6,0.45)]">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">待审核</p>
+                        <p id="metric-pending" class="text-2xl font-bold mt-1">0</p>
+                    </div>
+                    <div
+                        class="teacher-surface-green dark:bg-surface-dark rounded-2xl border border-[#dde9d2] dark:border-[#4a4238] p-4 shadow-[0_12px_24px_-22px_rgba(103,194,58,0.25)]">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">今日已通过</p>
+                        <p id="metric-verified" class="text-2xl font-bold mt-1">0</p>
+                    </div>
+                    <div
+                        class="teacher-surface-rose dark:bg-surface-dark rounded-2xl border border-[#f1d7d0] dark:border-[#4a4238] p-4 shadow-[0_12px_24px_-22px_rgba(245,108,108,0.25)]">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">今日已驳回</p>
+                        <p id="metric-rejected" class="text-2xl font-bold mt-1">0</p>
+                    </div>
+                </div>
+
+                <div
+                    class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] overflow-hidden shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                    <table class="w-full text-left">
+                        <thead
+                            class="bg-[#fcf5ea] dark:bg-surface-dark/50 border-b border-[#efebe0] dark:border-[#4a4238]">
+                            <tr>
+                                <th
+                                    class="px-4 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark w-12 text-center">
+                                    <input id="select-all-submissions" type="checkbox"
+                                        class="rounded border-[#efebe0] dark:border-[#4a4238]" />
+                                </th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                    学生</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                    任务</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                    状态</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark">
+                                    记录时间</th>
+                                <th
+                                    class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-sub-light dark:text-text-sub-dark text-right">
+                                    操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissions-table-body" class="divide-y divide-[#efebe0] dark:divide-[#4a4238]">
+                            <!-- Skeleton 1 -->
+                            <tr class="animate-pulse">
+                                <td class="px-4 py-4 text-center">
+                                    <div
+                                        class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="space-y-2">
+                                        <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="h-2 outline-none w-12 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 2 -->
+                            <tr class="animate-pulse">
+                                <td class="px-4 py-4 text-center">
+                                    <div
+                                        class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-4 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="space-y-2">
+                                        <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="h-2 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                </td>
+                            </tr>
+                            <!-- Skeleton 3 -->
+                            <tr class="animate-pulse">
+                                <td class="px-4 py-4 text-center">
+                                    <div
+                                        class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]">
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-4 outline-none w-14 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="space-y-2">
+                                        <div class="h-3 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        <div class="h-2 outline-none w-10 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="h-3 outline-none w-28 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="proof-image-preview-modal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/60 p-4" role="dialog" aria-modal="true" aria-label="材料图片预览">
+        <div class="relative w-full max-w-4xl rounded-2xl teacher-surface-warm dark:bg-surface-dark border border-[#eadfce] dark:border-[#4a4238] p-3 shadow-[0_18px_36px_-24px_rgba(74,66,56,0.45)]">
+            <button id="proof-image-preview-close" class="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/75 transition-colors" type="button" aria-label="关闭预览">
+                <span class="material-icons text-base">close</span>
+            </button>
+            <img id="proof-image-preview" class="max-h-[78vh] w-full rounded-md object-contain bg-black/5 dark:bg-white/5" alt="材料图片预览" />
+        </div>
+    </div>
+
+    <script>
+        let currentTeacherId = null;
+        let currentSubmissions = [];
+        const selectedSubmissionIds = new Set();
+
+        function isImageProofUrl(url) {
+            if (!url) return false;
+            const lowerUrl = String(url).toLowerCase();
+            return /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/.test(lowerUrl)
+                || lowerUrl.includes('/storage/v1/object/public/')
+                || lowerUrl.includes('/uploads/')
+                || lowerUrl.startsWith('data:image/');
+        }
+
+        function openProofImagePreview(url) {
+            const modal = document.getElementById('proof-image-preview-modal');
+            const image = document.getElementById('proof-image-preview');
+            if (!modal || !image || !url) return;
+            image.src = url;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProofImagePreview() {
+            const modal = document.getElementById('proof-image-preview-modal');
+            const image = document.getElementById('proof-image-preview');
+            if (!modal || !image) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            image.src = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentTeacherId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+            if (currentTeacherId && typeof hydrateTeacherIdentity === 'function') {
+                hydrateTeacherIdentity({
+                    teacherId: currentTeacherId,
+                    brandContextElementId: 'brand-context',
+                    subtitleElementId: 'header-class-context',
+                    subtitleSuffix: '最新提交审核与批量处理',
+                    avatarElementId: 'teacher-avatar',
+                    nameElementId: 'teacher-name'
+                });
+            }
+
+            const selectAll = document.getElementById('select-all-submissions');
+            const batchVerifyBtn = document.getElementById('batch-verify-btn');
+            const batchRejectBtn = document.getElementById('batch-reject-btn');
+
+            if (selectAll) {
+                selectAll.addEventListener('change', (event) => {
+                    const checked = Boolean(event.target?.checked);
+                    selectedSubmissionIds.clear();
+                    if (checked) {
+                        currentSubmissions
+                            .filter((item) => item.status === 'submitted')
+                            .forEach((item) => selectedSubmissionIds.add(String(item.id)));
+                    }
+                    renderSelectionState();
+                    fetchSubmissions(false);
+                });
+            }
+
+            if (batchVerifyBtn) {
+                batchVerifyBtn.addEventListener('click', () => reviewSelected('verified'));
+            }
+            if (batchRejectBtn) {
+                batchRejectBtn.addEventListener('click', () => reviewSelected('rejected'));
+            }
+
+            const proofPreviewModal = document.getElementById('proof-image-preview-modal');
+            const proofPreviewClose = document.getElementById('proof-image-preview-close');
+            if (proofPreviewClose) {
+                proofPreviewClose.addEventListener('click', closeProofImagePreview);
+            }
+            if (proofPreviewModal) {
+                proofPreviewModal.addEventListener('click', (event) => {
+                    if (event.target === proofPreviewModal) {
+                        closeProofImagePreview();
+                    }
+                });
+            }
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeProofImagePreview();
+                }
+            });
+
+            await fetchSubmissions();
+        });
+
+        function getStatusColor(status) {
+            if (status === 'completed' || status === 'verified') return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200';
+            if (status === 'rejected') return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-200';
+            return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200';
+        }
+
+        function getStatusText(status) {
+            if (status === 'completed' || status === 'verified') return '已通过';
+            if (status === 'rejected') return '已驳回';
+            return '待审核';
+        }
+
+        function formatDateTime(value) {
+            if (!value) return '--';
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? '--' : date.toLocaleString();
+        }
+
+        function getSubmissionTimeMeta(item) {
+            const status = String(item?.status || '').toLowerCase();
+            const reviewedAt = item?.reviewed_at || item?.updated_at || null;
+            const submittedAt = item?.submitted_at || item?.completed_at || item?.created_at || null;
+
+            if ((status === 'completed' || status === 'verified') && reviewedAt) {
+                return { label: '审核通过', value: reviewedAt };
+            }
+
+            if (status === 'rejected' && reviewedAt) {
+                return { label: '审核驳回', value: reviewedAt };
+            }
+
+            return { label: '提交时间', value: submittedAt };
+        }
+
+        function renderSelectionState() {
+            const batchVerifyBtn = document.getElementById('batch-verify-btn');
+            const batchRejectBtn = document.getElementById('batch-reject-btn');
+            const hasSelection = selectedSubmissionIds.size > 0;
+            if (batchVerifyBtn) batchVerifyBtn.disabled = !hasSelection;
+            if (batchRejectBtn) batchRejectBtn.disabled = !hasSelection;
+        }
+
+        function updateMetricsFromSubmissions(submissions) {
+            const pendingEl = document.getElementById('metric-pending');
+            const verifiedEl = document.getElementById('metric-verified');
+            const rejectedEl = document.getElementById('metric-rejected');
+            const rows = Array.isArray(submissions) ? submissions : [];
+
+            const now = new Date();
+            const isToday = (raw) => {
+                if (!raw) return false;
+                const date = new Date(raw);
+                return date.toDateString() === now.toDateString();
+            };
+
+            const pendingCount = rows.filter((item) => item.status === 'submitted').length;
+            const verifiedTodayCount = rows.filter((item) => (item.status === 'completed' || item.status === 'verified') && isToday(item.reviewed_at || item.updated_at)).length;
+            const rejectedTodayCount = rows.filter((item) => item.status === 'rejected' && isToday(item.reviewed_at || item.updated_at)).length;
+
+            if (pendingEl) pendingEl.textContent = String(pendingCount);
+            if (verifiedEl) verifiedEl.textContent = String(verifiedTodayCount);
+            if (rejectedEl) rejectedEl.textContent = String(rejectedTodayCount);
+        }
+
+        function setRowReviewLoading(triggerButton, isLoading) {
+            if (!triggerButton) return;
+            const row = triggerButton.closest('tr');
+            if (!row) return;
+
+            const rowButtons = row.querySelectorAll('button[data-review-action]');
+            rowButtons.forEach((btn) => {
+                if (isLoading) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if (btn === triggerButton) {
+                        btn.dataset.originalHtml = btn.innerHTML;
+                        btn.innerHTML = '<span class="inline-flex items-center gap-1"><span class="material-icons text-sm animate-spin">autorenew</span>处理中...</span>';
+                    }
+                } else {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    if (btn.dataset.originalHtml) {
+                        btn.innerHTML = btn.dataset.originalHtml;
+                        delete btn.dataset.originalHtml;
+                    }
+                }
+            });
+        }
+
+        function setBatchReviewLoading(action, isLoading) {
+            const verifyBtn = document.getElementById('batch-verify-btn');
+            const rejectBtn = document.getElementById('batch-reject-btn');
+            const activeBtn = action === 'verified' ? verifyBtn : rejectBtn;
+            const passiveBtn = action === 'verified' ? rejectBtn : verifyBtn;
+
+            if (isLoading) {
+                if (activeBtn) {
+                    activeBtn.dataset.originalHtml = activeBtn.innerHTML;
+                    activeBtn.innerHTML = '<span class="inline-flex items-center gap-1"><span class="material-icons text-sm animate-spin">autorenew</span>处理中...</span>';
+                    activeBtn.disabled = true;
+                }
+                if (passiveBtn) {
+                    passiveBtn.disabled = true;
+                }
+                return;
+            }
+
+            if (verifyBtn?.dataset.originalHtml) {
+                verifyBtn.innerHTML = verifyBtn.dataset.originalHtml;
+                delete verifyBtn.dataset.originalHtml;
+            }
+            if (rejectBtn?.dataset.originalHtml) {
+                rejectBtn.innerHTML = rejectBtn.dataset.originalHtml;
+                delete rejectBtn.dataset.originalHtml;
+            }
+            renderSelectionState();
+        }
+
+        function ensureSubmissionRowsPlaceholder() {
+            const tbody = document.getElementById('submissions-table-body');
+            if (!tbody) return;
+            const remainingRows = tbody.querySelectorAll('tr[data-submission-row]').length;
+            if (remainingRows > 0) return;
+            tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-text-sub-light dark:text-text-sub-dark">暂无提交记录</td></tr>';
+        }
+
+        function flashReviewedRow(submissionId, action) {
+            const row = document.querySelector(`tr[data-submission-row="${submissionId}"]`);
+            if (!row) return;
+            const highlightClass = action === 'verified' ? 'bg-green-50' : 'bg-red-50';
+            row.classList.add('transition-colors', 'duration-500', highlightClass);
+            setTimeout(() => {
+                row.classList.remove(highlightClass);
+            }, 900);
+        }
+
+        function applySingleReviewToRow(submissionId, action) {
+            const row = document.querySelector(`tr[data-submission-row="${submissionId}"]`);
+            if (!row) return;
+
+            const nextStatus = action === 'verified' ? 'completed' : 'rejected';
+            const statusEl = row.querySelector('[data-submission-status]');
+            const actionsEl = row.querySelector('[data-submission-actions]');
+
+            if (statusEl) {
+                statusEl.className = `px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(nextStatus)}`;
+                statusEl.textContent = getStatusText(nextStatus);
+            }
+            if (actionsEl) {
+                actionsEl.innerHTML = '<span class="text-xs text-text-sub-light dark:text-text-sub-dark">已处理</span>';
+            }
+        }
+
+        function applySingleReviewToCache(submissionId, action) {
+            const nextStatus = action === 'verified' ? 'completed' : 'rejected';
+            const reviewedAt = new Date().toISOString();
+            const targetId = String(submissionId);
+            currentSubmissions = (Array.isArray(currentSubmissions) ? currentSubmissions : []).map((item) => {
+                if (String(item.id) !== targetId) return item;
+                return {
+                    ...item,
+                    status: nextStatus,
+                    reviewed_at: reviewedAt,
+                    updated_at: reviewedAt,
+                    history_at: reviewedAt
+                };
+            });
+        }
+
+        function applyBatchReviewToUi(submissionIds, action) {
+            (Array.isArray(submissionIds) ? submissionIds : []).forEach((id) => {
+                applySingleReviewToRow(id, action);
+                applySingleReviewToCache(id, action);
+                flashReviewedRow(id, action);
+                selectedSubmissionIds.delete(String(id));
+            });
+            renderSelectionState();
+            updateMetricsFromSubmissions(currentSubmissions);
+        }
+
+        function renderLoadingRows() {
+            const tbody = document.getElementById('submissions-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = `
+                                    <!-- Skeleton 1 -->
+                                    <tr class="animate-pulse">
+                                        <td class="px-4 py-4 text-center">
+                                            <div class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 flex items-center gap-3">
+                                            <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-4 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="space-y-2">
+                                                <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                                <div class="h-2 outline-none w-12 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                        </td>
+                                    </tr>
+                                    <!-- Skeleton 2 -->
+                                    <tr class="animate-pulse">
+                                        <td class="px-4 py-4 text-center">
+                                            <div class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 flex items-center gap-3">
+                                            <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-4 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="space-y-2">
+                                                <div class="h-3 outline-none w-24 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                                <div class="h-2 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-3 outline-none w-20 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                        </td>
+                                    </tr>
+                                    <!-- Skeleton 3 -->
+                                    <tr class="animate-pulse">
+                                        <td class="px-4 py-4 text-center">
+                                            <div class="w-4 h-4 rounded border-[#efebe0] dark:border-[#4a4238] mx-auto bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 flex items-center gap-3">
+                                            <div class="h-8 w-8 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            <div class="h-4 outline-none w-14 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="space-y-2">
+                                                <div class="h-3 outline-none w-16 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                                <div class="h-2 outline-none w-10 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-5 w-14 rounded-full bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="h-3 outline-none w-28 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="h-6 w-20 rounded bg-[#efebe0] dark:bg-[#4a4238] ml-auto"></div>
+                                        </td>
+                                    </tr>
+            `;
+        }
+
+        async function fetchSubmissions(resetSelection = true) {
+            const tbody = document.getElementById('submissions-table-body');
+            const pendingEl = document.getElementById('metric-pending');
+            const verifiedEl = document.getElementById('metric-verified');
+            const rejectedEl = document.getElementById('metric-rejected');
+            if (!tbody) return;
+
+            renderLoadingRows();
+
+            if (resetSelection) {
+                selectedSubmissionIds.clear();
+            }
+            renderSelectionState();
+
+            try {
+                const queryParams = new URLSearchParams({
+                    limit: '100',
+                    history: 'all'
+                });
+                if (currentTeacherId) {
+                    queryParams.set('teacher_id', currentTeacherId);
+                }
+
+                const query = `?${queryParams.toString()}`;
+                const res = await apiFetch(API_BASE_URL + `/api/submissions${query}`);
+                if (!res.ok) throw new Error('Failed to fetch submissions');
+
+                const submissions = await res.json();
+                currentSubmissions = Array.isArray(submissions) ? submissions : [];
+                if (!Array.isArray(submissions) || submissions.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-text-sub-light dark:text-text-sub-dark">暂无提交记录</td></tr>';
+                    if (pendingEl) pendingEl.textContent = '0';
+                    if (verifiedEl) verifiedEl.textContent = '0';
+                    if (rejectedEl) rejectedEl.textContent = '0';
+                    return;
+                }
+
+                updateMetricsFromSubmissions(submissions);
+
+                const selectAll = document.getElementById('select-all-submissions');
+                if (selectAll) {
+                    const pendingIds = submissions
+                        .filter((item) => item.status === 'submitted')
+                        .map((item) => String(item.id));
+                    const allSelected = pendingIds.length > 0 && pendingIds.every((id) => selectedSubmissionIds.has(id));
+                    selectAll.checked = allSelected;
+                }
+
+                tbody.innerHTML = submissions.map((item) => {
+                    const studentName = item.student_name || item.profiles?.full_name || '未知学生';
+                    const avatarUrl = item.student_avatar || item.profiles?.avatar_url;
+                    const avatar = avatarUrl
+                        ? `<img class="w-8 h-8 rounded-full object-cover" src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(studentName)}的头像" loading="lazy" />`
+                        : `<div class="w-8 h-8 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">${escapeHtml(studentName[0] || '学')}</div>`;
+                    const canReview = item.status === 'submitted';
+                    const checked = selectedSubmissionIds.has(String(item.id)) ? 'checked' : '';
+                    const proofNote = String(item.proof_note || '').trim();
+                    const proofUrl = String(item.proof_url || '').trim();
+                    const proofIsImage = isImageProofUrl(proofUrl);
+                    const timeMeta = getSubmissionTimeMeta(item);
+                    const proofHtml = (proofNote || proofUrl)
+                        ? `<div class="mt-2 text-xs text-text-sub-light dark:text-text-sub-dark space-y-2">${proofNote ? `<div>说明：${escapeHtml(proofNote)}</div>` : ''}${proofUrl ? (proofIsImage
+                            ? `<button type="button" data-proof-preview-url="${escapeHtml(proofUrl)}" class="group inline-flex items-center gap-2 rounded-lg border border-[#efebe0] dark:border-[#4a4238] bg-[#fdfbf7] dark:bg-[#2b2520] px-2 py-1 hover:border-primary/60 transition-colors"><img src="${escapeHtml(proofUrl)}" alt="${escapeHtml(studentName)}提交的材料缩略图" class="h-12 w-12 rounded object-cover border border-[#efebe0] dark:border-[#4a4238]" loading="lazy" /><span class="inline-flex items-center gap-1 text-primary group-hover:text-primary-dark"><span class="material-icons text-sm">zoom_in</span>预览材料</span></button>`
+                            : `<a class="inline-flex items-center gap-1 text-primary hover:text-primary-dark" href="${escapeHtml(proofUrl)}" rel="noopener noreferrer"><span class="material-icons text-sm">link</span>查看材料链接</a>`
+                        ) : ''}</div>`
+                        : '<div class="mt-2 text-xs text-red-500">未提交材料</div>';
+
+                    return `
+                        <tr data-submission-row="${item.id}" class="hover:bg-secondary/20 dark:hover:bg-surface-light/5 transition-colors">
+                            <td class="px-4 py-4 text-center">
+                                ${canReview
+                            ? `<input data-submission-check="${item.id}" type="checkbox" class="rounded border-[#efebe0] dark:border-[#4a4238]" ${checked} />`
+                            : ''}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    ${avatar}
+                                    <span class="text-sm font-medium">${escapeHtml(studentName)}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-text-main-light dark:text-text-main-dark">${escapeHtml(item.task_title || item.tasks?.title || '任务')}</div>
+                                <div class="text-xs text-text-sub-light dark:text-text-sub-dark">${escapeHtml(item.task_type || item.tasks?.type || 'challenge')}</div>
+                                ${proofHtml}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span data-submission-status class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(item.status)}">${getStatusText(item.status)}</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-text-sub-light dark:text-text-sub-dark">
+                                <div>${formatDateTime(timeMeta.value)}</div>
+                                <div class="mt-1 text-xs">${timeMeta.label}</div>
+                            </td>
+                            <td data-submission-actions class="px-6 py-4 text-right text-sm">
+                                ${canReview
+                            ? `<div class="flex items-center justify-end gap-2">
+                                            <button data-review-action="verified" data-submission-id="${item.id}" class="px-3 py-1 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors">通过</button>
+                                            <button data-review-action="rejected" data-submission-id="${item.id}" class="px-3 py-1 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors">驳回</button>
+                                       </div>`
+                            : '<span class="text-xs text-text-sub-light dark:text-text-sub-dark">已处理</span>'}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                tbody.querySelectorAll('input[data-submission-check]').forEach((checkbox) => {
+                    checkbox.addEventListener('change', (event) => {
+                        const id = String(event.target.getAttribute('data-submission-check'));
+                        if (event.target.checked) {
+                            selectedSubmissionIds.add(id);
+                        } else {
+                            selectedSubmissionIds.delete(id);
+                        }
+                        renderSelectionState();
+                    });
+                });
+
+                tbody.querySelectorAll('button[data-review-action]').forEach((btn) => {
+                    btn.addEventListener('click', async () => {
+                        const submissionId = String(btn.getAttribute('data-submission-id') || '');
+                        const action = String(btn.getAttribute('data-review-action') || '');
+                        if (!submissionId || !action) return;
+                        await reviewSingle(submissionId, action, btn);
+                    });
+                });
+
+                tbody.querySelectorAll('button[data-proof-preview-url]').forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        const proofUrl = String(btn.getAttribute('data-proof-preview-url') || '').trim();
+                        if (!proofUrl) return;
+                        openProofImagePreview(proofUrl);
+                    });
+                });
+            } catch (error) {
+                console.error('Error fetching submissions:', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-red-500">提交记录加载失败，请稍后重试</td></tr>';
+            }
+        }
+
+        async function reviewSingle(submissionId, action, triggerButton) {
+            setRowReviewLoading(triggerButton, true);
+            try {
+                const res = await apiFetch(API_BASE_URL + `/api/submissions/${encodeURIComponent(submissionId)}/review`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '审核失败' }));
+                    throw new Error(errorData.error || '审核失败');
+                }
+                selectedSubmissionIds.delete(String(submissionId));
+                renderSelectionState();
+                applySingleReviewToRow(submissionId, action);
+                applySingleReviewToCache(submissionId, action);
+                flashReviewedRow(submissionId, action);
+                updateMetricsFromSubmissions(currentSubmissions);
+                if (window.showPageToast) {
+                    window.showPageToast(action === 'verified' ? '审核通过' : '已驳回该提交', 'success');
+                }
+                setTimeout(() => {
+                    fetchSubmissions(false).catch((error) => {
+                        console.error('Background refresh after single review failed:', error);
+                    });
+                }, 900);
+            } catch (error) {
+                console.error('Review single submission failed:', error);
+                if (window.showPageToast) {
+                    window.showPageToast(error.message || '审核失败，请稍后重试', 'error');
+                }
+            } finally {
+                setRowReviewLoading(triggerButton, false);
+            }
+        }
+
+        async function reviewSelected(action) {
+            const ids = Array.from(selectedSubmissionIds);
+            if (!ids.length) {
+                if (window.showPageToast) {
+                    window.showPageToast('请先选择要审核的提交', 'info');
+                }
+                return;
+            }
+
+            setBatchReviewLoading(action, true);
+            try {
+                const res = await apiFetch(API_BASE_URL + '/api/submissions/review-batch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, submission_ids: ids })
+                });
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '批量审核失败' }));
+                    throw new Error(errorData.error || '批量审核失败');
+                }
+                selectedSubmissionIds.clear();
+                applyBatchReviewToUi(ids, action);
+                if (window.showPageToast) {
+                    window.showPageToast(action === 'verified' ? '批量通过成功' : '批量驳回成功', 'success');
+                }
+                setTimeout(() => {
+                    fetchSubmissions().catch((error) => {
+                        console.error('Background refresh after batch review failed:', error);
+                    });
+                }, 1000);
+            } catch (error) {
+                console.error('Batch review submissions failed:', error);
+                if (window.showPageToast) {
+                    window.showPageToast(error.message || '批量审核失败，请稍后重试', 'error');
+                }
+            } finally {
+                setBatchReviewLoading(action, false);
+            }
+        }
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>学生档案 - 乐学成长平台</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6a23c",
+                        "primary-dark": "#d48806",
+                        "secondary": "#faecd8",
+                        "background-light": "#fdfbf7",
+                        "background-dark": "#2b2520",
+                        "surface-light": "#fffefc",
+                        "surface-dark": "#3a322b",
+                        "text-main-light": "#4a4238",
+                        "text-main-dark": "#f0e6d2",
+                        "text-sub-light": "#8c8174",
+                        "text-sub-dark": "#b0a69a",
+                        "accent-green": "#67c23a",
+                        "accent-red": "#f56c6c",
+                        "accent-blue": "#409eff"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.875rem",
+                        "lg": "1.25rem",
+                        "xl": "1.75rem",
+                        "full": "9999px"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(230, 162, 60, 0.08), transparent 30%),
+                linear-gradient(180deg, #fffcf6 0%, #f9f2e7 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e6dfd1;
+            border-radius: 99px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #5c5246;
+        }
+
+        .teacher-shell {
+            background:
+                radial-gradient(circle at top left, rgba(250, 236, 216, 0.75), transparent 28%),
+                linear-gradient(180deg, #fffdf9 0%, #fbf6ed 100%);
+        }
+
+        .teacher-surface-warm {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(250, 243, 232, 0.98));
+        }
+
+        .teacher-surface-amber {
+            background: linear-gradient(135deg, #fffaf1 0%, #f9efe2 100%);
+        }
+
+        .teacher-surface-green {
+            background: linear-gradient(135deg, #f4faef 0%, #f9f3e8 100%);
+        }
+
+        .teacher-surface-blue {
+            background: linear-gradient(135deg, #f3f8ff 0%, #f7f2ea 100%);
+        }
+
+        .metric-card {
+            border: 1px solid #eadfce;
+            border-radius: 1.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 14px 28px -24px rgba(74, 66, 56, 0.25);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border-radius: 9999px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <link rel="stylesheet" href="../shared/typography-system.css" />
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <aside class="hidden md:flex flex-col w-64 teacher-shell dark:bg-surface-dark border-r border-[#eadfce] dark:border-[#4a4238] p-6 z-20">
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer" data-teacher-nav="dashboard.html">
+                <div class="w-10 h-10 rounded-full bg-[linear-gradient(135deg,_#f3bb67_0%,_#df9a2a_100%)] flex items-center justify-center text-white font-bold text-xl shadow-[0_10px_20px_-12px_rgba(212,136,6,0.7)]">O</div>
+                <div class="min-w-0">
+                    <h1 class="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">OptiClass</h1>
+                    <p id="brand-context" class="text-xs text-text-sub-light dark:text-text-sub-dark truncate">教师工作台</p>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors" href="dashboard.html"><span class="material-icons">dashboard</span>工作台</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors" href="analytics.html"><span class="material-icons">bar_chart</span>数据分析</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[linear-gradient(135deg,_#fff5e6_0%,_#f7ead6_100%)] dark:bg-primary/20 text-primary-dark dark:text-primary font-medium shadow-[0_8px_18px_-16px_rgba(212,136,6,0.45)]" href="students.html"><span class="material-icons">groups</span>学生管理</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors" href="submissions.html"><span class="material-icons">assignment_turned_in</span>作业审核</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors" href="settings.html"><span class="material-icons">settings</span>班级设置</a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-[#efebe0] dark:border-[#4a4238]">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors cursor-pointer" data-teacher-nav="../index.html"><span class="material-icons">logout</span>退出登录</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7] dark:bg-[#2b2520]">
+            <header data-teacher-header="true" class="sticky top-0 z-50 bg-[linear-gradient(180deg,_rgba(255,252,247,0.96)_0%,_rgba(251,246,237,0.96)_100%)] dark:bg-background-dark px-8 py-5 flex items-center justify-between border-b border-[#efebe0] dark:border-[#4a4238] backdrop-blur-sm">
+                <div class="flex items-center gap-4">
+                    <a href="students.html" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#eadbc6] bg-white/80 text-text-main-light transition hover:bg-[#f8efe0] dark:bg-[#2b2520] dark:border-[#4a4238]" aria-label="返回学生管理">
+                        <span class="material-icons-round">arrow_back</span>
+                    </a>
+                    <div>
+                        <h2 id="page-title" class="text-2xl font-bold text-text-main-light dark:text-text-main-dark">学生档案</h2>
+                        <p id="page-subtitle" class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">正在加载学生信息...</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <notification-bell></notification-bell>
+                    <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#efebe0] dark:border-[#4a4238] cursor-pointer" data-teacher-nav="settings.html?section=profile" title="维护个人信息">
+                        <img id="teacher-avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white dark:border-[#3a322b] shadow-sm" alt="教师头像" />
+                        <span id="teacher-name" class="text-sm font-medium text-text-main-light dark:text-text-main-dark max-w-[110px] truncate">老师</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 max-w-7xl mx-auto space-y-6">
+                <div id="student-profile-error" class="hidden rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700"></div>
+
+                <section class="grid grid-cols-1 xl:grid-cols-[1.3fr_0.9fr] gap-6">
+                    <div class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-6 shadow-[0_14px_28px_-24px_rgba(212,136,6,0.35)]">
+                        <div class="flex flex-col sm:flex-row sm:items-start gap-5">
+                            <img id="student-avatar" class="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-sm bg-white/70" alt="学生头像" />
+                            <div class="min-w-0 flex-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 id="student-name" class="text-3xl font-bold text-text-main-light dark:text-text-main-dark">加载中</h3>
+                                    <span id="student-class-chip" class="chip bg-white/80 text-text-main-light border border-[#eadbc6]">班级信息</span>
+                                </div>
+                                <p id="student-bio" class="mt-3 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">正在整理学生的基本信息与成长状态。</p>
+                                <div id="student-dreams" class="mt-4 flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] p-6 shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">教师摘要</h3>
+                            <span class="chip bg-[#fff5e6] text-primary-dark border border-[#efdcc0]">只读视图</span>
+                        </div>
+                        <p id="student-ai-summary" class="mt-4 text-sm leading-7 text-text-sub-light dark:text-text-sub-dark">正在加载摘要...</p>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <article class="metric-card teacher-surface-green dark:bg-surface-dark">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">连续记录</p>
+                        <p id="metric-streak" class="mt-2 text-3xl font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                        <p class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">连续天数</p>
+                    </article>
+                    <article class="metric-card teacher-surface-amber dark:bg-surface-dark">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">打卡天数</p>
+                        <p id="metric-checkins" class="mt-2 text-3xl font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                        <p class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">累计完成打卡</p>
+                    </article>
+                    <article class="metric-card teacher-surface-blue dark:bg-surface-dark">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">贴纸进度</p>
+                        <p id="metric-stickers" class="mt-2 text-3xl font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                        <p class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">已解锁贴纸</p>
+                    </article>
+                    <article class="metric-card teacher-surface-warm dark:bg-surface-dark">
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">最近活跃</p>
+                        <p id="metric-activity" class="mt-2 text-xl font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                        <p id="metric-account-age" class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">账号天数 --</p>
+                    </article>
+                </section>
+
+                <section class="grid grid-cols-1 xl:grid-cols-[1fr_1.15fr] gap-6">
+                    <div class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] p-6 shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">最近期待</h3>
+                            <span id="goals-meta" class="text-xs text-text-sub-light dark:text-text-sub-dark">0 条</span>
+                        </div>
+                        <div id="recent-goals" class="mt-4 space-y-3"></div>
+                    </div>
+
+                    <div class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] p-6 shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)]">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">最近活动记录</h3>
+                            <span id="timeline-meta" class="text-xs text-text-sub-light dark:text-text-sub-dark">时间线</span>
+                        </div>
+                        <div id="recent-timeline" class="mt-4 space-y-3"></div>
+                    </div>
+                </section>
+
+                <section class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-6 shadow-[0_14px_28px_-24px_rgba(212,136,6,0.35)]">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">贴纸簿概览</h3>
+                            <p class="text-xs text-text-sub-light dark:text-text-sub-dark mt-1">展示已解锁贴纸和下一步进度提示。</p>
+                        </div>
+                        <span id="badge-board-meta" class="text-xs text-text-sub-light dark:text-text-sub-dark">加载中</span>
+                    </div>
+                    <div id="sticker-board" class="mt-4 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentTeacherId = null;
+        let currentStudentId = null;
+
+        const TEXT = {
+            none: '\u6682\u65e0\u8bb0\u5f55',
+            unset: '\u672a\u8bbe\u7f6e',
+            pending: '\u5f85\u5ba1\u6838',
+            done: '\u5df2\u5b8c\u6210',
+            active: '\u8fdb\u884c\u4e2d',
+            pageError: '\u9875\u9762\u52a0\u8f7d\u5931\u8d25',
+            requestError: '\u8bf7\u6c42\u5931\u8d25',
+            noStudentId: '\u7f3a\u5c11\u5b66\u751f ID\uff0c\u65e0\u6cd5\u6253\u5f00\u6863\u6848\u9875\u3002',
+            noClass: '\u672a\u5173\u8054\u73ed\u7ea7\u4fe1\u606f',
+            noBio: '\u6682\u65e0\u5b66\u751f\u4ecb\u7ecd\u3002',
+            noDreams: '\u6682\u65e0\u671f\u5f85\u6807\u7b7e',
+            noAi: '\u6682\u65e0 AI \u6458\u8981\u3002',
+            noGoals: '\u6682\u65e0\u671f\u5f85\u8bb0\u5f55\u3002',
+            unnamedGoal: '\u672a\u547d\u540d\u671f\u5f85',
+            noGoalDesc: '\u6682\u65e0\u8865\u5145\u8bf4\u660e',
+            datePrefix: '\u65e5\u671f',
+            noTimeline: '\u6682\u65e0\u6d3b\u52a8\u65f6\u95f4\u7ebf\u3002',
+            growthRecord: '\u6210\u957f\u8bb0\u5f55',
+            noTimelineDesc: '\u6682\u65e0\u63cf\u8ff0',
+            noStickers: '\u6682\u65e0\u8d34\u7eb8\u6570\u636e\u3002',
+            sticker: '\u8d34\u7eb8',
+            stickerHint: '\u7ee7\u7eed\u5b8c\u6210\u8bb0\u5f55\u4ee5\u89e3\u9501\u8d34\u7eb8',
+            unlockedAt: '\u5df2\u83b7\u5f97',
+            accountDays: '\u8d26\u53f7\u5929\u6570',
+            studentProfileFailed: '\u5b66\u751f\u6863\u6848\u52a0\u8f7d\u5931\u8d25'
+        };
+
+        function getStudentIdFromQuery() {
+            const params = new URLSearchParams(window.location.search || '');
+            return String(params.get('id') || '').trim();
+        }
+
+        function fallbackAvatar(seed) {
+            const safeSeed = String(seed || 'student').trim() || 'student';
+            return `https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(safeSeed)}&backgroundColor=e6dac6`;
+        }
+
+        function formatDateTime(value) {
+            if (!value) return TEXT.none;
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return TEXT.none;
+            return date.toLocaleString('zh-CN', {
+                month: 'numeric',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDateOnly(value) {
+            if (!value) return TEXT.unset;
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return TEXT.unset;
+            return date.toLocaleDateString('zh-CN');
+        }
+
+        function normalizeStatus(raw) {
+            const status = String(raw || '').trim().toLowerCase();
+            if (status === 'completed' || status === 'verified') {
+                return { label: TEXT.done, className: 'bg-green-100 text-green-700' };
+            }
+            if (status === 'submitted' || status === 'pending') {
+                return { label: TEXT.pending, className: 'bg-amber-100 text-amber-700' };
+            }
+            return { label: TEXT.active, className: 'bg-slate-100 text-slate-700' };
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('student-profile-error');
+            if (!errorEl) return;
+            errorEl.textContent = String(message || TEXT.pageError);
+            errorEl.classList.remove('hidden');
+        }
+
+        async function fetchJson(path) {
+            const response = await apiFetch(buildApiUrl(path));
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: TEXT.requestError }));
+                throw new Error(errorData.error || TEXT.requestError);
+            }
+            return response.json();
+        }
+
+        async function fetchStudentContext(studentId) {
+            const [students, summary, stats, goals, growthStats, stickerBoard] = await Promise.allSettled([
+                currentTeacherId ? fetchJson(`/api/students?teacher_id=${encodeURIComponent(currentTeacherId)}&limit=200`) : Promise.resolve([]),
+                fetchJson(`/api/student/${encodeURIComponent(studentId)}/summary`),
+                fetchJson(`/api/student/${encodeURIComponent(studentId)}/stats`),
+                fetchJson(`/api/student/${encodeURIComponent(studentId)}/goals`),
+                fetchJson(`/api/student/${encodeURIComponent(studentId)}/growth-stats?limit=8`),
+                fetchJson(`/api/student/${encodeURIComponent(studentId)}/sticker-board`)
+            ]);
+
+            return {
+                studentRow: students.status === 'fulfilled'
+                    ? (Array.isArray(students.value) ? students.value.find((item) => String(item.id || '') === studentId) || null : null)
+                    : null,
+                summary: summary.status === 'fulfilled' ? summary.value : null,
+                stats: stats.status === 'fulfilled' ? stats.value : null,
+                goals: goals.status === 'fulfilled' ? (Array.isArray(goals.value) ? goals.value : []) : [],
+                growthStats: growthStats.status === 'fulfilled' ? growthStats.value : null,
+                stickerBoard: stickerBoard.status === 'fulfilled' ? (Array.isArray(stickerBoard.value) ? stickerBoard.value : []) : [],
+                errors: [students, summary, stats, goals, growthStats, stickerBoard]
+                    .filter((item) => item.status === 'rejected')
+                    .map((item) => item.reason?.message)
+                    .filter(Boolean)
+            };
+        }
+
+        function renderHero(data) {
+            const { studentRow, summary } = data;
+            const name = String(studentRow?.full_name || summary?.full_name || '\u5b66\u751f').trim() || '\u5b66\u751f';
+            const avatar = buildMediaUrl(studentRow?.avatar_url || summary?.avatar_url || '') || fallbackAvatar(name);
+            const classText = [studentRow?.school_name, studentRow?.class_name].filter(Boolean).join(' · ') || TEXT.noClass;
+            const bio = String(summary?.bio || '').trim() || TEXT.noBio;
+            const dreams = Array.isArray(summary?.dreams) ? summary.dreams.filter(Boolean).slice(0, 6) : [];
+
+            document.getElementById('page-title').textContent = `${name}\u7684\u6210\u957f\u6863\u6848`;
+            document.getElementById('page-subtitle').textContent = classText;
+            document.getElementById('student-name').textContent = name;
+            document.getElementById('student-class-chip').textContent = classText;
+            document.getElementById('student-bio').textContent = bio;
+            document.getElementById('student-avatar').src = avatar;
+            document.getElementById('student-avatar').alt = `${name}\u7684\u5934\u50cf`;
+
+            const dreamsEl = document.getElementById('student-dreams');
+            dreamsEl.innerHTML = dreams.length
+                ? dreams.map((dream) => `<span class="chip bg-white/85 text-text-main-light border border-[#eadbc6]">${escapeHtml(dream)}</span>`).join('')
+                : `<span class="text-sm text-text-sub-light dark:text-text-sub-dark">${TEXT.noDreams}</span>`;
+        }
+
+        function renderSummary(data) {
+            const summaryText = String(data?.summary?.ai_comment || '').trim() || TEXT.noAi;
+            document.getElementById('student-ai-summary').textContent = summaryText;
+        }
+
+        function renderMetrics(data) {
+            const stats = data.stats || {};
+            const growthStats = data.growthStats || {};
+            const stickerBoard = Array.isArray(data.stickerBoard) ? data.stickerBoard : [];
+            const studentRow = data.studentRow || {};
+
+            const unlockedCount = stickerBoard.filter((item) => item && item.unlocked).length;
+            const lastActivity = studentRow?.last_activity_at || growthStats?.timeline?.[0]?.date || null;
+            const accountAge = Number(growthStats?.account_age_days || 0);
+            const streak = Number(stats?.streak || growthStats?.metrics?.streak || 0);
+            const checkins = Number(growthStats?.metrics?.total_checkin_days || 0);
+
+            document.getElementById('metric-streak').textContent = String(streak);
+            document.getElementById('metric-checkins').textContent = String(checkins);
+            document.getElementById('metric-stickers').textContent = `${unlockedCount}/${stickerBoard.length || 0}`;
+            document.getElementById('metric-activity').textContent = formatDateTime(lastActivity);
+            document.getElementById('metric-account-age').textContent = `${TEXT.accountDays} ${accountAge || 0}`;
+        }
+
+        function renderGoals(data) {
+            const goals = (Array.isArray(data.goals) ? data.goals : []).slice(0, 6);
+            const container = document.getElementById('recent-goals');
+            const meta = document.getElementById('goals-meta');
+
+            meta.textContent = `${goals.length} \u6761`;
+
+            if (!goals.length) {
+                container.innerHTML = `<div class="rounded-2xl border border-dashed border-[#eadbc6] px-4 py-5 text-sm text-text-sub-light dark:text-text-sub-dark">${TEXT.noGoals}</div>`;
+                return;
+            }
+
+            container.innerHTML = goals.map((goal) => {
+                const status = normalizeStatus(goal.goal_status || goal.status);
+                const targetDate = formatDateOnly(goal.target_date || goal.completed_at);
+                const description = String(goal.description || '').trim();
+                return `
+                    <article class="rounded-2xl border border-[#eadfce] bg-white/70 dark:bg-[#2b2520] px-4 py-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <h4 class="text-sm font-bold text-text-main-light dark:text-text-main-dark">${escapeHtml(goal.title || TEXT.unnamedGoal)}</h4>
+                                <p class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">${description ? escapeHtml(description) : TEXT.noGoalDesc}</p>
+                            </div>
+                            <span class="chip ${status.className}">${status.label}</span>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2 text-xs text-text-sub-light dark:text-text-sub-dark">
+                            <span class="chip bg-[#f8f3ea] text-text-sub-light border border-[#eadfce]">${TEXT.datePrefix} ${targetDate}</span>
+                            ${goal.dream_tag ? `<span class="chip bg-[#eef7e8] text-green-700 border border-[#dde9d2]">${escapeHtml(goal.dream_tag)}</span>` : ''}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderTimeline(data) {
+            const growthStats = data.growthStats || {};
+            const timeline = Array.isArray(growthStats.timeline) ? growthStats.timeline.slice(0, 8) : [];
+            const container = document.getElementById('recent-timeline');
+            const meta = document.getElementById('timeline-meta');
+
+            meta.textContent = `${timeline.length} \u6761\u6d3b\u52a8`;
+
+            if (!timeline.length) {
+                container.innerHTML = `<div class="rounded-2xl border border-dashed border-[#eadbc6] px-4 py-5 text-sm text-text-sub-light dark:text-text-sub-dark">${TEXT.noTimeline}</div>`;
+                return;
+            }
+
+            container.innerHTML = timeline.map((item) => `
+                <article class="rounded-2xl border border-[#eadfce] bg-white/70 dark:bg-[#2b2520] px-4 py-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <h4 class="text-sm font-bold text-text-main-light dark:text-text-main-dark">${escapeHtml(item.title || TEXT.growthRecord)}</h4>
+                            <p class="mt-1 text-xs leading-6 text-text-sub-light dark:text-text-sub-dark">${escapeHtml(item.desc || item.detail?.content || TEXT.noTimelineDesc)}</p>
+                        </div>
+                        <span class="text-xs text-text-sub-light dark:text-text-sub-dark whitespace-nowrap">${formatDateTime(item.date)}</span>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function renderStickerBoard(data) {
+            const board = Array.isArray(data.stickerBoard) ? data.stickerBoard.slice(0, 8) : [];
+            const meta = document.getElementById('badge-board-meta');
+            const container = document.getElementById('sticker-board');
+
+            const unlocked = board.filter((item) => item && item.unlocked).length;
+            meta.textContent = `\u5df2\u89e3\u9501 ${unlocked}/${board.length || 0}`;
+
+            if (!board.length) {
+                container.innerHTML = `<div class="col-span-full rounded-2xl border border-dashed border-[#eadbc6] px-4 py-5 text-sm text-text-sub-light dark:text-text-sub-dark">${TEXT.noStickers}</div>`;
+                return;
+            }
+
+            container.innerHTML = board.map((item) => {
+                const unlockedClass = item.unlocked
+                    ? 'bg-white/80 border-[#eadbc6]'
+                    : 'bg-white/45 border-dashed border-[#e5dbc8] opacity-80';
+                const name = String(item.name || TEXT.sticker).trim();
+                const hint = item.unlocked
+                    ? `${TEXT.unlockedAt} · ${formatDateOnly(item.awarded_at)}`
+                    : String(item.next_goal_text || item.goal_text || TEXT.stickerHint);
+
+                return `
+                    <article class="rounded-2xl border ${unlockedClass} px-4 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="h-12 w-12 rounded-2xl bg-[#fff6e8] border border-[#efdcc0] flex items-center justify-center text-xs font-bold">${item.unlocked ? 'DONE' : 'LOCK'}</div>
+                            <div class="min-w-0">
+                                <h4 class="text-sm font-bold text-text-main-light dark:text-text-main-dark">${escapeHtml(name)}</h4>
+                                <p class="mt-1 text-xs leading-5 text-text-sub-light dark:text-text-sub-dark">${escapeHtml(hint)}</p>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        async function initPage() {
+            currentTeacherId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+            currentStudentId = getStudentIdFromQuery();
+
+            if (currentTeacherId && typeof hydrateTeacherIdentity === 'function') {
+                hydrateTeacherIdentity({
+                    teacherId: currentTeacherId,
+                    brandContextElementId: 'brand-context',
+                    subtitleElementId: 'page-subtitle',
+                    subtitleSuffix: '\u5b66\u751f\u6210\u957f\u603b\u89c8',
+                    avatarElementId: 'teacher-avatar',
+                    nameElementId: 'teacher-name'
+                });
+            }
+
+            if (!currentStudentId) {
+                showError(TEXT.noStudentId);
+                return;
+            }
+
+            try {
+                const data = await fetchStudentContext(currentStudentId);
+                renderHero(data);
+                renderSummary(data);
+                renderMetrics(data);
+                renderGoals(data);
+                renderTimeline(data);
+                renderStickerBoard(data);
+
+                if (!data.studentRow && data.errors.length) {
+                    showError(data.errors[0]);
+                }
+            } catch (error) {
+                console.error('Load student profile failed:', error);
+                showError(error.message || TEXT.studentProfileFailed);
+                if (window.showPageToast) {
+                    window.showPageToast(error.message || TEXT.studentProfileFailed, 'error');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

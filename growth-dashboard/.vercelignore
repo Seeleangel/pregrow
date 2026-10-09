@@ -1,0 +1,15 @@
+node_modules
+.env
+*.log
+.DS_Store
+backend/.env
+backend/node_modules
+.git
+.vscode
+.claude
+tasks
+*.md
+!README.md
+# 排除图片目录（已迁移到 Supabase Storage）
+img/
+student/img/

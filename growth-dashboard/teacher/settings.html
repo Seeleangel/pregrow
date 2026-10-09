@@ -1,0 +1,653 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>班级设置 - OptiClass</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6a23c",
+                        "primary-dark": "#d48806",
+                        "secondary": "#faecd8",
+                        "background-light": "#fdfbf7",
+                        "background-dark": "#2b2520",
+                        "surface-light": "#fffefc",
+                        "surface-dark": "#3a322b",
+                        "text-main-light": "#4a4238",
+                        "text-main-dark": "#f0e6d2",
+                        "text-sub-light": "#8c8174",
+                        "text-sub-dark": "#b0a69a"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(5px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(230, 162, 60, 0.08), transparent 30%),
+                linear-gradient(180deg, #fffcf6 0%, #f9f2e7 100%);
+        }
+
+        .teacher-shell {
+            background:
+                radial-gradient(circle at top left, rgba(250, 236, 216, 0.75), transparent 28%),
+                linear-gradient(180deg, #fffdf9 0%, #fbf6ed 100%);
+        }
+
+        .teacher-surface-warm {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(250, 243, 232, 0.98));
+        }
+
+        .teacher-surface-amber {
+            background: linear-gradient(135deg, #fffaf1 0%, #f9efe2 100%);
+        }
+    </style>
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <link rel="stylesheet" href="../shared/typography-system.css" />
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="hidden md:flex flex-col w-64 teacher-shell dark:bg-surface-dark border-r border-[#eadfce] dark:border-[#4a4238] p-6 z-20">
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer"
+                data-teacher-nav="dashboard.html">
+                <div
+                    class="w-10 h-10 rounded-full bg-[linear-gradient(135deg,_#f3bb67_0%,_#df9a2a_100%)] flex items-center justify-center text-white font-bold text-xl shadow-[0_10px_20px_-12px_rgba(212,136,6,0.7)]">
+                    O</div>
+                <div class="min-w-0">
+                    <h1 class="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">OptiClass</h1>
+                    <p id="brand-context" class="text-xs text-text-sub-light dark:text-text-sub-dark truncate">教师工作台</p>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="dashboard.html"><span class="material-icons">dashboard</span>工作台</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="analytics.html"><span class="material-icons">bar_chart</span>数据分析</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="students.html"><span class="material-icons">groups</span>学生管理</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="submissions.html"><span class="material-icons">assignment_turned_in</span>作业审核</a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[linear-gradient(135deg,_#fff5e6_0%,_#f7ead6_100%)] dark:bg-primary/20 text-primary-dark dark:text-primary font-medium shadow-[0_8px_18px_-16px_rgba(212,136,6,0.45)]"
+                    href="settings.html"><span class="material-icons">settings</span>班级设置</a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-[#efebe0] dark:border-[#4a4238]">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors cursor-pointer"
+                    data-teacher-nav="../index.html"><span class="material-icons">logout</span>退出登录</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7] dark:bg-[#2b2520]">
+            <header data-teacher-header="true"
+                class="sticky top-0 z-50 bg-[linear-gradient(180deg,_rgba(255,252,247,0.96)_0%,_rgba(251,246,237,0.96)_100%)] dark:bg-background-dark px-8 py-5 flex items-center justify-between border-b border-[#efebe0] dark:border-[#4a4238] backdrop-blur-sm">
+                <div>
+                    <h2 class="text-2xl font-bold">班级设置</h2>
+                    <p id="header-class-context" class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">正在加载班级信息...</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <notification-bell></notification-bell>
+                    <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#efebe0] dark:border-[#4a4238] cursor-pointer"
+                        data-teacher-nav="settings.html?section=profile" title="维护个人信息">
+                        <img id="teacher-avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white dark:border-[#3a322b] shadow-sm" alt="教师头像" />
+                        <span id="teacher-name" class="text-sm font-medium text-text-main-light dark:text-text-main-dark max-w-[110px] truncate">老师</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 max-w-4xl mx-auto space-y-6">
+                <div id="profile-settings-card"
+                    class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-6 shadow-[0_12px_26px_-24px_rgba(212,136,6,0.45)]">
+                    <h3 class="text-lg font-bold mb-4">个人信息</h3>
+                    <p id="profile-status" class="hidden mb-4 text-sm rounded-lg px-3 py-2"></p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="block md:col-span-1">
+                            <span class="text-sm text-text-sub-light dark:text-text-sub-dark">姓名</span>
+                            <input id="teacher-full-name-input" type="text"
+                                class="mt-1 w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5"
+                                placeholder="请输入姓名" maxlength="32" />
+                        </label>
+                        <label class="block md:col-span-1">
+                            <span class="text-sm text-text-sub-light dark:text-text-sub-dark">头像链接</span>
+                            <input id="teacher-avatar-url-input" type="url"
+                                class="mt-1 w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5"
+                                placeholder="https://example.com/avatar.png" maxlength="500" />
+                            <div class="mt-3 flex items-center gap-3">
+                                <img id="teacher-avatar-preview" class="w-12 h-12 rounded-full object-cover border border-[#efebe0] dark:border-[#4a4238]" alt="头像预览" />
+                                <span id="teacher-avatar-preview-text" class="text-xs text-text-sub-light dark:text-text-sub-dark">头像预览</span>
+                            </div>
+                            <div class="mt-2 flex items-center gap-3">
+                                <input id="teacher-avatar-file-input" type="file" accept="image/*" class="hidden" />
+                                <button id="upload-avatar-btn" type="button"
+                                    class="px-3 py-2 rounded-xl border border-[#e3c79e] dark:border-[#4a4238] bg-[#fff6ea] dark:bg-[#2b2520] text-[#7a4b12] dark:text-[#f0e6d2] text-sm font-semibold hover:bg-[#f8e7cb] focus:outline-none focus:ring-2 focus:ring-[#e6a23c]/30 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">上传本地头像</button>
+                                <span id="avatar-upload-hint" class="text-xs text-text-sub-light dark:text-text-sub-dark">支持 jpg、png、webp，最大 5MB</span>
+                            </div>
+                        </label>
+                        <label class="block md:col-span-2">
+                            <span class="text-sm text-text-sub-light dark:text-text-sub-dark">个人简介（选填）</span>
+                            <textarea id="teacher-bio-input" rows="4" maxlength="200"
+                                class="mt-1 w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5"
+                                placeholder="例如：专注成长型思维训练，欢迎同学们主动交流学习困惑。"></textarea>
+                            <p class="mt-1 text-xs text-text-sub-light dark:text-text-sub-dark">最多 200 字</p>
+                        </label>
+                    </div>
+                    <button id="save-profile-btn"
+                        class="mt-5 px-4 py-2.5 rounded-xl border border-[#e3c79e] bg-[linear-gradient(135deg,_#fff1dc_0%,_#f5dfbf_100%)] text-[#6d4312] text-sm font-semibold hover:bg-[linear-gradient(135deg,_#fce6c4_0%,_#f1d39e_100%)] focus:outline-none focus:ring-2 focus:ring-[#e6a23c]/30 transition-colors shadow-[0_10px_20px_-18px_rgba(212,136,6,0.45)] disabled:opacity-60 disabled:cursor-not-allowed">保存个人信息</button>
+                </div>
+
+                <div
+                    class="teacher-surface-warm dark:bg-surface-dark rounded-2xl border border-[#eadfce] dark:border-[#4a4238] p-6 shadow-[0_12px_26px_-24px_rgba(140,129,116,0.45)]">
+                    <h3 class="text-lg font-bold mb-4">班级信息</h3>
+                    <p id="settings-status" class="hidden mb-4 text-sm rounded-lg px-3 py-2"></p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="block">
+                            <span class="text-sm text-text-sub-light dark:text-text-sub-dark">班级名称</span>
+                            <input id="class-name-input" type="text"
+                                class="mt-1 w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5"
+                                placeholder="例如：一年级二班" />
+                        </label>
+                        <label class="block">
+                            <span class="text-sm text-text-sub-light dark:text-text-sub-dark">年级</span>
+                            <input id="school-name-input" type="text"
+                                class="mt-1 w-full rounded-xl border border-[#eadbc6] dark:border-[#4a4238] bg-white/90 dark:bg-[#2b2520] px-4 py-2.5"
+                                placeholder="例如：一年级" />
+                        </label>
+                    </div>
+                    <button id="save-class-btn"
+                        class="mt-5 px-4 py-2.5 rounded-xl border border-[#e3c79e] bg-[linear-gradient(135deg,_#fff1dc_0%,_#f5dfbf_100%)] text-[#6d4312] text-sm font-semibold hover:bg-[linear-gradient(135deg,_#fce6c4_0%,_#f1d39e_100%)] focus:outline-none focus:ring-2 focus:ring-[#e6a23c]/30 transition-colors shadow-[0_10px_20px_-18px_rgba(212,136,6,0.45)] disabled:opacity-60 disabled:cursor-not-allowed">保存班级信息</button>
+                </div>
+
+                <div
+                    class="teacher-surface-amber dark:bg-surface-dark rounded-2xl border border-[#efdcc0] dark:border-[#4a4238] p-6 shadow-[0_12px_26px_-24px_rgba(212,136,6,0.45)]">
+                    <h3 class="text-lg font-bold mb-4">班级邀请码</h3>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <div id="invite-code-text"
+                            class="flex-1 rounded-md bg-[#fdfbf7] dark:bg-[#2b2520] border border-[#efebe0] dark:border-[#4a4238] px-4 py-3 font-bold tracking-[0.2em] flex items-center">
+                            <div class="h-6 w-32 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse"></div>
+                        </div>
+                        <button id="copy-invite-btn"
+                            class="px-4 py-2.5 rounded-xl border border-[#e3c79e] dark:border-[#4a4238] bg-[#fff6ea] dark:bg-[#2b2520] text-[#7a4b12] dark:text-[#f0e6d2] text-sm font-semibold hover:bg-[#f8e7cb] focus:outline-none focus:ring-2 focus:ring-[#e6a23c]/30 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">复制邀请码</button>
+                        <button id="refresh-invite-btn"
+                            class="px-4 py-2.5 rounded-xl border border-[#e3c79e] bg-[linear-gradient(135deg,_#fff1dc_0%,_#f5dfbf_100%)] text-[#6d4312] text-sm font-semibold hover:bg-[linear-gradient(135deg,_#fce6c4_0%,_#f1d39e_100%)] focus:outline-none focus:ring-2 focus:ring-[#e6a23c]/30 transition-colors shadow-[0_10px_20px_-18px_rgba(212,136,6,0.45)] disabled:opacity-60 disabled:cursor-not-allowed">刷新邀请码</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentTeacherId = null;
+
+        function showStatus(statusElementId, message, type = 'info') {
+            const statusEl = document.getElementById(statusElementId);
+            if (!statusEl) return;
+
+            statusEl.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border', 'border-green-200', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-blue-50', 'text-blue-700', 'border-blue-200');
+            if (type === 'success') {
+                statusEl.classList.add('bg-green-50', 'text-green-700', 'border', 'border-green-200');
+            } else if (type === 'error') {
+                statusEl.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+            } else {
+                statusEl.classList.add('bg-blue-50', 'text-blue-700', 'border', 'border-blue-200');
+            }
+            statusEl.textContent = message;
+        }
+
+        function showClassStatus(message, type = 'info') {
+            showStatus('settings-status', message, type);
+        }
+
+        function showProfileStatus(message, type = 'info') {
+            showStatus('profile-status', message, type);
+        }
+
+        function getAvatarPreviewFallback() {
+            return 'https://api.dicebear.com/7.x/notionists/svg?seed=teacher_profile_preview&backgroundColor=e6dac6';
+        }
+
+        function setAvatarPreview(url, isLocal = false) {
+            const preview = document.getElementById('teacher-avatar-preview');
+            const previewText = document.getElementById('teacher-avatar-preview-text');
+            if (!preview) return;
+
+            const fallback = getAvatarPreviewFallback();
+            const finalUrl = String(url || '').trim() || fallback;
+            preview.src = finalUrl;
+            preview.onerror = () => {
+                preview.onerror = null;
+                preview.src = fallback;
+            };
+
+            if (previewText) {
+                if (isLocal) {
+                    previewText.textContent = '本地预览（待上传）';
+                } else {
+                    previewText.textContent = String(url || '').trim() ? '当前头像预览' : '头像预览';
+                }
+            }
+        }
+
+        function fillProfileForm(data) {
+            const fullNameInput = document.getElementById('teacher-full-name-input');
+            const avatarUrlInput = document.getElementById('teacher-avatar-url-input');
+            const bioInput = document.getElementById('teacher-bio-input');
+
+            if (fullNameInput) fullNameInput.value = data?.full_name || '';
+            if (avatarUrlInput) avatarUrlInput.value = data?.avatar_url || '';
+            if (bioInput) bioInput.value = data?.bio || '';
+            setAvatarPreview(data?.avatar_url || '');
+        }
+
+        function fillClassForm(data) {
+            const classNameInput = document.getElementById('class-name-input');
+            const schoolNameInput = document.getElementById('school-name-input');
+            const inviteCodeEl = document.getElementById('invite-code-text');
+
+            if (classNameInput) classNameInput.value = data?.name || '';
+            if (schoolNameInput) schoolNameInput.value = data?.school_name || '';
+            if (inviteCodeEl) {
+                // Clear the animated pulse skeleton div and set class and text directly
+                inviteCodeEl.innerHTML = '';
+                inviteCodeEl.className = 'flex-1 rounded-md bg-[#fdfbf7] dark:bg-[#2b2520] border border-[#efebe0] dark:border-[#4a4238] px-4 py-3 font-bold tracking-[0.2em] flex items-center animate-fade-in';
+                inviteCodeEl.textContent = data?.invite_code || '无邀请码';
+            }
+        }
+
+        function setInviteLoading() {
+            const inviteCodeEl = document.getElementById('invite-code-text');
+            if (!inviteCodeEl) return;
+            inviteCodeEl.innerHTML = '<div class="h-6 w-32 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse"></div>';
+        }
+
+        async function fetchClassSettings() {
+            if (!currentTeacherId) {
+                showClassStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            try {
+                setInviteLoading();
+                showClassStatus('正在加载班级信息...', 'info');
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/class`);
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '加载失败' }));
+                    throw new Error(errorData.error || '加载失败');
+                }
+                const data = await res.json();
+                fillClassForm(data);
+                showClassStatus('班级信息加载完成', 'success');
+            } catch (error) {
+                console.error('Fetch class settings failed:', error);
+                showClassStatus(error.message || '班级信息加载失败', 'error');
+            }
+        }
+
+        async function fetchTeacherProfile() {
+            if (!currentTeacherId) {
+                showProfileStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            try {
+                showProfileStatus('正在加载个人信息...', 'info');
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/profile`);
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '加载失败' }));
+                    throw new Error(errorData.error || '加载失败');
+                }
+
+                const data = await res.json();
+                fillProfileForm(data || {});
+                showProfileStatus('个人信息加载完成', 'success');
+            } catch (error) {
+                console.error('Fetch teacher profile failed:', error);
+                showProfileStatus(error.message || '个人信息加载失败', 'error');
+            }
+        }
+
+        async function saveTeacherProfile() {
+            const fullNameInput = document.getElementById('teacher-full-name-input');
+            const avatarUrlInput = document.getElementById('teacher-avatar-url-input');
+            const bioInput = document.getElementById('teacher-bio-input');
+            const saveBtn = document.getElementById('save-profile-btn');
+
+            if (!fullNameInput || !avatarUrlInput || !bioInput || !saveBtn) return;
+
+            const payload = {
+                full_name: String(fullNameInput.value || '').trim(),
+                avatar_url: String(avatarUrlInput.value || '').trim(),
+                bio: String(bioInput.value || '').trim()
+            };
+
+            if (!payload.full_name) {
+                showProfileStatus('请填写姓名', 'error');
+                return;
+            }
+
+            if (payload.full_name.length < 3) {
+                showProfileStatus('姓名至少需要 3 个字符', 'error');
+                return;
+            }
+
+            if (payload.bio.length > 200) {
+                showProfileStatus('个人简介最多 200 字', 'error');
+                return;
+            }
+
+            if (!currentTeacherId) {
+                showProfileStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            const prevText = saveBtn.textContent;
+            saveBtn.textContent = '保存中...';
+
+            try {
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/profile`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '保存失败' }));
+                    throw new Error(errorData.error || '保存失败');
+                }
+
+                const result = await res.json();
+                fillProfileForm(result?.data || payload);
+                showProfileStatus('个人信息保存成功', 'success');
+
+                if (typeof hydrateTeacherIdentity === 'function') {
+                    hydrateTeacherIdentity({
+                        teacherId: currentTeacherId,
+                        brandContextElementId: 'brand-context',
+                        subtitleElementId: 'header-class-context',
+                        subtitleSuffix: '班级基础信息与邀请码管理',
+                        avatarElementId: 'teacher-avatar',
+                        nameElementId: 'teacher-name'
+                    });
+                }
+            } catch (error) {
+                console.error('Save teacher profile failed:', error);
+                showProfileStatus(error.message || '保存失败，请稍后重试', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = prevText;
+            }
+        }
+
+        function readFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result || ''));
+                reader.onerror = () => reject(new Error('读取图片失败'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function uploadTeacherAvatarFromFile(file) {
+            if (!file) return;
+
+            if (!String(file.type || '').startsWith('image/')) {
+                showProfileStatus('仅支持图片文件', 'error');
+                return;
+            }
+
+            const maxBytes = 5 * 1024 * 1024;
+            if (Number(file.size || 0) > maxBytes) {
+                showProfileStatus('鍥剧墖涓嶈兘瓒呰繃 5MB', 'error');
+                return;
+            }
+
+            if (!currentTeacherId) {
+                showProfileStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            const uploadBtn = document.getElementById('upload-avatar-btn');
+            if (uploadBtn) {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = '上传中...';
+            }
+
+            try {
+                showProfileStatus('正在上传头像...', 'info');
+                const dataBase64 = await readFileAsDataUrl(file);
+                setAvatarPreview(dataBase64, true);
+
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/avatar/upload`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fileName: file.name,
+                        mimeType: file.type || 'image/png',
+                        dataBase64
+                    })
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '上传失败' }));
+                    throw new Error(errorData.error || '上传失败');
+                }
+
+                const result = await res.json();
+                const avatarUrlInput = document.getElementById('teacher-avatar-url-input');
+                if (avatarUrlInput && result?.avatar_url) {
+                    avatarUrlInput.value = result.avatar_url;
+                }
+                setAvatarPreview(result?.avatar_url || '');
+
+                if (typeof hydrateTeacherIdentity === 'function') {
+                    hydrateTeacherIdentity({
+                        teacherId: currentTeacherId,
+                        brandContextElementId: 'brand-context',
+                        subtitleElementId: 'header-class-context',
+                        subtitleSuffix: '班级基础信息与邀请码管理',
+                        avatarElementId: 'teacher-avatar',
+                        nameElementId: 'teacher-name'
+                    });
+                }
+
+                showProfileStatus('头像上传成功，已自动填入头像链接', 'success');
+            } catch (error) {
+                console.error('Upload teacher avatar failed:', error);
+                showProfileStatus(error.message || '头像上传失败，请稍后重试', 'error');
+            } finally {
+                if (uploadBtn) {
+                    uploadBtn.disabled = false;
+                    uploadBtn.textContent = '上传本地头像';
+                }
+            }
+        }
+
+        async function saveClassSettings() {
+            const classNameInput = document.getElementById('class-name-input');
+            const schoolNameInput = document.getElementById('school-name-input');
+            const saveBtn = document.getElementById('save-class-btn');
+            if (!classNameInput || !schoolNameInput || !saveBtn) return;
+
+            const payload = {
+                name: String(classNameInput.value || '').trim(),
+                school_name: String(schoolNameInput.value || '').trim()
+            };
+
+            if (!payload.name || !payload.school_name) {
+                showClassStatus('请完整填写班级名称和年级', 'error');
+                return;
+            }
+
+            if (!currentTeacherId) {
+                showClassStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            const prevText = saveBtn.textContent;
+            saveBtn.textContent = '保存中...';
+
+            try {
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/class`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '保存失败' }));
+                    throw new Error(errorData.error || '保存失败');
+                }
+                const result = await res.json();
+                fillClassForm(result.data || payload);
+                showClassStatus('班级信息保存成功', 'success');
+            } catch (error) {
+                console.error('Save class settings failed:', error);
+                showClassStatus(error.message || '保存失败，请稍后重试', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = prevText;
+            }
+        }
+
+        async function refreshInviteCode() {
+            const refreshBtn = document.getElementById('refresh-invite-btn');
+            if (!refreshBtn) return;
+
+            if (!currentTeacherId) {
+                showClassStatus('请先登录教师账号', 'error');
+                return;
+            }
+
+            refreshBtn.disabled = true;
+            const prevText = refreshBtn.textContent;
+            refreshBtn.textContent = '刷新中...';
+
+            try {
+                setInviteLoading();
+                const res = await apiFetch(API_BASE_URL + `/api/teacher/${encodeURIComponent(currentTeacherId)}/class/invite-code/refresh`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ error: '刷新失败' }));
+                    throw new Error(errorData.error || '刷新失败');
+                }
+                const result = await res.json();
+                fillClassForm(result.data || {});
+                showClassStatus('邀请码已刷新', 'success');
+            } catch (error) {
+                console.error('Refresh invite code failed:', error);
+                showClassStatus(error.message || '刷新失败，请稍后重试', 'error');
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = prevText;
+            }
+        }
+
+        async function copyInviteCode() {
+            const inviteCodeEl = document.getElementById('invite-code-text');
+            if (!inviteCodeEl) return;
+            const value = String(inviteCodeEl.textContent || '').trim();
+            if (!value || value === '无邀请码' || value === '加载中...') {
+                showClassStatus('暂无可复制的邀请码', 'error');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(value);
+                showClassStatus('邀请码已复制到剪贴板', 'success');
+            } catch (error) {
+                console.error('Copy invite code failed:', error);
+                showClassStatus('复制失败，请手动复制', 'error');
+            }
+        }
+
+        function scrollToProfileSectionIfNeeded() {
+            const section = new URLSearchParams(window.location.search).get('section');
+            if (section !== 'profile') return;
+
+            const card = document.getElementById('profile-settings-card');
+            if (!card) return;
+
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            card.classList.add('ring-2', 'ring-primary/40');
+            setTimeout(() => {
+                card.classList.remove('ring-2', 'ring-primary/40');
+            }, 1400);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentTeacherId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+
+            if (currentTeacherId && typeof hydrateTeacherIdentity === 'function') {
+                hydrateTeacherIdentity({
+                    teacherId: currentTeacherId,
+                    brandContextElementId: 'brand-context',
+                    subtitleElementId: 'header-class-context',
+                    subtitleSuffix: '班级基础信息与邀请码管理',
+                    avatarElementId: 'teacher-avatar',
+                    nameElementId: 'teacher-name'
+                });
+            }
+
+            const saveBtn = document.getElementById('save-class-btn');
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            const uploadAvatarBtn = document.getElementById('upload-avatar-btn');
+            const avatarFileInput = document.getElementById('teacher-avatar-file-input');
+            const avatarUrlInput = document.getElementById('teacher-avatar-url-input');
+            const refreshBtn = document.getElementById('refresh-invite-btn');
+            const copyBtn = document.getElementById('copy-invite-btn');
+
+            if (saveBtn) saveBtn.addEventListener('click', saveClassSettings);
+            if (saveProfileBtn) saveProfileBtn.addEventListener('click', saveTeacherProfile);
+            if (uploadAvatarBtn && avatarFileInput) {
+                uploadAvatarBtn.addEventListener('click', () => avatarFileInput.click());
+                avatarFileInput.addEventListener('change', async (event) => {
+                    const file = event.target?.files?.[0];
+                    await uploadTeacherAvatarFromFile(file);
+                    avatarFileInput.value = '';
+                });
+            }
+            if (avatarUrlInput) {
+                avatarUrlInput.addEventListener('change', () => {
+                    setAvatarPreview(avatarUrlInput.value || '');
+                });
+            }
+            if (refreshBtn) refreshBtn.addEventListener('click', refreshInviteCode);
+            if (copyBtn) copyBtn.addEventListener('click', copyInviteCode);
+
+            await fetchTeacherProfile();
+            await fetchClassSettings();
+            scrollToProfileSectionIfNeeded();
+        });
+    </script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>成长足迹 - 乐学成长平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" /><!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <!-- Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee9d2b",
+                        "primary-dark": "#d98b1f",
+                        "primary-light": "#fef3e2",
+                        "beige-bg": "#fcf9f4",
+                        "beige-card": "#ffffff",
+                        "warm-border": "#f0e6d0",
+                        "accent-yellow": "#f4d03f",
+                        "text-main": "#4a4036",
+                        "text-sub": "#9ca3af",
+                        "background-dark": "#292520",
+                        "surface-dark": "#36322b",
+                        "chart-blue": "#3b82f6",
+                        "chart-purple": "#8b5cf6",
+                        "chart-orange": "#f97316",
+                        "chart-red": "#ef4444",
+                        "chart-green": "#10b981",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2.5rem",
+                        "2xl": "3rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(238, 157, 43, 0.15)',
+                        'card': '0 4px 6px -1px rgba(92, 84, 70, 0.05), 0 10px 15px -3px rgba(92, 84, 70, 0.05)',
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                    }
+                },
+            },
+        }
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/growth.css" />
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+<style>
+        /* MVP Focus states for accessibility */
+        .focus-ring:focus,
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        .focus-ring:focus-visible {
+            outline: 2px solid #ee9d2b;
+            outline-offset: 2px;
+        }
+
+        /* Disabled state */
+        .disabled,
+        button:disabled,
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f0e6d0;
+            border-top-color: #ee9d2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state styling */
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Smooth transitions for interactive elements */
+        button, a, input, select, textarea {
+            transition: all 0.2s ease;
+        }
+</style>
+</head>
+
+<body
+    class="bg-beige-bg dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen font-body overflow-x-hidden transition-colors duration-300">
+    <div class="flex h-screen w-full">
+        <!-- Sidebar Navigation -->
+        <aside class="hidden md:flex flex-col w-24 lg:w-32 py-6 pl-6 h-full fixed z-20">
+            <div
+                class="flex-1 bg-beige-card dark:bg-surface-dark shadow-soft rounded-[2rem] flex flex-col items-center py-8 gap-8 border-2 border-white/60 dark:border-surface-dark/50 ring-1 ring-warm-border/50">
+                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4 cursor-pointer hover-bounce border-4 border-white shadow-sm"
+                    onclick="window.location.href='profile.html'">
+                    <img alt="User Avatar Placeholder" class="w-full h-full object-cover rounded-full p-0.5"
+                        id="sidebar-avatar"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+                </div>
+                <!-- Navigation Items -->
+                <nav class="flex flex-col gap-6 w-full items-center">
+                    <!-- Home -->
+                    <a class="group flex flex-col items-center gap-1 w-full relative" href="dashboard.html">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+                            <span class="material-icons-round text-2xl">home</span>
+                        </div>
+                        <span
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">首页</span>
+                    </a>
+                    <!-- Portfolio / Dream -->
+                    <a class="group flex flex-col items-center gap-1 w-full relative" href="portfolio.html">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+                            <span class="material-icons-round text-2xl">rocket_launch</span>
+                        </div>
+                        <span
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">梦想</span>
+                    </a>
+                    <!-- Challenge -->
+                    <a class="group flex flex-col items-center gap-1 w-full relative" href="challenge.html">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-white dark:bg-surface-dark hover:bg-orange-50 dark:hover:bg-gray-800 text-text-sub dark:text-gray-400 flex items-center justify-center border-2 border-warm-border dark:border-gray-700 group-hover:border-primary/50 group-hover:text-primary transition-all shadow-sm">
+                            <span class="material-icons-round text-2xl">bolt</span>
+                        </div>
+                        <span
+                            class="text-xs font-bold text-text-sub group-hover:text-primary-dark transition-colors font-display">挑战</span>
+                    </a>
+                    <!-- Growth (Active) -->
+                    <a class="group flex flex-col items-center gap-1 w-full relative" href="growth.html">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30 transform transition-transform group-hover:scale-110 group-hover:rotate-3">
+                            <span class="material-icons-round text-3xl">psychology</span>
+                        </div>
+                        <span class="text-xs font-bold text-primary-dark transition-colors font-display">成长</span>
+                        <div
+                            class="absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary rounded-l-full shadow-sm">
+                        </div>
+                    </a>
+                </nav>
+                <div class="mt-auto">
+                    <button
+                        class="w-10 h-10 rounded-full bg-warm-border/50 dark:bg-gray-800 text-text-sub flex items-center justify-center hover:bg-orange-100 dark:hover:bg-gray-700 transition-colors"
+                        onclick="logout()">
+                        <span class="material-icons-round text-xl">logout</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 md:ml-32 lg:ml-40 p-6 md:p-8 lg:p-10 overflow-y-auto">
+            <!-- Header -->
+            <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-text-main dark:text-white mb-2 tracking-wide font-display"
+                        id="user-greeting">
+                        我的成长足迹 <span class="text-primary-dark drop-shadow-sm">✨</span>
+                    </h1>
+                    <p class="text-text-sub dark:text-gray-400 text-lg font-medium">看，你一点一滴的努力都在这里发光！</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full overflow-hidden border-4 border-white shadow-soft hover-bounce cursor-pointer ring-2 ring-primary/30 bg-gray-200"
+                        onclick="window.location.href='profile.html'">
+                        <img alt="Profile" class="w-full h-full object-cover transition-opacity duration-500 opacity-0"
+                            id="user-avatar-header" onload="this.classList.remove('opacity-0')"
+                            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex flex-col gap-8">
+                <!-- Hero Section & Metrics Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Hero Card -->
+                    <div
+                        class="lg:col-span-12 xl:col-span-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary-dark/30 dark:to-background-dark p-8 relative overflow-hidden shadow-soft border-2 border-white/60 ring-1 ring-primary/20 glassmorphism flex flex-col justify-center h-full">
+                        <div
+                            class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary/30 rounded-full blur-3xl mix-blend-multiply">
+                        </div>
+                        <div
+                            class="absolute -left-10 -top-10 w-48 h-48 bg-yellow-200/40 rounded-full blur-3xl mix-blend-multiply">
+                        </div>
+
+                        <div class="relative z-10">
+                            <div
+                                class="w-16 h-16 bg-white/50 backdrop-blur-sm rounded-lg flex items-center justify-center mb-6 shadow-sm border border-white">
+                                <span class="text-4xl">🌱</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-text-main dark:text-white mb-2 font-display">陪伴相伴的时光</h2>
+                            <p class="text-text-sub dark:text-gray-300 mb-4 text-lg">
+                                这是你与乐学共同度过的第
+                            </p>
+                            <div class="flex items-end gap-2 text-primary-dark dark:text-primary">
+                                <span class="text-6xl font-black font-display tracking-tighter"
+                                    id="account-age">0</span>
+                                <span class="text-2xl font-bold mb-1">天</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div
+                        class="lg:col-span-12 xl:col-span-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                        <!-- Metric 1 -->
+                        <div class="metric-card bg-beige-card dark:bg-surface-dark cursor-pointer hover:scale-105 transition-transform" onclick="window.location.href='challenge.html'">
+                            <div class="flex justify-between items-start mb-4">
+                                <div
+                                    class="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-md flex items-center justify-center">
+                                    <span class="material-icons-round text-blue-500 text-2xl">bolt</span>
+                                </div>
+                            </div>
+                            <h3 class="text-text-sub dark:text-gray-400 text-sm font-bold mb-1">完整挑战测试</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-text-main dark:text-white font-display"
+                                    id="metric-challenges">0</span>
+                                <span class="text-sm font-medium text-text-sub">次</span>
+                            </div>
+                            <p id="metric-challenges-pending" class="mt-2 text-xs font-semibold text-text-sub dark:text-gray-400">当前进度 0/10 题</p>
+                        </div>
+
+                        <!-- Metric 2 -->
+                        <div class="metric-card bg-beige-card dark:bg-surface-dark cursor-pointer hover:scale-105 transition-transform" onclick="window.location.href='dashboard.html'">
+                            <div class="flex justify-between items-start mb-4">
+                                <div
+                                    class="w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-md flex items-center justify-center">
+                                    <span class="material-icons-round text-purple-500 text-2xl">palette</span>
+                                </div>
+                            </div>
+                            <h3 class="text-text-sub dark:text-gray-400 text-sm font-bold mb-1">成长动态</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-text-main dark:text-white font-display"
+                                    id="metric-portfolios">0</span>
+                                <span class="text-sm font-medium text-text-sub">条</span>
+                            </div>
+                        </div>
+
+                        <!-- Metric 3 -->
+                        <div class="metric-card bg-beige-card dark:bg-surface-dark cursor-pointer hover:scale-105 transition-transform" onclick="window.location.href='dashboard.html'">
+                            <div class="flex justify-between items-start mb-4">
+                                <div
+                                    class="w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-md flex items-center justify-center">
+                                    <span
+                                        class="material-icons-round text-orange-500 text-2xl">local_fire_department</span>
+                                </div>
+                            </div>
+                            <h3 class="text-text-sub dark:text-gray-400 text-sm font-bold mb-1">坚持天数</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-text-main dark:text-white font-display"
+                                    id="metric-streak">0</span>
+                                <span class="text-sm font-medium text-text-sub">天</span>
+                            </div>
+                        </div>
+
+                        <!-- Metric 4 -->
+                        <div class="metric-card bg-beige-card dark:bg-surface-dark cursor-pointer hover:scale-105 transition-transform" onclick="window.location.href='portfolio.html'">
+                            <div class="flex justify-between items-start mb-4">
+                                <div
+                                    class="w-12 h-12 bg-green-100 dark:bg-green-900/40 rounded-md flex items-center justify-center">
+                                    <span class="material-icons-round text-green-500 text-2xl">star_rate</span>
+                                </div>
+                            </div>
+                            <h3 class="text-text-sub dark:text-gray-400 text-sm font-bold mb-1">获得赞赏</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-text-main dark:text-white font-display"
+                                    id="metric-likes">0</span>
+                                <span class="text-sm font-medium text-text-sub">次</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Radar Chart: Multi-dimensional skill breakdown -->
+                    <div class="chart-container bg-beige-card dark:bg-surface-dark relative overflow-hidden group">
+                        <div
+                            class="absolute -top-10 -right-10 w-40 h-40 bg-purple-100/50 dark:bg-purple-900/10 rounded-full blur-3xl z-0">
+                        </div>
+                        <div class="relative z-10 flex flex-col h-full">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="p-2 bg-purple-100 dark:bg-purple-900/40 rounded-md inline-flex">
+                                    <span class="material-icons-round text-purple-500 text-xl">radar</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-text-main dark:text-white font-display">综合能力分析
+                                    </h3>
+                                    <p class="text-xs text-text-sub mt-0.5">各项挑战分类的表现维度</p>
+                                </div>
+                            </div>
+                            <div class="relative h-[320px] w-full flex items-center justify-center">
+                                <canvas id="radarChart"></canvas>
+                                <!-- Loading overlay -->
+                                <div id="radar-loading"
+                                    class="absolute inset-0 bg-white/50 dark:bg-black/20 backdrop-blur-sm flex items-center justify-center rounded-lg transition-opacity duration-300 z-20">
+                                    <div
+                                        class="w-10 h-10 border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart: Activity Trend -->
+                    <div class="chart-container bg-beige-card dark:bg-surface-dark relative overflow-hidden group">
+                        <div
+                            class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-100/50 dark:bg-blue-900/10 rounded-full blur-3xl z-0">
+                        </div>
+                        <div class="relative z-10 flex flex-col h-full">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-md inline-flex">
+                                    <span class="material-icons-round text-blue-500 text-xl">trending_up</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-text-main dark:text-white font-display">近期活跃度</h3>
+                                    <p class="text-xs text-text-sub mt-0.5">过去30天完成任务的趋势</p>
+                                </div>
+                            </div>
+                            <div class="relative h-[320px] w-full">
+                                <canvas id="lineChart"></canvas>
+                                <!-- Loading overlay -->
+                                <div id="line-loading"
+                                    class="absolute inset-0 bg-white/50 dark:bg-black/20 backdrop-blur-sm flex items-center justify-center rounded-lg transition-opacity duration-300 z-20">
+                                    <div
+                                        class="w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Section -->
+                <div
+                    class="bg-beige-card dark:bg-surface-dark rounded-2xl p-8 shadow-card border-2 border-white ring-1 ring-warm-border/40 relative">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="p-2 bg-green-100 dark:bg-green-900/40 rounded-md inline-flex">
+                            <span class="material-icons-round text-green-500 text-xl">history_edu</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-text-main dark:text-white font-display">历史轨迹</h3>
+                    </div>
+
+                    <div class="relative pl-6 border-l-2 border-warm-border/60 dark:border-gray-700 space-y-8"
+                        id="timeline-container">
+                        <!-- Timeline items will be injected here -->
+                        <div id="timeline-loading" class="text-text-sub text-sm py-4">正在加载历史轨迹...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Timeline Detail Modal -->
+    <div id="timeline-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-surface-dark rounded-2xl w-full max-w-sm shadow-2xl p-6 relative animate-slide-up">
+            <button onclick="document.getElementById('timeline-detail-modal').classList.replace('flex','hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <span class="material-icons-round">close</span>
+            </button>
+            <div id="timeline-detail-icon" class="w-12 h-12 rounded-lg flex items-center justify-center mb-4"></div>
+            <p id="timeline-detail-label" class="text-xs font-semibold text-text-sub mb-1"></p>
+            <h4 id="timeline-detail-title" class="text-lg font-bold text-text-main dark:text-white mb-3"></h4>
+            <p id="timeline-detail-desc" class="text-sm text-text-sub dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-black/20 rounded-md p-3 hidden"></p>
+            <div id="timeline-detail-meta" class="mt-3 space-y-2 hidden"></div>
+            <a id="timeline-detail-proof-link" class="mt-3 inline-flex items-center gap-1 text-sm text-primary-dark hover:text-primary hidden" href="#" rel="noopener noreferrer">
+                <span class="material-icons-round text-base">link</span>
+                查看提交材料
+            </a>
+            <p id="timeline-detail-time" class="text-xs text-text-sub mt-3"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../shared/api.js"></script>
+    <script src="js/growth.js"></script>
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

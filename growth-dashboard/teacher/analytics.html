@@ -1,0 +1,993 @@
+﻿<!-- Class Psychology Analytics -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script id="page-loading-bootstrap">document.documentElement.classList.add('ui-shell-pending');document.documentElement.dataset.loadingBootAt=String(Date.now());</script>
+    <title>数据分析 - OptiClass</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e6a23c",
+                        "primary-dark": "#d48806",
+                        "secondary": "#faecd8",
+                        "background-light": "#fdfbf7",
+                        "background-dark": "#2b2520",
+                        "surface-light": "#fffefc",
+                        "surface-dark": "#3a322b",
+                        "text-main-light": "#4a4238",
+                        "text-main-dark": "#f0e6d2",
+                        "text-sub-light": "#8c8174",
+                        "text-sub-dark": "#b0a69a",
+                        "accent-green": "#67c23a",
+                        "accent-red": "#f56c6c",
+                        "accent-blue": "#409eff",
+                        "chart-blue": "rgba(64, 158, 255, 0.6)",
+                        "chart-green": "rgba(103, 194, 58, 0.6)",
+                        "chart-yellow": "rgba(230, 162, 60, 0.6)",
+                        "chart-red": "rgba(245, 108, 108, 0.6)",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Lexend", "sans-serif"]
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(5px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    borderRadius: { "DEFAULT": "0.875rem", "lg": "1.25rem", "xl": "1.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(230, 162, 60, 0.08), transparent 30%),
+                linear-gradient(180deg, #fffcf6 0%, #f9f2e7 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e6dfd1;
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4c8b5;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #5c5246;
+        }
+
+        .teacher-shell {
+            background:
+                radial-gradient(circle at top left, rgba(250, 236, 216, 0.75), transparent 28%),
+                linear-gradient(180deg, #fffdf9 0%, #fbf6ed 100%);
+        }
+
+        .teacher-surface-warm {
+            background: linear-gradient(180deg, rgba(255, 252, 246, 0.98), rgba(250, 243, 232, 0.98));
+        }
+
+        .teacher-surface-amber {
+            background: linear-gradient(135deg, #fffaf1 0%, #f9efe2 100%);
+        }
+
+        .teacher-surface-green {
+            background: linear-gradient(135deg, #f4faef 0%, #f9f3e8 100%);
+        }
+
+        .teacher-surface-rose {
+            background: linear-gradient(135deg, #fff5f4 0%, #fcebe8 100%);
+        }
+    </style>
+    <script src="../shared/api.js"></script>
+    <script src="../shared/components.js"></script>
+    <link rel="stylesheet" href="../shared/page-loading.css" />
+    <link rel="stylesheet" href="../shared/typography-system.css" />
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="hidden md:flex flex-col w-64 teacher-shell dark:bg-surface-dark border-r border-[#eadfce] dark:border-[#4a4238] p-6 z-20">
+            <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer"
+                data-teacher-nav="dashboard.html">
+                <div
+                    class="w-10 h-10 rounded-full bg-[linear-gradient(135deg,_#f3bb67_0%,_#df9a2a_100%)] flex items-center justify-center text-white font-bold text-xl shadow-[0_10px_20px_-12px_rgba(212,136,6,0.7)]">
+                    O</div>
+                <div class="min-w-0">
+                    <h1 class="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">OptiClass</h1>
+                    <p id="brand-context" class="text-xs text-text-sub-light dark:text-text-sub-dark truncate">教师工作台</p>
+                </div>
+            </div>
+            <nav class="flex-1 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="dashboard.html">
+                    <span class="material-icons">dashboard</span>
+                    工作台
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[linear-gradient(135deg,_#fff5e6_0%,_#f7ead6_100%)] dark:bg-primary/20 text-primary-dark dark:text-primary font-medium shadow-[0_8px_18px_-16px_rgba(212,136,6,0.45)]"
+                    href="analytics.html">
+                    <span class="material-icons">bar_chart</span>
+                    数据分析
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="students.html">
+                    <span class="material-icons">groups</span>
+                    学生管理
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="submissions.html">
+                    <span class="material-icons">assignment_turned_in</span>
+                    作业审核
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors"
+                    href="settings.html">
+                    <span class="material-icons">settings</span>
+                    班级设置
+                </a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-[#efebe0] dark:border-[#4a4238]">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f8efe0] dark:hover:bg-surface-light/5 text-text-sub-light dark:text-text-sub-dark transition-colors cursor-pointer"
+                    data-teacher-nav="../index.html">
+                    <span class="material-icons">logout</span>
+                    退出登录
+                </a>
+            </div>
+        </aside>
+        <main class="flex-1 overflow-y-auto relative bg-[#fdfbf7] dark:bg-[#2b2520]">
+            <header data-teacher-header="true"
+                class="sticky top-0 z-50 bg-[linear-gradient(180deg,_rgba(255,252,247,0.96)_0%,_rgba(251,246,237,0.96)_100%)] dark:bg-background-dark px-8 py-5 flex items-center justify-between border-b border-[#efebe0] dark:border-[#4a4238] backdrop-blur-sm">
+                <div class="flex flex-col">
+                    <h2
+                        class="text-2xl font-bold text-text-main-light dark:text-text-main-dark flex items-center gap-2">
+                        班级数据分析
+                        <span
+                            class="text-xs font-normal text-primary-dark dark:text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">AI
+                            增强</span>
+                    </h2>
+                    <p id="header-class-context" class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">正在加载班级信息...</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div
+                        class="flex items-center teacher-surface-amber dark:bg-surface-dark rounded-xl p-1 border border-[#eadbc6] dark:border-[#4a4238] shadow-[0_10px_18px_-18px_rgba(212,136,6,0.45)]">
+                        <button id="period-week-btn" data-period="week"
+                            class="px-3 py-1 text-sm font-medium bg-secondary/50 dark:bg-primary/20 text-primary-dark dark:text-primary rounded-md shadow-sm">本周</button>
+                        <button id="period-month-btn" data-period="month"
+                            class="px-3 py-1 text-sm font-medium text-text-sub-light dark:text-text-sub-dark hover:text-text-main-light dark:hover:text-text-main-dark transition-colors">本月</button>
+                        <button id="period-term-btn" data-period="term"
+                            class="px-3 py-1 text-sm font-medium text-text-sub-light dark:text-text-sub-dark hover:text-text-main-light dark:hover:text-text-main-dark transition-colors">学期</button>
+                    </div>
+                    <button id="analytics-export-btn"
+                        class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl shadow-[0_10px_20px_-16px_rgba(212,136,6,0.65)] hover:bg-primary-dark transition-colors">
+                        <span class="material-icons text-sm">download</span>
+                        <span class="text-sm font-bold">导出报告</span>
+                    </button>
+                    <div class="hidden sm:flex items-center gap-2 pl-3 border-l border-[#efebe0] dark:border-[#4a4238] cursor-pointer"
+                        data-teacher-nav="settings.html?section=profile" title="维护个人信息">
+                        <img id="teacher-avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white dark:border-[#3a322b] shadow-sm" alt="教师头像" />
+                        <span id="teacher-name" class="text-sm font-medium text-text-main-light dark:text-text-main-dark max-w-[110px] truncate">老师</span>
+                    </div>
+                </div>
+            </header>
+            <div class="p-8 max-w-7xl mx-auto space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div
+                        class="teacher-surface-green dark:bg-surface-dark p-5 rounded-2xl shadow-[0_12px_24px_-22px_rgba(103,194,58,0.25)] border border-[#dde9d2] dark:border-[#4a4238] flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-accent-green mb-3">
+                            <span class="material-icons">sentiment_very_satisfied</span>
+                        </div>
+                        <h3 id="metric-total-students"
+                            class="text-3xl font-bold text-text-main-light dark:text-text-main-dark">
+                            <div class="h-9 w-16 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse mx-auto"></div>
+                        </h3>
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">乐观指数</p>
+                    </div>
+                    <div
+                        class="teacher-surface-warm dark:bg-surface-dark p-5 rounded-2xl shadow-[0_12px_24px_-22px_rgba(140,129,116,0.25)] border border-[#eadfce] dark:border-[#4a4238] flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-accent-blue mb-3">
+                            <span class="material-icons">psychology</span>
+                        </div>
+                        <h3 id="metric-avg-goals"
+                            class="text-3xl font-bold text-text-main-light dark:text-text-main-dark">
+                            <div class="h-9 w-16 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse mx-auto"></div>
+                        </h3>
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">成长型思维</p>
+                    </div>
+                    <div
+                        class="teacher-surface-amber dark:bg-surface-dark p-5 rounded-2xl shadow-[0_12px_24px_-22px_rgba(212,136,6,0.25)] border border-[#efdcc0] dark:border-[#4a4238] flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-primary mb-3">
+                            <span class="material-icons">sentiment_neutral</span>
+                        </div>
+                        <h3 id="metric-avg-tasks"
+                            class="text-3xl font-bold text-text-main-light dark:text-text-main-dark">
+                            <div class="h-9 w-16 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse mx-auto"></div>
+                        </h3>
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">情绪波动</p>
+                    </div>
+                    <div
+                        class="teacher-surface-rose dark:bg-surface-dark p-5 rounded-2xl shadow-[0_12px_24px_-22px_rgba(245,108,108,0.25)] border border-[#f1d7d0] dark:border-[#4a4238] flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-red-50 dark:bg-red-900/10 pointer-events-none"></div>
+                        <div
+                            class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-accent-red mb-3 relative z-10">
+                            <span class="material-icons">warning</span>
+                        </div>
+                        <h3 id="metric-top-students"
+                            class="text-3xl font-bold text-text-main-light dark:text-text-main-dark relative z-10">
+                            <div class="h-9 w-16 bg-red-100 dark:bg-red-900/40 rounded animate-pulse mx-auto"></div>
+                        </h3>
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark relative z-10">需关注学生</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div
+                        class="col-span-1 lg:col-span-2 teacher-surface-warm dark:bg-surface-dark p-6 rounded-2xl shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)] border border-[#eadfce] dark:border-[#4a4238]">
+                        <h3 class="font-bold text-lg text-text-main-light dark:text-text-main-dark mb-6">班级情绪趋势变化</h3>
+                        <div class="h-80 w-full">
+                            <canvas height="320" id="moodTrendChart" width="100%"></canvas>
+                        </div>
+                    </div>
+                    <div
+                        class="teacher-surface-amber dark:bg-surface-dark p-6 rounded-2xl shadow-[0_14px_28px_-24px_rgba(212,136,6,0.28)] border border-[#efdcc0] dark:border-[#4a4238]">
+                        <h3 class="font-bold text-lg text-text-main-light dark:text-text-main-dark mb-6">思维模式分布</h3>
+                        <div class="h-64 w-full flex items-center justify-center relative">
+                            <canvas height="256" id="mindsetDistributionChart" width="256"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span id="distribution-total"
+                                    class="text-2xl font-bold text-text-main-light dark:text-text-main-dark mb-1">
+                                    <div class="h-8 w-12 bg-[#efebe0] dark:bg-[#4a4238] rounded animate-pulse"></div>
+                                </span>
+                                <span class="text-sm text-text-sub-light dark:text-text-sub-dark">总人数</span>
+                            </div>
+                        </div>
+                        <div id="distribution-legend" class="mt-6 space-y-3">
+                            <div class="animate-pulse space-y-2">
+                                <div class="h-4 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                <div class="h-4 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                <div class="h-4 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div
+                        class="teacher-surface-warm dark:bg-surface-dark p-6 rounded-2xl shadow-[0_14px_28px_-24px_rgba(140,129,116,0.45)] border border-[#eadfce] dark:border-[#4a4238]">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-lg text-text-main-light dark:text-text-main-dark">AI 洞察建议</h3>
+                            <button id="insight-refresh-btn" type="button"
+                                class="bg-[#fff2dc] text-primary-dark px-3 py-1 rounded-full text-xs font-bold border border-[#efdcc0] hover:bg-[#f7e7cc] transition">
+                                刷新洞察
+                            </button>
+                        </div>
+                        <div id="insight-list" class="space-y-4">
+                            <div class="animate-pulse p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238]">
+                                <div class="h-4 w-1/3 rounded bg-[#efebe0] dark:bg-[#4a4238] mb-2"></div>
+                                <div class="h-3 w-full rounded bg-[#efebe0] dark:bg-[#4a4238] mb-1"></div>
+                                <div class="h-3 w-5/6 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                            </div>
+                            <div class="animate-pulse p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238]">
+                                <div class="h-4 w-1/4 rounded bg-[#efebe0] dark:bg-[#4a4238] mb-2"></div>
+                                <div class="h-3 w-full rounded bg-[#efebe0] dark:bg-[#4a4238] mb-1"></div>
+                                <div class="h-3 w-4/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="teacher-surface-green dark:bg-surface-dark p-6 rounded-2xl shadow-[0_14px_28px_-24px_rgba(103,194,58,0.28)] border border-[#dde9d2] dark:border-[#4a4238]">
+                        <div class="flex items-start justify-between gap-4 mb-5">
+                            <div>
+                                <h3 class="font-bold text-lg text-text-main-light dark:text-text-main-dark">词云分析</h3>
+                                <p class="text-xs text-text-sub-light dark:text-text-sub-dark mt-1">班级表达热词与关注主题分布</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span id="word-cloud-updated"
+                                    class="text-[11px] text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark px-2.5 py-1 rounded-full border border-[#efebe0] dark:border-[#4a4238]">尚未更新</span>
+                                <button id="word-cloud-refresh-btn" type="button"
+                                    class="inline-flex items-center gap-1.5 bg-secondary text-primary-dark px-3 py-1.5 rounded-full text-xs font-bold border border-[#efebe0] dark:border-[#4a4238] hover:bg-secondary/80 transition">
+                                    <span class="material-icons text-sm">refresh</span>
+                                    刷新词云
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3 mb-4">
+                            <div class="rounded-md border border-[#efebe0] dark:border-[#4a4238] bg-background-light dark:bg-background-dark px-3 py-2">
+                                <p class="text-[11px] text-text-sub-light dark:text-text-sub-dark">热词数量</p>
+                                <p id="word-cloud-total" class="text-base font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                            </div>
+                            <div class="rounded-md border border-[#efebe0] dark:border-[#4a4238] bg-background-light dark:bg-background-dark px-3 py-2">
+                                <p class="text-[11px] text-text-sub-light dark:text-text-sub-dark">最高频词</p>
+                                <p id="word-cloud-top" class="text-base font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                            </div>
+                            <div class="rounded-md border border-[#efebe0] dark:border-[#4a4238] bg-background-light dark:bg-background-dark px-3 py-2">
+                                <p class="text-[11px] text-text-sub-light dark:text-text-sub-dark">文本样本</p>
+                                <p id="word-cloud-source" class="text-base font-bold text-text-main-light dark:text-text-main-dark">--</p>
+                            </div>
+                        </div>
+
+                        <div id="word-cloud-container"
+                            class="relative min-h-[260px] rounded-lg border border-[#efebe0] dark:border-[#4a4238] bg-gradient-to-br from-background-light to-secondary/50 dark:from-background-dark dark:to-surface-dark overflow-hidden p-4">
+                            <div class="absolute inset-0 pointer-events-none opacity-40">
+                                <div class="absolute -top-8 -left-8 w-32 h-32 rounded-full bg-secondary/70 dark:bg-primary/10"></div>
+                                <div class="absolute -bottom-8 -right-8 w-36 h-36 rounded-full bg-primary/10 dark:bg-primary/15"></div>
+                            </div>
+                            <div id="word-cloud-stage"
+                                class="relative z-10 flex flex-wrap gap-2 justify-center items-center h-full min-h-[220px] content-center">
+                                <div class="animate-pulse space-y-3 w-full max-w-sm">
+                                    <div class="h-5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-5 w-4/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-5 w-3/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                    <div class="h-5 w-2/3 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="word-cloud-keywords" class="mt-4 flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        let moodTrendChart = null;
+        let mindsetDistributionChart = null;
+        let currentPeriod = 'week';
+        let cachedStudents = [];
+        let cachedDistribution = null;
+        let cachedInsights = [];
+        let cachedWordCloud = [];
+        let cachedWordCloudMeta = null;
+        let currentClassId = null;
+        let currentClassName = '班级';
+        let currentTeacherId = null;
+
+        function buildMoodChart(labels, data) {
+            const ctxMood = document.getElementById('moodTrendChart').getContext('2d');
+            if (moodTrendChart) {
+                moodTrendChart.destroy();
+            }
+            moodTrendChart = new Chart(ctxMood, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: '平均乐观指数',
+                        data,
+                        borderColor: '#e6a23c',
+                        backgroundColor: 'rgba(230, 162, 60, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#e6a23c',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function buildDistributionChart(data) {
+            const ctxMindset = document.getElementById('mindsetDistributionChart').getContext('2d');
+            if (mindsetDistributionChart) {
+                mindsetDistributionChart.destroy();
+            }
+            mindsetDistributionChart = new Chart(ctxMindset, {
+                type: 'doughnut',
+                data: {
+                    labels: ['成长型', '混合型', '固定型'],
+                    datasets: [{
+                        data,
+                        backgroundColor: [
+                            '#67c23a',
+                            '#e6a23c',
+                            '#f56c6c'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const total = data.reduce((sum, value) => sum + value, 0) || 1;
+            const legendEl = document.getElementById('distribution-legend');
+            if (legendEl) {
+                const items = [
+                    { label: '成长型思维', value: data[0], color: 'bg-accent-green' },
+                    { label: '混合型思维', value: data[1], color: 'bg-primary' },
+                    { label: '固定型思维', value: data[2], color: 'bg-accent-red' }
+                ];
+                legendEl.innerHTML = items.map((item) => {
+                    const percent = Math.round((item.value / total) * 100);
+                    return `
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full ${item.color}"></span>
+                                <span class="text-text-sub-light dark:text-text-sub-dark">${item.label}</span>
+                            </div>
+                            <span class="font-bold text-text-main-light dark:text-text-main-dark">${percent}%</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const totalEl = document.getElementById('distribution-total');
+            if (totalEl) {
+                totalEl.innerHTML = `<span class="animate-fade-in">${String(total)}</span>`;
+            }
+        }
+
+        function setMetrics(distribution) {
+            const totalStudents = Number(distribution?.total_students || 0);
+            const classification = distribution?.classification || {};
+            const growthCount = Number(classification.growth || 0);
+            const mixedCount = Number(classification.mixed || 0);
+            const fixedCount = Number(classification.fixed || 0);
+
+            const growthRate = totalStudents > 0 ? Math.round((growthCount / totalStudents) * 100) : 0;
+            const mixedRate = totalStudents > 0 ? Math.round((mixedCount / totalStudents) * 100) : 0;
+
+            const totalStudentsEl = document.getElementById('metric-total-students');
+            const avgGoalsEl = document.getElementById('metric-avg-goals');
+            const avgTasksEl = document.getElementById('metric-avg-tasks');
+            const topStudentsEl = document.getElementById('metric-top-students');
+
+            if (totalStudentsEl) totalStudentsEl.innerHTML = `<span class="animate-fade-in">${String(growthCount)}</span>`;
+            if (avgGoalsEl) avgGoalsEl.innerHTML = `<span class="animate-fade-in">${String(growthRate)}%</span>`;
+            if (avgTasksEl) avgTasksEl.innerHTML = `<span class="animate-fade-in">${String(mixedRate)}%</span>`;
+            if (topStudentsEl) topStudentsEl.innerHTML = `<span class="animate-fade-in">${String(fixedCount)}</span>`;
+        }
+
+        function setInsightsLoading() {
+            const insightList = document.getElementById('insight-list');
+            if (!insightList) return;
+            insightList.innerHTML = `
+                <div class="animate-pulse p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238]">
+                    <div class="h-4 w-1/3 rounded bg-[#efebe0] dark:bg-[#4a4238] mb-2"></div>
+                    <div class="h-3 w-full rounded bg-[#efebe0] dark:bg-[#4a4238] mb-1"></div>
+                    <div class="h-3 w-5/6 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                </div>
+                <div class="animate-pulse p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238]">
+                    <div class="h-4 w-1/4 rounded bg-[#efebe0] dark:bg-[#4a4238] mb-2"></div>
+                    <div class="h-3 w-full rounded bg-[#efebe0] dark:bg-[#4a4238] mb-1"></div>
+                    <div class="h-3 w-4/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                </div>
+            `;
+        }
+
+        function setInsightsEmpty(message = '暂无 AI 洞察数据') {
+            const insightList = document.getElementById('insight-list');
+            if (!insightList) return;
+            insightList.innerHTML = `<div class="p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238] text-sm text-text-sub-light dark:text-text-sub-dark">${message}</div>`;
+        }
+
+        function setInsightRefreshState(isLoading) {
+            const refreshBtn = document.getElementById('insight-refresh-btn');
+            if (!refreshBtn) return;
+            refreshBtn.disabled = isLoading;
+            refreshBtn.textContent = isLoading ? '刷新中...' : '刷新洞察';
+            refreshBtn.classList.toggle('opacity-60', isLoading);
+            refreshBtn.classList.toggle('cursor-not-allowed', isLoading);
+        }
+
+        function renderInsights(insights) {
+            const insightList = document.getElementById('insight-list');
+            if (!insightList) return;
+
+            if (!Array.isArray(insights) || insights.length === 0) {
+                setInsightsEmpty('暂无 AI 洞察数据');
+                return;
+            }
+
+            const priorityMap = {
+                high: { label: '高优先级', className: 'text-red-600 bg-red-50 border-red-100' },
+                medium: { label: '中优先级', className: 'text-amber-600 bg-amber-50 border-amber-100' },
+                low: { label: '低优先级', className: 'text-emerald-600 bg-emerald-50 border-emerald-100' }
+            };
+
+            insightList.innerHTML = insights.map((item) => {
+                const level = priorityMap[item?.priority] || priorityMap.low;
+                return `
+                    <div class="p-4 rounded-md border border-[#efebe0] dark:border-[#4a4238] bg-[#fffcf5] dark:bg-[#2d2923] space-y-2">
+                        <div class="flex items-center justify-between gap-3">
+                            <p class="font-semibold text-sm text-text-main-light dark:text-text-main-dark">${item?.title || '班级洞察'}</p>
+                            <span class="px-2 py-0.5 rounded-full text-[11px] border ${level.className}">${level.label}</span>
+                        </div>
+                        <p class="text-sm text-text-sub-light dark:text-text-sub-dark">${item?.summary || ''}</p>
+                        <p class="text-xs text-primary-dark dark:text-primary">建议行动：${item?.action || '持续跟进班级状态。'}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadInsights(classId, forceRefresh = false) {
+            if (!classId) {
+                setInsightsEmpty('未找到班级信息，无法生成洞察');
+                return;
+            }
+
+            setInsightRefreshState(true);
+            if (!forceRefresh) {
+                setInsightsLoading();
+            }
+
+            try {
+                const query = forceRefresh ? '?force_refresh=true' : '';
+                const insightRes = await apiFetch(API_BASE_URL + `/api/analytics/class/${classId}/insights${query}`);
+                if (!insightRes.ok) {
+                    const errData = await insightRes.json().catch(() => ({ error: '加载洞察失败' }));
+                    throw new Error(errData.error || '加载洞察失败');
+                }
+
+                const insightData = await insightRes.json();
+                cachedInsights = Array.isArray(insightData?.insights) ? insightData.insights : [];
+                renderInsights(cachedInsights);
+                if (forceRefresh && window.showPageToast) {
+                    window.showPageToast('AI 洞察已刷新', 'success', 1200);
+                }
+            } catch (error) {
+                console.error('Load insights failed:', error);
+                if (cachedInsights.length > 0) {
+                    renderInsights(cachedInsights);
+                } else {
+                    setInsightsEmpty(String(error?.message || '洞察加载失败'));
+                }
+                if (window.showPageToast) {
+                    window.showPageToast(String(error?.message || '加载 AI 洞察失败'), 'error');
+                }
+            } finally {
+                setInsightRefreshState(false);
+            }
+        }
+
+        function setWordCloudLoading() {
+            const stage = document.getElementById('word-cloud-stage');
+            if (!stage) return;
+            stage.innerHTML = `
+                <div class="animate-pulse space-y-3 w-full max-w-sm">
+                    <div class="h-5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                    <div class="h-5 w-4/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                    <div class="h-5 w-3/5 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                    <div class="h-5 w-2/3 rounded bg-[#efebe0] dark:bg-[#4a4238]"></div>
+                </div>
+            `;
+
+            const keywordList = document.getElementById('word-cloud-keywords');
+            if (keywordList) keywordList.innerHTML = '';
+            setWordCloudMeta(null, null);
+        }
+
+        function setWordCloudEmpty(message = '暂无词云数据') {
+            const stage = document.getElementById('word-cloud-stage');
+            if (!stage) return;
+            stage.innerHTML = `
+                <div class="text-center space-y-2">
+                    <span class="material-icons text-3xl text-text-sub-light dark:text-text-sub-dark">auto_awesome</span>
+                    <p class="text-sm text-text-sub-light dark:text-text-sub-dark">${message}</p>
+                </div>
+            `;
+
+            const keywordList = document.getElementById('word-cloud-keywords');
+            if (keywordList) keywordList.innerHTML = '';
+            setWordCloudMeta([], null);
+        }
+
+        function setWordCloudMeta(words, meta) {
+            const totalEl = document.getElementById('word-cloud-total');
+            const topEl = document.getElementById('word-cloud-top');
+            const sourceEl = document.getElementById('word-cloud-source');
+            const updatedEl = document.getElementById('word-cloud-updated');
+
+            const safeWords = Array.isArray(words) ? words : [];
+            const topWord = safeWords[0];
+            const totalTexts = Number(meta?.total_texts || 0);
+
+            if (totalEl) totalEl.textContent = safeWords.length > 0 ? String(safeWords.length) : '--';
+            if (topEl) topEl.textContent = topWord ? `${topWord.text} · ${topWord.value}` : '--';
+            if (sourceEl) sourceEl.textContent = totalTexts > 0 ? `${totalTexts} 条` : '--';
+
+            if (updatedEl) {
+                if (meta?.generated_at) {
+                    const dt = new Date(meta.generated_at);
+                    if (!Number.isNaN(dt.getTime())) {
+                        updatedEl.textContent = dt.toLocaleString('zh-CN', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    } else {
+                        updatedEl.textContent = '刚刚更新';
+                    }
+                } else {
+                    updatedEl.textContent = '尚未更新';
+                }
+            }
+        }
+
+        function setWordCloudRefreshState(isLoading) {
+            const refreshBtn = document.getElementById('word-cloud-refresh-btn');
+            if (!refreshBtn) return;
+            refreshBtn.disabled = isLoading;
+            refreshBtn.textContent = isLoading ? '刷新中...' : '刷新词云';
+            refreshBtn.classList.toggle('opacity-60', isLoading);
+            refreshBtn.classList.toggle('cursor-not-allowed', isLoading);
+        }
+
+        function renderWordCloud(words) {
+            const stage = document.getElementById('word-cloud-stage');
+            const keywordList = document.getElementById('word-cloud-keywords');
+            if (!stage) return;
+
+            if (!Array.isArray(words) || words.length === 0) {
+                setWordCloudEmpty('暂无词云数据');
+                return;
+            }
+
+            const sizeMap = {
+                1: 'text-sm px-2.5 py-1.5',
+                2: 'text-base px-3 py-1.5',
+                3: 'text-lg px-3.5 py-2',
+                4: 'text-xl px-4 py-2',
+                5: 'text-2xl px-5 py-2.5'
+            };
+
+            const palette = [
+                'text-primary-dark dark:text-primary bg-secondary/80 dark:bg-primary/10 border-primary/20',
+                'text-accent-green bg-white/70 dark:bg-surface-dark/60 border-accent-green/20',
+                'text-accent-blue bg-white/80 dark:bg-surface-dark/60 border-accent-blue/20',
+                'text-text-main-light dark:text-text-main-dark bg-background-light/90 dark:bg-background-dark/80 border-[#efebe0] dark:border-[#4a4238]'
+            ];
+
+            const rotateMap = ['-rotate-1', 'rotate-0', 'rotate-1', 'rotate-0', '-rotate-1', 'rotate-1'];
+
+            stage.innerHTML = words.map((item, index) => {
+                const sizeClass = sizeMap[item?.weight] || 'text-base';
+                const colorClass = palette[index % palette.length];
+                const rotateClass = rotateMap[index % rotateMap.length];
+                const count = Number(item?.value || 0);
+                const text = String(item?.text || '');
+                return '<span title="出现 ' + count + ' 次" class="inline-flex items-center rounded-full border font-semibold ' + sizeClass + ' ' + colorClass + ' ' + rotateClass + ' transition-all duration-200 hover:scale-105 hover:shadow-sm cursor-default select-none animate-fade-in">' + text + '</span>';
+            }).join('');
+
+            if (keywordList) {
+                const topWords = words.slice(0, 6);
+                keywordList.innerHTML = topWords.map((item, index) => {
+                    const text = String(item?.text || '');
+                    const value = Number(item?.value || 0);
+                    return '<span class="inline-flex items-center gap-1 text-xs rounded-full px-2.5 py-1 border border-[#efebe0] dark:border-[#4a4238] bg-background-light dark:bg-background-dark text-text-sub-light dark:text-text-sub-dark"><span class="font-bold text-text-main-light dark:text-text-main-dark">#' + (index + 1) + '</span><span>' + text + '</span><span class="opacity-70">' + value + '</span></span>';
+                }).join('');
+            }
+
+            setWordCloudMeta(words, cachedWordCloudMeta);
+        }
+
+        async function loadWordCloud(classId, forceRefresh = false) {
+            if (!classId) {
+                setWordCloudEmpty('未找到班级信息，无法生成词云');
+                return;
+            }
+
+            setWordCloudRefreshState(true);
+            if (!forceRefresh) {
+                setWordCloudLoading();
+            }
+
+            try {
+                const query = forceRefresh ? '?force_refresh=true' : '';
+                const wordCloudRes = await apiFetch(API_BASE_URL + '/api/analytics/class/' + classId + '/word-cloud' + query);
+                if (!wordCloudRes.ok) {
+                    const errData = await wordCloudRes.json().catch(() => ({ error: '加载词云失败' }));
+                    throw new Error(errData.error || '加载词云失败');
+                }
+
+                const wordCloudData = await wordCloudRes.json();
+                cachedWordCloud = Array.isArray(wordCloudData?.words) ? wordCloudData.words : [];
+                cachedWordCloudMeta = wordCloudData?.meta || null;
+                renderWordCloud(cachedWordCloud);
+                if (forceRefresh && window.showPageToast) {
+                    window.showPageToast('词云已刷新', 'success', 1200);
+                }
+            } catch (error) {
+                console.error('Load word cloud failed:', error);
+                if (cachedWordCloud.length > 0) {
+                    renderWordCloud(cachedWordCloud);
+                } else {
+                    setWordCloudEmpty(String(error?.message || '词云加载失败'));
+                }
+                if (window.showPageToast) {
+                    window.showPageToast(String(error?.message || '加载词云失败'), 'error');
+                }
+            } finally {
+                setWordCloudRefreshState(false);
+            }
+        }
+
+        function setChartLoading(isLoading) {
+            const trendCanvas = document.getElementById('moodTrendChart');
+            const distCanvas = document.getElementById('mindsetDistributionChart');
+            if (trendCanvas) {
+                trendCanvas.classList.toggle('opacity-40', isLoading);
+                trendCanvas.classList.toggle('animate-pulse', isLoading);
+            }
+            if (distCanvas) {
+                distCanvas.classList.toggle('opacity-40', isLoading);
+                distCanvas.classList.toggle('animate-pulse', isLoading);
+            }
+        }
+
+        function clearAnalyticsCharts() {
+            if (moodTrendChart) {
+                moodTrendChart.destroy();
+                moodTrendChart = null;
+            }
+            if (mindsetDistributionChart) {
+                mindsetDistributionChart.destroy();
+                mindsetDistributionChart = null;
+            }
+        }
+
+        function buildTrendFromStudents(students, period = 'week') {
+            const periodMap = {
+                week: { labels: ['成长型', '混合型', '固定型'], size: 7, taskWeight: 5, goalWeight: 10 },
+                month: { labels: ['成长型', '混合型', '固定型'], size: 4, taskWeight: 8, goalWeight: 12 },
+                term: { labels: ['成长型', '混合型', '固定型'], size: 6, taskWeight: 6, goalWeight: 14 }
+            };
+
+            const config = periodMap[period] || periodMap.week;
+            const values = (students || []).slice(0, config.size).map((item) => {
+                const score = Number(item.goals_completed || 0) * config.goalWeight + Number(item.tasks_completed || 0) * config.taskWeight;
+                return Math.min(100, Math.max(50, score || 50));
+            });
+            while (values.length < config.size) {
+                values.push(50);
+            }
+            buildMoodChart(config.labels, values);
+        }
+
+        function setPeriodButtonState(period) {
+            const buttonMap = {
+                week: document.getElementById('period-week-btn'),
+                month: document.getElementById('period-month-btn'),
+                term: document.getElementById('period-term-btn')
+            };
+            const activeClass = ['bg-secondary/50', 'dark:bg-primary/20', 'text-primary-dark', 'dark:text-primary', 'shadow-sm'];
+            const inactiveClass = ['text-text-sub-light', 'dark:text-text-sub-dark', 'hover:text-text-main-light', 'dark:hover:text-text-main-dark'];
+
+            Object.entries(buttonMap).forEach(([key, btn]) => {
+                if (!btn) return;
+                if (key === period) {
+                    btn.classList.add(...activeClass);
+                    btn.classList.remove(...inactiveClass);
+                } else {
+                    btn.classList.remove(...activeClass);
+                    btn.classList.add(...inactiveClass);
+                }
+            });
+        }
+
+        function applyPeriod(period) {
+            currentPeriod = period;
+            setPeriodButtonState(period);
+            buildTrendFromStudents(cachedStudents, period);
+        }
+
+        async function exportAnalyticsReport() {
+            const exportBtn = document.getElementById('analytics-export-btn');
+            if (!currentClassId) {
+                if (window.showPageToast) {
+                    window.showPageToast('班级信息尚未加载完成，暂时无法导出', 'error');
+                }
+                return;
+            }
+
+            const originalHtml = exportBtn ? exportBtn.innerHTML : '';
+            if (exportBtn) {
+                exportBtn.disabled = true;
+                exportBtn.innerHTML = '<span class="material-icons text-sm animate-spin">autorenew</span><span class="text-sm font-bold">导出中...</span>';
+            }
+
+            try {
+                const res = await apiFetch(API_BASE_URL + `/api/export/class/${encodeURIComponent(currentClassId)}/report?period=${encodeURIComponent(currentPeriod)}`);
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({ error: '导出失败' }));
+                    throw new Error(errData.error || '导出失败');
+                }
+
+                const blob = await res.blob();
+                const dateText = new Date().toISOString().slice(0, 10);
+                const safeClassName = String(currentClassName || '班级').replace(/[\\/:*?"<>|]/g, '-').trim() || '班级';
+                const fileName = `${dateText}_${safeClassName}_数据分析.xlsx`;
+
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                if (window.showPageToast) {
+                    window.showPageToast('分析报告导出成功', 'success');
+                }
+            } catch (error) {
+                console.error('Export analytics report failed:', error);
+                if (window.showPageToast) {
+                    window.showPageToast(error.message || '导出失败，请稍后重试', 'error');
+                }
+            } finally {
+                if (exportBtn) {
+                    exportBtn.disabled = false;
+                    exportBtn.innerHTML = originalHtml;
+                }
+            }
+        }
+
+        function bindAnalyticsInteractions() {
+            const weekBtn = document.getElementById('period-week-btn');
+            const monthBtn = document.getElementById('period-month-btn');
+            const termBtn = document.getElementById('period-term-btn');
+            const exportBtn = document.getElementById('analytics-export-btn');
+            const insightRefreshBtn = document.getElementById('insight-refresh-btn');
+            const wordCloudRefreshBtn = document.getElementById('word-cloud-refresh-btn');
+
+            if (weekBtn) weekBtn.addEventListener('click', () => applyPeriod('week'));
+            if (monthBtn) monthBtn.addEventListener('click', () => applyPeriod('month'));
+            if (termBtn) termBtn.addEventListener('click', () => applyPeriod('term'));
+            if (exportBtn) exportBtn.addEventListener('click', exportAnalyticsReport);
+            if (insightRefreshBtn) insightRefreshBtn.addEventListener('click', () => loadInsights(currentClassId, true));
+            if (wordCloudRefreshBtn) wordCloudRefreshBtn.addEventListener('click', () => loadWordCloud(currentClassId, true));
+
+            setPeriodButtonState(currentPeriod);
+        }
+
+        async function loadAnalyticsData() {
+            setChartLoading(true);
+            setInsightsLoading();
+            setWordCloudLoading();
+            try {
+                const teacherId = typeof getSessionUserId === 'function' ? getSessionUserId() : null;
+                if (!teacherId) throw new Error('请先登录教师账号');
+                currentTeacherId = teacherId;
+
+                if (typeof hydrateTeacherIdentity === 'function') {
+                    hydrateTeacherIdentity({
+                        teacherId,
+                        brandContextElementId: 'brand-context',
+                        subtitleElementId: 'header-class-context',
+                        subtitleSuffix: '数据趋势与班级洞察',
+                        avatarElementId: 'teacher-avatar',
+                        nameElementId: 'teacher-name'
+                    });
+                }
+
+                const classRes = await apiFetch(API_BASE_URL + `/api/teacher/${teacherId}/class`);
+                if (!classRes.ok) {
+                    const errData = await classRes.json().catch(() => ({ error: '加载班级失败' }));
+                    throw new Error(errData.error || '加载班级失败');
+                }
+                const classData = await classRes.json();
+                if (!classData?.id) throw new Error('Class not found');
+                currentClassId = classData.id;
+                currentClassName = String(classData.name || '班级').trim() || '班级';
+
+                const distRes = await apiFetch(API_BASE_URL + `/api/analytics/class/${classData.id}/distribution`);
+                if (!distRes.ok) {
+                    const errData = await distRes.json().catch(() => ({ error: '加载分析数据失败' }));
+                    throw new Error(errData.error || '加载分析数据失败');
+                }
+                const distData = await distRes.json();
+
+                cachedDistribution = distData.distribution || {};
+                setMetrics(cachedDistribution);
+
+                const students = Array.isArray(distData.students) ? distData.students : [];
+                cachedStudents = students;
+                const classification = cachedDistribution?.classification || {};
+                const growCount = Number(classification.growth || 0);
+                const mixCount = Number(classification.mixed || 0);
+                const fixedCount = Number(classification.fixed || 0);
+
+                buildDistributionChart([growCount, mixCount, fixedCount]);
+                buildTrendFromStudents(students, currentPeriod);
+                await loadInsights(classData.id, false);
+                await loadWordCloud(classData.id, false);
+
+                if (window.showPageToast) {
+                    window.showPageToast('分析数据加载完成', 'success', 1200);
+                }
+            } catch (error) {
+                console.error('Load analytics data failed:', error);
+                cachedStudents = [];
+                cachedDistribution = null;
+                setMetrics(null);
+                clearAnalyticsCharts();
+                setInsightsEmpty('分析数据加载失败');
+                setWordCloudEmpty('词云数据加载失败');
+                const legendEl = document.getElementById('distribution-legend');
+                if (legendEl) {
+                    legendEl.innerHTML = `<div class="text-sm text-red-500">${String(error?.message || '加载失败')}</div>`;
+                }
+                if (window.showPageToast) {
+                    window.showPageToast(String(error?.message || '分析页面加载失败'), 'error');
+                }
+            } finally {
+                setChartLoading(false);
+            }
+        }
+
+        bindAnalyticsInteractions();
+        loadAnalyticsData();
+    </script>
+
+    <script src="../shared/page-loading.js"></script>
+</body>
+
+</html>

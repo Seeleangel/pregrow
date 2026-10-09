@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>图片使用示例</title>
+</head>
+<body>
+  <h1>优化后的图片使用示例</h1>
+
+  <!-- 方式1: 使用 picture 元素 (推荐) -->
+  <h2>方式1: Picture 元素 (WebP + 回退)</h2>
+  <picture>
+    <source
+      srcset="a_1-400.webp 400w,
+              a_1-800.webp 800w,
+              a_1.webp 1200w"
+      sizes="(max-width: 400px) 400px,
+             (max-width: 800px) 800px,
+             1200px"
+      type="image/webp">
+    <img
+      src="a_1.png"
+      alt="描述文字"
+      loading="lazy"
+      decoding="async"
+      width="800"
+      height="600">
+  </picture>
+
+  <!-- 方式2: 简单 WebP (现代浏览器) -->
+  <h2>方式2: 直接使用 WebP</h2>
+  <img
+    src="a_1.webp"
+    alt="描述文字"
+    loading="lazy"
+    decoding="async"
+    width="800"
+    height="600">
+
+  <!-- 方式3: 响应式图片 -->
+  <h2>方式3: 响应式 Srcset</h2>
+  <img
+    src="a_1-400.webp"
+    srcset="a_1-400.webp 400w,
+            a_1-800.webp 800w,
+            a_1.webp 1200w"
+    sizes="(max-width: 400px) 400px,
+           (max-width: 800px) 800px,
+           1200px"
+    alt="描述文字"
+    loading="lazy"
+    decoding="async">
+
+</body>
+</html>
